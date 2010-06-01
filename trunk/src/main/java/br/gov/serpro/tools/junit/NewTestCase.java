@@ -2,7 +2,7 @@ package br.gov.serpro.tools.junit;
 
 import java.io.File;
 
-import br.gov.serpro.tools.junit.parser.JavaSourceParser;
+import br.gov.serpro.tools.junit.parser.JsmgJavaSourceParser;
 import br.gov.serpro.tools.junit.parser.ParseException;
 import br.gov.serpro.tools.junit.parser.SourceParser;
 
@@ -10,17 +10,17 @@ public class NewTestCase {
 
 	public static void main(String[] args) throws ParseException {
 
-		args = new String[] {"resources\\ResultadoProvaManualBusinessBean.java.txt"};
+		args = new String[] {"/home/05473574602/workspaces/workspaceTestCode/jutcg/src/main/resources/ResultadoProvaManualBusinessBean.java.txt"};
 
-		NewTestCase newTestCase = new NewTestCase();
+		final NewTestCase newTestCase = new NewTestCase();
 
 		if (!newTestCase.validarArgumentos(args)) {
 			return;
 		}
 
-		final SourceParser parser = new JavaSourceParser();
+		final SourceParser parser = new JsmgJavaSourceParser();
 		parser.parse(new File(args[0]));
-		String testCase = new TestCaseGenerator(parser.getSource()).generate();
+		final String testCase = new TestCaseGenerator(parser.getSource()).generate();
 		System.out.println(testCase);
 
 	}

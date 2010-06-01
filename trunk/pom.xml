@@ -3,4 +3,49 @@
   <groupId>marcosoft</groupId>
   <artifactId>jutcg</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+
+  <build>
+    <plugins>
+        <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+                <encoding>ISO-8859-1</encoding>
+                <source>1.6</source>
+                <target>1.6</target>
+            </configuration>
+        </plugin>
+
+        <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+                <useFile>false</useFile>
+                <encoding>ISO-8859-1</encoding>
+            </configuration>
+        </plugin>
+
+        <!-- plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <executions>
+                <execution>
+                    <id>sign-artifacts</id>
+                    <phase>verify</phase>
+                    <goals>
+                        <goal>sign</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin -->
+
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>net.sourceforge.jsmg</groupId>
+      <artifactId>jsmg</artifactId>
+      <version>0.0.1-alfa</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>  
 </project>
