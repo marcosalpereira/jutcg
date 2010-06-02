@@ -3,8 +3,8 @@ package br.gov.serpro.tools.junit;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.gov.serpro.tools.junit.model.JavaClass;
 import br.gov.serpro.tools.junit.model.Field;
+import br.gov.serpro.tools.junit.model.JavaClass;
 import br.gov.serpro.tools.junit.model.Method;
 import br.gov.serpro.tools.junit.model.Type;
 
@@ -22,7 +22,7 @@ public class TestCaseGenerator {
 	}
 
 	public String generate() {
-		SourceBuilder sb = new SourceBuilder();
+		final SourceBuilder sb = new SourceBuilder();
 		sb.appendln(generatePackageName());
 		sb.appendln(generateImports());
 		sb.appendln(generateClassStart());
@@ -36,15 +36,15 @@ public class TestCaseGenerator {
 	}
 
 	String generateCreateMockMethods() {
-		SourceBuilder sb = new SourceBuilder();
-		for (Field field : dependencies) {
+		final SourceBuilder sb = new SourceBuilder();
+		for (final Field field : dependencies) {
 			sb.appendln(generateCreateMockMethod(field)).appendln();
 		}
 		return sb.toString();
 	}
 
 	String generateCreateMockMethod(Field field) {
-		SourceBuilder sb = new SourceBuilder();
+		final SourceBuilder sb = new SourceBuilder();
 		sb.appendJavaDoc("Cria o mock {@link %s} e seta na classe sendo testada\n" +
 				" * @returns o mock criado", field.getType());
 		sb.appendln("private %1$s criarMock%1$s() {", field.getType());
@@ -55,9 +55,9 @@ public class TestCaseGenerator {
 	}
 
 	private List<Method> selectMethods() {
-		List<Method> Methods = classUnderTest.getMethods();
-		List<Method> ret = new ArrayList<Method>();
-		for (Method Method : Methods) {
+		final List<Method> Methods = classUnderTest.getMethods();
+		final List<Method> ret = new ArrayList<Method>();
+		for (final Method Method : Methods) {
 			if (!ignoreMethod(Method)) {
 				ret.add(Method);
 			}
@@ -66,9 +66,9 @@ public class TestCaseGenerator {
 	}
 
 	private List<Field> selectDependencies() {
-		List<Field> fields = classUnderTest.getFields();
-		List<Field> ret = new ArrayList<Field>();
-		for (Field field : fields) {
+		final List<Field> fields = classUnderTest.getFields();
+		final List<Field> ret = new ArrayList<Field>();
+		for (final Field field : fields) {
 			if (!ignoreField(field)) {
 				ret.add(field);
 			}
@@ -77,8 +77,8 @@ public class TestCaseGenerator {
 	}
 
 	String generateMethods() {
-		SourceBuilder sb = new SourceBuilder();
-		for (Method method : selectedMethods) {
+		final SourceBuilder sb = new SourceBuilder();
+		for (final Method method : selectedMethods) {
 			sb.append(
 					new TestCaseMethodGenerator(method, dependencies)
 					.generate());
@@ -101,7 +101,7 @@ public class TestCaseGenerator {
 		if (!classUnderTest.isAtDao()) {
 			return "";
 		}
-		SourceBuilder sb = new SourceBuilder();
+		final SourceBuilder sb = new SourceBuilder();
 		final String dsxml = varNameForClassUnderTest.replace("DaoBean", "") + "DS.xml";
 		sb.appendln()
 			.appendln("/** {@inheritDoc} */")
@@ -114,19 +114,19 @@ public class TestCaseGenerator {
 	}
 
 	String generateSetup() {
-		SourceBuilder sb = new SourceBuilder();
+		final SourceBuilder sb = new SourceBuilder();
 
 		if (classUnderTest.isAtView()) {
 			sb.appendln();
 			sb.appendln("/** {@inheritDoc} */");
 			sb.appendln("@Override");
-			sb.appendln("protected void setUp() throws Exception {");
+			sb.appendln("public void setUp() throws Exception {");
 			sb.appendln("  super.setUp();");
 		} else {
 			sb.appendln();
 			sb.appendln("/** Configuracoes iniciais */");
 			sb.appendln("@Before");
-			sb.appendln("protected void setUp() {");
+			sb.appendln("public void setUp() {");
 		}
 		sb.appendln("  %s = new %s();", varNameForClassUnderTest, classUnderTest.getType());
 
@@ -139,10 +139,10 @@ public class TestCaseGenerator {
 	}
 
 	String generateFields() {
-		SourceBuilder sb = new SourceBuilder();
+		final SourceBuilder sb = new SourceBuilder();
 		sb.append(generateFieldForType(classUnderTest.getType(), "Classe sendo testada"));
 
-		for (Field field : dependencies) {
+		for (final Field field : dependencies) {
 			sb.append(generateFieldForType(field.getType(), ""));
 			sb.appendln();
 		}
@@ -150,7 +150,7 @@ public class TestCaseGenerator {
 	}
 
 	String generateFieldForType(Type type, String prefix) {
-		SourceBuilder sb = new SourceBuilder();
+		final SourceBuilder sb = new SourceBuilder();
 		sb.appendJavaDoc(String.format("%s {@link %s}.", prefix, type));
 		sb.appendln("private %s %s;", type, type.getVariableName());
 		return sb.toString();
@@ -163,7 +163,7 @@ public class TestCaseGenerator {
 		if (!field.isPrivate())
 			return true;
 
-		for (String annotation : field.getAnnotations()) {
+		for (final String annotation : field.getAnnotations()) {
 			if (annotation.equals("In") || annotation.equals("EJB")) {
 				return false;
 			}
@@ -173,10 +173,10 @@ public class TestCaseGenerator {
 	}
 
 	String generateImports() {
-		SourceBuilder sb = new SourceBuilder();
+		final SourceBuilder sb = new SourceBuilder();
 
 		//include all imports of class under test
-		for (String imp : classUnderTest.getImports()) {
+		for (final String imp : classUnderTest.getImports()) {
 			sb.appendln("import %s;", imp);
 		}
 
@@ -197,7 +197,7 @@ public class TestCaseGenerator {
 	}
 
 	String generateClassStart() {
-		SourceBuilder sb = new SourceBuilder();
+		final SourceBuilder sb = new SourceBuilder();
 
 		String extendz = "";
 		if (classUnderTest.isAtView()) {
