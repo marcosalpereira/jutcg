@@ -124,7 +124,7 @@ public class TestCaseGenerator {
 			sb.appendln("  super.setUp();");
 		} else {
 			sb.appendln();
-			sb.appendln("/** Configuracoes iniciais */");
+			sb.appendln("/** Configuracoes iniciais. */");
 			sb.appendln("@Before");
 			sb.appendln("public void setUp() {");
 		}
