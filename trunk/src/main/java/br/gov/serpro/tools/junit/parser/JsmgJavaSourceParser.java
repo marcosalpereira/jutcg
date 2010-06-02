@@ -201,11 +201,27 @@ public class JsmgJavaSourceParser implements SourceParser {
 		final FieldMethodInvocation fieldMethodInvocation = new FieldMethodInvocation();
 		fieldMethodInvocation.setInvokedAtField(method.getJavaClass()
 				.searchField(methodInvocation.getInvokerVariable().getVariableId()));
-		fieldMethodInvocation.setMethod(method);
+		fieldMethodInvocation.setMethod(translateInvokedMethod(methodInvocation));
 		fieldMethodInvocation.setReturnInvocation(methodInvocation.isReturnedInvocation());
 		fieldMethodInvocation.setArguments(translateArgumentList(methodInvocation));
 
 		return fieldMethodInvocation;
+	}
+
+	private Method translateInvokedMethod(MethodInvocation methodInvocation) {
+		final Method method = new Method();
+		method.setName(methodInvocation.getMethodInvoked());
+		if(methodInvocation.getReturnedType() != null) {
+			method.setType(translateType(methodInvocation.getReturnedType()));
+		}
+		return method;
+	}
+
+	private Type translateType(String returnedType) {
+		final Type type = new Type();
+		type.setName(returnedType);
+		type.setPrimitive(isPrimitive(returnedType));
+		return type;
 	}
 
 	private List<String> translateArgumentList(MethodInvocation methodInvocation) {
