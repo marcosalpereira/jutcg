@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.jsmg.JsmgParser;
+import org.jsmg.model.Annotation;
 import org.jsmg.model.ExecutionPath;
 import org.jsmg.model.ImportPath;
 import org.jsmg.model.JavaSourceClassModel;
@@ -26,6 +27,7 @@ import br.gov.serpro.tools.junit.model.Flow;
 import br.gov.serpro.tools.junit.model.FormalParameter;
 import br.gov.serpro.tools.junit.model.JavaClass;
 import br.gov.serpro.tools.junit.model.Method;
+import br.gov.serpro.tools.junit.model.Protection;
 import br.gov.serpro.tools.junit.model.Type;
 
 /**
@@ -93,12 +95,35 @@ public class JsmgJavaSourceParser implements SourceParser {
 		for (final org.jsmg.model.Field jsmgField : jsmgFields) {
 			final Field field = new Field();
 			field.setName(jsmgField.getVariableName());
-			field.setProtection(null);
-			field.setStatic(false);
+			field.setProtection(translateProtection(jsmgField));
+			field.setStatic(jsmgField.isStatic());
 			field.setType(translateTypeName(jsmgField.getFieldType()));
+			field.setAnnotations(translateAnnoatations(jsmgField));
 			fields.add(field);
 		}
 		return fields;
+	}
+
+	private List<String> translateAnnoatations(org.jsmg.model.Field jsmgField) {
+		final List<Annotation> jsmgAnnotations = jsmgField.getAnnotations();
+		final List<String> annotations = new ArrayList<String>(jsmgAnnotations
+				.size());
+		for (final Annotation annotation : jsmgAnnotations) {
+			annotations.add(annotation.getName());
+		}
+		return annotations;
+	}
+
+	private Protection translateProtection(org.jsmg.model.Field jsmgField) {
+		if (jsmgField.isPrivate()) {
+			return Protection.PRIVATE;
+		} else if (jsmgField.isProtected()) {
+			return Protection.PROTECTED;
+		} else if (jsmgField.isPublic()) {
+			return Protection.PUBLIC;
+		} else {
+			return Protection.DEFAULT;
+		}
 	}
 
 	private Type translateTypeName(String typeName) {
