@@ -29,6 +29,11 @@ public class FieldMethodInvocation {
 	 */
 	private boolean returnInvocation;
 
+	/**
+	 * Invocation is assigned to a variable.
+	 */
+	private Variable assignedVariable;
+
 	public Field getInvokedAtField() {
 		return invokedAtField;
 	}
@@ -54,9 +59,24 @@ public class FieldMethodInvocation {
 		this.returnInvocation = returnInvocation;
 	}
 
+	public Variable getAssignedVariable() {
+		return assignedVariable;
+	}
+
+	public void setAssignedVariable(Variable assignedVariable) {
+		if(assignedVariable != null) {
+			System.out.println(assignedVariable);
+		}
+		this.assignedVariable = assignedVariable;
+	}
+
+	public boolean isAssigned() {
+		return getAssignedVariable() != null;
+	}
+
 	public String getArgumentsAsString() {
-		StringBuilder result = new StringBuilder();
-		List<String> args = getArguments();
+		final StringBuilder result = new StringBuilder();
+		final List<String> args = getArguments();
 		for (int i = 0; i < args.size(); i++) {
 			if (i > 0) {
 				result.append(',');
@@ -70,5 +90,4 @@ public class FieldMethodInvocation {
 	public String toString() {
 		return this.method + "(" + this.getArgumentsAsString() + ")";
 	}
-
 }
