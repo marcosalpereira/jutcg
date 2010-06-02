@@ -21,7 +21,7 @@ public class TestCaseMethodFlowGenerator {
 	final private JavaClass classUnderTest;
 	final private String varNameForClassUnderTest;
 	final private Set<Field> usedDependencies;
-	
+
 	public TestCaseMethodFlowGenerator(Flow flow, List<Field> dependencies) {
 		this.flow = flow;
 		this.method = flow.getMethod();
@@ -71,21 +71,21 @@ public class TestCaseMethodFlowGenerator {
 	String generateVerifys() {
 		SourceBuilder sb = new SourceBuilder();
 		sb.appendLineComment("verificacoes do resultado do metodo sendo testado");
-		
+
 		Method returnInvocationMethod = flow.getReturnInvocationMethod();
 		if (returnInvocationMethod != null) {
 			sb.append("assertEquals(%1$sEsperado, %1$sReal);", method.getName());
 		} else if (!method.isVoid()) {
 			sb.appendln("assertEquals(esperado, %sReal);", method.getName());
-		} 
-		
+		}
+
 		JavaClass classUnderTest = flow.getMethod().getJavaClass();
 		for (Field f : flow.getWrittenFields()) {
 			sb.append("assertEquals(expected, %s.%s());", classUnderTest.variableNameForType(),
 					f.getGetter());
 		}
 
-		
+
 		return sb.toString();
 	}
 
@@ -158,7 +158,7 @@ public class TestCaseMethodFlowGenerator {
 			sb.appendln("%s %s = criarMock%s()", mock.getType(), mock.getName(), mock.getType());
 			for (FieldMethodInvocation invocation : flow.getInvocations()) {
 				if (!mock.equals(invocation.getInvokedAtField())) continue;
-				
+
 				final Type methodType = invocation.getMethod().getType();
 				if (invocation.getMethod().isVoid()) {
 					sb.appendln("%s.%s(%s);", mock.getName(),
@@ -171,6 +171,7 @@ public class TestCaseMethodFlowGenerator {
 								invocation.getArgumentsAsString(),
 								lowerCaseFirstChar(invocation.getMethod().getName()));
 					} else {
+					    //TODO tratar a atribuicao feita
 						sb.appendln("expect(%s.%s(%s))\n\t.andReturn(%s);", mock.getName(),
 								invocation.getMethod().getName(),
 								invocation.getArgumentsAsString(),
@@ -208,11 +209,11 @@ public class TestCaseMethodFlowGenerator {
 		SourceBuilder sb = new SourceBuilder();
 		List<FormalParameter> params = method.getFormalParameters();
 		Method returnInvocationMethod = flow.getReturnInvocationMethod();
-		
+
 		if (returnInvocationMethod != null || !params.isEmpty()) {
 			sb.appendLineComment("variaveis usadas");
 		}
-		
+
 		if (returnInvocationMethod != null) {
 			sb.appendln("final %s %sEsperado = %s;", returnInvocationMethod.getType(),
 					lowerCaseFirstChar(method.getName()), returnInvocationMethod.getType().getNewValue());
