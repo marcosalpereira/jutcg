@@ -46,7 +46,7 @@ public class TestCaseGenerator {
 	String generateCreateMockMethod(Field field) {
 		final SourceBuilder sb = new SourceBuilder();
 		sb.appendJavaDoc("Cria o mock {@link %s} e seta na classe sendo testada\n" +
-				" * @returns o mock criado", field.getType());
+				" * @return o mock criado", field.getType());
 		sb.appendln("private %1$s criarMock%1$s() {", field.getType());
 		sb.appendln("  %1$s mock = createStrictMock(%1$s.class);", field.getType());
 		sb.appendln("  %s.set%s(mock);", varNameForClassUnderTest, field.getType());
