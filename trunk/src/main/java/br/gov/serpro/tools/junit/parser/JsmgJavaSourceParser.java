@@ -28,6 +28,7 @@ import br.gov.serpro.tools.junit.model.FormalParameter;
 import br.gov.serpro.tools.junit.model.JavaClass;
 import br.gov.serpro.tools.junit.model.Method;
 import br.gov.serpro.tools.junit.model.Protection;
+import br.gov.serpro.tools.junit.model.Scope;
 import br.gov.serpro.tools.junit.model.Type;
 
 /**
@@ -190,22 +191,45 @@ public class JsmgJavaSourceParser implements SourceParser {
 		for (final MethodInvocation methodInvocation : methodInvocations) {
 			if (methodInvocation.hasInvokerVariable()
 					&& methodInvocation.getInvokerVariable().isClassScope()) {
-				fieldMethodInvocations.add(translateFielMethodInvocation(methodInvocation, method));
+				fieldMethodInvocations.add(translateFieldMethodInvocation(methodInvocation, method));
 			}
 		}
 		return fieldMethodInvocations;
 	}
 
-	private FieldMethodInvocation translateFielMethodInvocation(
+	private FieldMethodInvocation translateFieldMethodInvocation(
 			MethodInvocation methodInvocation, Method method) {
 		final FieldMethodInvocation fieldMethodInvocation = new FieldMethodInvocation();
 		fieldMethodInvocation.setInvokedAtField(method.getJavaClass()
 				.searchField(methodInvocation.getInvokerVariable().getVariableId()));
 		fieldMethodInvocation.setMethod(translateInvokedMethod(methodInvocation));
 		fieldMethodInvocation.setReturnInvocation(methodInvocation.isReturnedInvocation());
+		if (methodInvocation.isAssigned()) {
+			fieldMethodInvocation.setAssignedVariable(
+					translateVariable(methodInvocation.getAssignedVariable()));
+		}
 		fieldMethodInvocation.setArguments(translateArgumentList(methodInvocation));
 
 		return fieldMethodInvocation;
+	}
+
+	private br.gov.serpro.tools.junit.model.Variable translateVariable(
+			Variable assignedVariable) {
+		final br.gov.serpro.tools.junit.model.Variable variable = new br.gov.serpro.tools.junit.model.Variable();
+		variable.setName(assignedVariable.getVariableId());
+		variable.setScope(translateScope(assignedVariable.getScope()));
+		variable.setType(translateType(assignedVariable.getType()));
+		return variable;
+	}
+
+	private Scope translateScope(org.jsmg.model.Scope scope) {
+		if(scope.isLocalScope()) {
+			return Scope.LOCAL_SCOPE;
+		} else if(scope.isMethodScope()) {
+			return Scope.METHOD_SCOPE;
+		} else {
+			return Scope.CLASS_SCOPE;
+		}
 	}
 
 	private Method translateInvokedMethod(MethodInvocation methodInvocation) {

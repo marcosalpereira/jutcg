@@ -14,6 +14,7 @@ import br.gov.serpro.tools.junit.model.FormalParameter;
 import br.gov.serpro.tools.junit.model.JavaClass;
 import br.gov.serpro.tools.junit.model.Method;
 import br.gov.serpro.tools.junit.model.Type;
+import br.gov.serpro.tools.junit.model.Variable;
 
 public class TestCaseMethodFlowGenerator {
 	final private Method method;
@@ -31,8 +32,8 @@ public class TestCaseMethodFlowGenerator {
 	}
 
 	private Set<Field> selectUsedDependencies(List<Field> dependencies) {
-		Set<Field> ret = new HashSet<Field>();
-		for (FieldMethodInvocation invocation : flow.getInvocations()) {
+		final Set<Field> ret = new HashSet<Field>();
+		for (final FieldMethodInvocation invocation : flow.getInvocations()) {
 			if (dependencies.contains(invocation.getInvokedAtField())) {
 				ret.add(invocation.getInvokedAtField());
 			}
@@ -41,7 +42,7 @@ public class TestCaseMethodFlowGenerator {
 	}
 
 	public String generate() {
-		SourceBuilder sb = new SourceBuilder();
+		final SourceBuilder sb = new SourceBuilder();
 		sb.appendJavaDoc(String.format("Teste para o metodo {@link %s#%s}", method.getJavaClass()
 				.getType(), method.getLoggingSignature()));
 
@@ -69,18 +70,18 @@ public class TestCaseMethodFlowGenerator {
 	}
 
 	String generateVerifys() {
-		SourceBuilder sb = new SourceBuilder();
+		final SourceBuilder sb = new SourceBuilder();
 		sb.appendLineComment("verificacoes do resultado do metodo sendo testado");
 
-		Method returnInvocationMethod = flow.getReturnInvocationMethod();
+		final Method returnInvocationMethod = flow.getReturnInvocationMethod();
 		if (returnInvocationMethod != null) {
 			sb.append("assertEquals(%1$sEsperado, %1$sReal);", method.getName());
 		} else if (!method.isVoid()) {
 			sb.appendln("assertEquals(esperado, %sReal);", method.getName());
 		}
 
-		JavaClass classUnderTest = flow.getMethod().getJavaClass();
-		for (Field f : flow.getWrittenFields()) {
+		final JavaClass classUnderTest = flow.getMethod().getJavaClass();
+		for (final Field f : flow.getWrittenFields()) {
 			sb.append("assertEquals(expected, %s.%s());", classUnderTest.variableNameForType(),
 					f.getGetter());
 		}
@@ -90,9 +91,9 @@ public class TestCaseMethodFlowGenerator {
 	}
 
 	String generateInvokeMethod() {
-		SourceBuilder sb = new SourceBuilder();
+		final SourceBuilder sb = new SourceBuilder();
 		sb.appendLineComment("invocar metodo sendo testado");
-		String strParams = concatMethodParams(method.getFormalParameters());
+		final String strParams = concatMethodParams(method.getFormalParameters());
 		if (method.isVoid()) {
 			sb.appendln("%s.%s(%s);",
 					varNameForClassUnderTest,
@@ -116,7 +117,7 @@ public class TestCaseMethodFlowGenerator {
 	 */
 	private String concatMethodParams(List<FormalParameter> params) {
 		String strParams = "";
-		for (FormalParameter p : params) {
+		for (final FormalParameter p : params) {
 			if (!strParams.isEmpty())
 				strParams += ",";
 			strParams += p.getVariableId();
@@ -125,12 +126,12 @@ public class TestCaseMethodFlowGenerator {
 	}
 
 	String generateConfigInternalState() {
-		SourceBuilder sb = new SourceBuilder();
+		final SourceBuilder sb = new SourceBuilder();
 		if (classUnderTest.isAtView()) {
 			sb.appendLineComment("Configurando estado interno da classe sob teste");
 		}
-		JavaClass classUnderTest = flow.getMethod().getJavaClass();
-		for (Field f : flow.getReadFields()){
+		final JavaClass classUnderTest = flow.getMethod().getJavaClass();
+		for (final Field f : flow.getReadFields()){
 			if (classUnderTest.getFields().contains(f)) {
 				sb.appendln("%s.%s(%s);", classUnderTest.variableNameForType(),
 						f.getSetter(), f.getType().getNewValue());
@@ -140,7 +141,7 @@ public class TestCaseMethodFlowGenerator {
 	}
 
 	String generateStartMethod() {
-		SourceBuilder sb = new SourceBuilder();
+		final SourceBuilder sb = new SourceBuilder();
 		sb.appendln("@Test");
 		sb.appendln("public void test%s%s() {",
 				upperCaseFirstChar(method.getName()),
@@ -149,14 +150,17 @@ public class TestCaseMethodFlowGenerator {
 	}
 
 	String generateConfigMocks() {
-		SourceBuilder sb = new SourceBuilder();
+		final SourceBuilder sb = new SourceBuilder();
 		sb.appendLineComment("Configurando mocks (" + usedDependencies.size() + ")");
-		for(Field mock : usedDependencies) {
+
+		final Set<Variable> variablesDeclared = new HashSet<Variable>();
+
+		for(final Field mock : usedDependencies) {
 			if (usedDependencies.size() > 1) {
 				sb.appendLineComment(mock.getName());
 			}
-			sb.appendln("%s %s = criarMock%s()", mock.getType(), mock.getName(), mock.getType());
-			for (FieldMethodInvocation invocation : flow.getInvocations()) {
+			sb.appendln("%s %s = criarMock%s();", mock.getType(), mock.getName(), mock.getType());
+			for (final FieldMethodInvocation invocation : flow.getInvocations()) {
 				if (!mock.equals(invocation.getInvokedAtField())) continue;
 
 				final Type methodType = invocation.getMethod().getType();
@@ -170,8 +174,22 @@ public class TestCaseMethodFlowGenerator {
 								invocation.getMethod().getName(),
 								invocation.getArgumentsAsString(),
 								lowerCaseFirstChar(invocation.getMethod().getName()));
+					} else if(invocation.isAssigned()) {
+						final Variable assignedVariable = invocation
+								.getAssignedVariable();
+						if (assignedVariable.isScopeLocal()
+								&& !variablesDeclared.contains(assignedVariable)) {
+							sb.appendln("%s %s = %s;",
+									assignedVariable.getType().getName(),
+									assignedVariable.getName(),
+									assignedVariable.getType().getNewValue());
+							variablesDeclared.add(assignedVariable);
+						}
+						sb.appendln("expect(%s.%s(%s))\n\t.andReturn(%s);", mock.getName(),
+								invocation.getMethod().getName(),
+								invocation.getArgumentsAsString(),
+								assignedVariable.getName());
 					} else {
-					    //TODO tratar a atribuicao feita
 						sb.appendln("expect(%s.%s(%s))\n\t.andReturn(%s);", mock.getName(),
 								invocation.getMethod().getName(),
 								invocation.getArgumentsAsString(),
@@ -206,9 +224,9 @@ public class TestCaseMethodFlowGenerator {
 	}
 
 	String generateUsedVars() {
-		SourceBuilder sb = new SourceBuilder();
-		List<FormalParameter> params = method.getFormalParameters();
-		Method returnInvocationMethod = flow.getReturnInvocationMethod();
+		final SourceBuilder sb = new SourceBuilder();
+		final List<FormalParameter> params = method.getFormalParameters();
+		final Method returnInvocationMethod = flow.getReturnInvocationMethod();
 
 		if (returnInvocationMethod != null || !params.isEmpty()) {
 			sb.appendLineComment("variaveis usadas");
@@ -221,7 +239,7 @@ public class TestCaseMethodFlowGenerator {
 
 		if (!params.isEmpty()) {
 
-			for (FormalParameter fp : params) {
+			for (final FormalParameter fp : params) {
 				sb.appendln("final %s %s = %s;", fp.getType().getName(), fp
 						.getVariableId(), fp.getType().getNewValue());
 			}
@@ -231,7 +249,7 @@ public class TestCaseMethodFlowGenerator {
 
 
 	String generateCheckMocks() {
-		SourceBuilder sb = new SourceBuilder();
+		final SourceBuilder sb = new SourceBuilder();
 
 		if (usedDependencies.isEmpty())
 			return "";
@@ -239,7 +257,7 @@ public class TestCaseMethodFlowGenerator {
 		sb.appendLineComment("checar estados dos mocks");
 
 		String mocks = "";
-		for (Field dep : usedDependencies) {
+		for (final Field dep : usedDependencies) {
 			mocks += dep.getName() + ",";
 		}
 		sb.appendln("verify(" + mocks.substring(0, mocks.length() - 1) + ");");
