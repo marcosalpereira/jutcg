@@ -43,7 +43,7 @@ public class TestCaseMethodFlowGenerator {
 
 	public String generate() {
 		final SourceBuilder sb = new SourceBuilder();
-		sb.appendJavaDoc(String.format("Teste para o metodo {@link %s#%s}", method.getJavaClass()
+		sb.appendJavaDoc(String.format("Teste para o metodo {@link %s#%s}.", method.getJavaClass()
 				.getType(), method.getLoggingSignature()));
 
 		final String usedVars = generateUsedVars();
@@ -75,7 +75,8 @@ public class TestCaseMethodFlowGenerator {
 
 		final Method returnInvocationMethod = flow.getReturnInvocationMethod();
 		if (returnInvocationMethod != null) {
-			sb.append("assertEquals(%1$sEsperado, %1$sReal);", method.getName());
+			sb.append("assertEquals(%sEsperado, %sReal);", returnInvocationMethod.getName(),
+					method.getName());
 		} else if (!method.isVoid()) {
 			sb.appendln("assertEquals(esperado, %sReal);", method.getName());
 		}
