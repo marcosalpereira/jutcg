@@ -234,7 +234,8 @@ public class TestCaseMethodFlowGenerator {
 
 		if (returnInvocationMethod != null) {
 			sb.appendln("final %s %sEsperado = %s;", returnInvocationMethod.getType(),
-					lowerCaseFirstChar(method.getName()), returnInvocationMethod.getType().getNewValue());
+					lowerCaseFirstChar(returnInvocationMethod.getName()),
+					returnInvocationMethod.getType().getNewValue());
 		}
 
 		if (!params.isEmpty()) {
