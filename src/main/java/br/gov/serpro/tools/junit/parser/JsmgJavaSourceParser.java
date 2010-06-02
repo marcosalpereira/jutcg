@@ -162,7 +162,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 		for (final Parameter parameter : jsmgParameters) {
 			final FormalParameter formalParameter = new FormalParameter();
 			formalParameter.setVariableId(parameter.getVariableId());
-			formalParameter.setType(translateTypeName(parameter.getVariableId()));
+			formalParameter.setType(translateTypeName(parameter.getType()));
 			parameters.add(formalParameter);
 		}
 		return parameters;
