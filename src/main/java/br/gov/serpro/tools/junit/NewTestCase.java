@@ -10,7 +10,7 @@ public class NewTestCase {
 
 	public static void main(String[] args) throws ParseException {
 
-		args = new String[] {"/home/05473574602/workspaces/workspaceTestCode/jutcg/src/main/resources/ResultadoProvaManualBusinessBean.java.txt"};
+		args = new String[] {"/home/54706424372/dev/java/workspaces/sgc/jutcg/src/main/resources/VinculoProvaFaseDaoBean.java.txt"};
 
 		final NewTestCase newTestCase = new NewTestCase();
 

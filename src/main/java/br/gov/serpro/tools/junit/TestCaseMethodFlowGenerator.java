@@ -1,7 +1,6 @@
 package br.gov.serpro.tools.junit;
 
 import static br.gov.serpro.tools.junit.GeneratorHelper.lowerCaseFirstChar;
-import static br.gov.serpro.tools.junit.GeneratorHelper.upperCaseFirstChar;
 
 import java.util.HashSet;
 import java.util.List;
@@ -13,8 +12,6 @@ import br.gov.serpro.tools.junit.model.Flow;
 import br.gov.serpro.tools.junit.model.FormalParameter;
 import br.gov.serpro.tools.junit.model.JavaClass;
 import br.gov.serpro.tools.junit.model.Method;
-import br.gov.serpro.tools.junit.model.Type;
-import br.gov.serpro.tools.junit.model.Variable;
 
 public class TestCaseMethodFlowGenerator {
 	final private Method method;
@@ -71,22 +68,28 @@ public class TestCaseMethodFlowGenerator {
 
 	String generateVerifys() {
 		final SourceBuilder sb = new SourceBuilder();
-		sb.appendLineComment("verificacoes do resultado do metodo sendo testado");
+		boolean infoAppended = false;
 
 		final Method returnInvocationMethod = flow.getReturnInvocationMethod();
 		if (returnInvocationMethod != null) {
 			sb.append("assertEquals(%sEsperado, %sReal);", returnInvocationMethod.getName(),
 					method.getName());
+			infoAppended = true;
 		} else if (!method.isVoid()) {
 			sb.appendln("assertEquals(esperado, %sReal);", method.getName());
+			infoAppended = true;
 		}
 
 		final JavaClass classUnderTest = flow.getMethod().getJavaClass();
 		for (final Field f : flow.getWrittenFields()) {
 			sb.append("assertEquals(expected, %s.%s());", classUnderTest.variableNameForType(),
 					f.getGetter());
+			infoAppended = true;
 		}
 
+		if (infoAppended) {
+		    sb.insertLineComment(0, "verificacoes do resultado do metodo sendo testado");
+		}
 
 		return sb.toString();
 	}
@@ -128,10 +131,12 @@ public class TestCaseMethodFlowGenerator {
 
 	String generateConfigInternalState() {
 		final SourceBuilder sb = new SourceBuilder();
-		if (classUnderTest.isAtView()) {
+
+		final JavaClass classUnderTest = flow.getMethod().getJavaClass();
+
+		if (!flow.getReadFields().isEmpty()) {
 			sb.appendLineComment("Configurando estado interno da classe sob teste");
 		}
-		final JavaClass classUnderTest = flow.getMethod().getJavaClass();
 		for (final Field f : flow.getReadFields()){
 			if (classUnderTest.getFields().contains(f)) {
 				sb.appendln("%s.%s(%s);", classUnderTest.variableNameForType(),
@@ -144,84 +149,13 @@ public class TestCaseMethodFlowGenerator {
 	String generateStartMethod() {
 		final SourceBuilder sb = new SourceBuilder();
 		sb.appendln("@Test");
-		sb.appendln("public void test%s%s() {",
-				upperCaseFirstChar(method.getName()),
-				method.getFlows().size() > 1 ? flow.getName() : "");
+		sb.appendln("public void %s() {", method.getNameForTest(flow));
 		return sb.toString();
 	}
 
 	String generateConfigMocks() {
-		final SourceBuilder sb = new SourceBuilder();
-		sb.appendLineComment("Configurando mocks (" + usedDependencies.size() + ")");
-
-		final Set<Variable> variablesDeclared = new HashSet<Variable>();
-
-		for(final Field mock : usedDependencies) {
-			if (usedDependencies.size() > 1) {
-				sb.appendLineComment(mock.getName());
-			}
-			sb.appendln("%s %s = criarMock%s();", mock.getType(), mock.getName(), mock.getType());
-			for (final FieldMethodInvocation invocation : flow.getInvocations()) {
-				if (!mock.equals(invocation.getInvokedAtField())) continue;
-
-				final Type methodType = invocation.getMethod().getType();
-				if (invocation.getMethod().isVoid()) {
-					sb.appendln("%s.%s(%s);", mock.getName(),
-							invocation.getMethod().getName(),
-							invocation.getArgumentsAsString());
-				} else {
-					if (invocation.isReturnInvocation()) {
-						sb.appendln("expect(%s.%s(%s))\n\t.andReturn(%sEsperado);", mock.getName(),
-								invocation.getMethod().getName(),
-								invocation.getArgumentsAsString(),
-								lowerCaseFirstChar(invocation.getMethod().getName()));
-					} else if(invocation.isAssigned()) {
-						final Variable assignedVariable = invocation
-								.getAssignedVariable();
-						if (assignedVariable.isScopeLocal()
-								&& !variablesDeclared.contains(assignedVariable)) {
-							sb.appendln("%s %s = %s;",
-									assignedVariable.getType().getName(),
-									assignedVariable.getName(),
-									assignedVariable.getType().getNewValue());
-							variablesDeclared.add(assignedVariable);
-						}
-						sb.appendln("expect(%s.%s(%s))\n\t.andReturn(%s);", mock.getName(),
-								invocation.getMethod().getName(),
-								invocation.getArgumentsAsString(),
-								assignedVariable.getName());
-					} else {
-						sb.appendln("expect(%s.%s(%s))\n\t.andReturn(%s);", mock.getName(),
-								invocation.getMethod().getName(),
-								invocation.getArgumentsAsString(),
-								methodType.getNewValue());
-					}
-				}
-			}
-			sb.append("replay(%s);", mock.getName());
-			sb.appendln();
-		}
-		return sb.toString();
-
-
-		// if (dependencies.isEmpty()) return;
-		// sb.append( "\n// configurar mocks");
-		// // String mock = selectByPassMethodMock();
-		// // if (mock == null) return;
-		//
-		// String strParams = concatMethodParams(method.getParams());
-		//
-		// if (method.isVoid()) {
-		// sb.appendln("%s.%s(%s);", mock, method.getName(), strParams));
-		// } else {
-		// sb.appendln("final %s esperado = %s;",
-		// method.getType().getClassName(), newValueForType(method.getType())));
-		// sb.appendln("expect(%s.%s(%s)).andReturn(esperado);", mock,
-		// method.getName(), strParams));
-		// }
-		// sb.appendln("replay(%s);", mock));
-		//
-		// //List<String> mocks = guessMocksFromMethod();
+	    return new ConfigMocksGenerator(flow, usedDependencies)
+	       .generate();
 	}
 
 	String generateUsedVars() {
@@ -253,16 +187,15 @@ public class TestCaseMethodFlowGenerator {
 	String generateCheckMocks() {
 		final SourceBuilder sb = new SourceBuilder();
 
-		if (usedDependencies.isEmpty())
-			return "";
-
-		sb.appendLineComment("checar estados dos mocks");
-
 		String mocks = "";
 		for (final Field dep : usedDependencies) {
 			mocks += dep.getName() + ",";
 		}
-		sb.appendln("verify(" + mocks.substring(0, mocks.length() - 1) + ");");
+
+		if (!usedDependencies.isEmpty()) {
+		    sb.appendLineComment("checar estados dos mocks");
+		    sb.appendln("verify(" + mocks.substring(0, mocks.length() - 1) + ");");
+		}
 		return sb.toString();
 	}
 

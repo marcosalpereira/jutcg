@@ -80,7 +80,7 @@ public class TestCaseGenerator {
 		final SourceBuilder sb = new SourceBuilder();
 		for (final Method method : selectedMethods) {
 			sb.append(
-					new TestCaseMethodGenerator(method, dependencies)
+			    new TestCaseMethodGenerator(method, dependencies)
 					.generate());
 		}
 		return sb.toString();
