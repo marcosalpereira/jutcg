@@ -1,16 +1,16 @@
 package br.gov.serpro.tools.junit;
 
-import java.io.IOException;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 import br.gov.serpro.tools.junit.parser.JsmgJavaSourceParser;
 import br.gov.serpro.tools.junit.parser.ParseException;
-import br.gov.serpro.tools.junit.parser.SourceParser;
 
 public class NewTestCase {
 
-	public static void main(String[] args) throws ParseException, IOException {
+	public static void main(String[] args) throws ParseException, FileNotFoundException {
 
-		args = new String[] {"/VinculoProvaFaseDaoBean.java.txt"};
+		args = new String[] {"/home/05473574602/workspaces/workspaceTestCode/jutcg/src/main/resources/CampoAtuacaoBusinessBean.java.txt"};
 
 		final NewTestCase newTestCase = new NewTestCase();
 
@@ -18,9 +18,8 @@ public class NewTestCase {
 			return;
 		}
 
-		final SourceParser parser = new JsmgJavaSourceParser();
-
-		parser.parse(NewTestCase.class.getClassLoader().getResourceAsStream(args[0]));
+		final JsmgJavaSourceParser parser = new JsmgJavaSourceParser();
+		parser.parse(new File(args[0]));
 		final String testCase = new TestCaseGenerator(parser.getSource()).generate();
 		System.out.println(testCase);
 
