@@ -60,7 +60,7 @@ public class ConfigMocksGenerator {
     private void configNonVoidInvocation(final Field mock,
         final FieldMethodInvocation invocation) {
         final Type methodType = invocation.getMethod().getType();
-        sb.appendln("expect(%s.%s(%s))\n\t.andReturn(%s);", mock.getName(),
+        sb.appendln("expect(%s.%s(%s))\n  .andReturn(%s);", mock.getName(),
                 invocation.getMethod().getName(),
                 invocation.getArgumentsAsString(),
                 methodType.getNewValue());
@@ -82,7 +82,7 @@ public class ConfigMocksGenerator {
                     assignedVariable.getType().getNewValue());
             variablesDeclared.add(assignedVariable);
         }
-        sb.appendln("expect(%s.%s(%s))\n\t.andReturn(%s);", mock.getName(),
+        sb.appendln("expect(%s.%s(%s))\n  .andReturn(%s);", mock.getName(),
                 invocation.getMethod().getName(),
                 invocation.getArgumentsAsString(),
                 assignedVariable.getName());
@@ -94,7 +94,7 @@ public class ConfigMocksGenerator {
      */
     private void configReturnInvocation(final Field mock,
         final FieldMethodInvocation invocation) {
-        sb.appendln("expect(%s.%s(%s))\n\t.andReturn(%sEsperado);", mock.getName(),
+        sb.appendln("expect(%s.%s(%s))\n  .andReturn(%sEsperado);", mock.getName(),
                 invocation.getMethod().getName(),
                 invocation.getArgumentsAsString(),
                 lowerCaseFirstChar(invocation.getMethod().getName()));

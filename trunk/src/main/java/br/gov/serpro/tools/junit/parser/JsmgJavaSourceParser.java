@@ -5,9 +5,10 @@ package br.gov.serpro.tools.junit.parser;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.jsmg.JsmgParser;
 import org.jsmg.model.Annotation;
@@ -251,13 +252,13 @@ public class JsmgJavaSourceParser implements SourceParser {
 		return arguments;
 	}
 
-	private Set<Field> translateWrittenFields(ExecutionPath executionPath,
+	private SortedSet<Field> translateWrittenFields(ExecutionPath executionPath,
 			JavaClass javaClass) {
 		final Set<Variable> writtenVariables = executionPath.getVariablesWritten();
 		return getFields(javaClass, writtenVariables);
 	}
 
-	private Set<Field> translateReadFields(ExecutionPath executionPath, JavaClass javaClass) {
+	private SortedSet<Field> translateReadFields(ExecutionPath executionPath, JavaClass javaClass) {
 		final Set<Variable> readVariables = executionPath.getReadVariables();
 		return getFields(javaClass, readVariables);
 	}
@@ -268,8 +269,8 @@ public class JsmgJavaSourceParser implements SourceParser {
 	 * @param variables variables set
 	 * @return fields in the set
 	 */
-	private Set<Field> getFields(JavaClass javaClass, final Set<Variable> variables) {
-		final Set<Field> fieldsRead = new LinkedHashSet<Field>();
+	private SortedSet<Field> getFields(JavaClass javaClass, final Set<Variable> variables) {
+		final SortedSet<Field> fieldsRead = new TreeSet<Field>();
 		for (final Variable variable : variables) {
 			if (variable.isClassScope()) {
 				fieldsRead.add(javaClass.searchField(variable.getVariableId()));

@@ -6,7 +6,7 @@ import java.util.List;
 import br.gov.serpro.tools.junit.GeneratorHelper;
 
 
-public class Field {
+public class Field implements Comparable<Field>{
 	/**
 	 * Field name.
 	 */
@@ -80,7 +80,7 @@ public class Field {
 	public boolean isPrivate() {
 		return protection == Protection.PRIVATE;
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.name;
@@ -96,4 +96,9 @@ public class Field {
 		}
 		return "get" + GeneratorHelper.upperCaseFirstChar(name);
 	}
+
+    @Override
+    public int compareTo(Field o) {
+        return o.getName().compareTo(getName());
+    }
 }

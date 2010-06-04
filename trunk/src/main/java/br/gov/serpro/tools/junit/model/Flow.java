@@ -1,9 +1,9 @@
 package br.gov.serpro.tools.junit.model;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class Flow {
 
@@ -25,27 +25,27 @@ public class Flow {
 	/**
 	 * Fields read on this flow.
 	 */
-	private Set<Field> readFields = new HashSet<Field>();
+	private SortedSet<Field> readFields = new TreeSet<Field>();
 
 	/**
 	 * Fields written on this flow.
 	 */
-	private Set<Field> writtenFields = new HashSet<Field>();
+	private SortedSet<Field> writtenFields = new TreeSet<Field>();
 
 
-	public Set<Field> getWrittenFields() {
+	public SortedSet<Field> getWrittenFields() {
 		return writtenFields;
 	}
 
-	public void setWrittenFields(Set<Field> writtenFields) {
+	public void setWrittenFields(SortedSet<Field> writtenFields) {
 		this.writtenFields = writtenFields;
 	}
 
-	public Set<Field> getReadFields() {
+	public SortedSet<Field> getReadFields() {
 		return readFields;
 	}
 
-	public void setReadFields(Set<Field> usedFields) {
+	public void setReadFields(SortedSet<Field> usedFields) {
 		this.readFields = usedFields;
 	}
 
