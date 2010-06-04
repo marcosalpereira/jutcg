@@ -72,7 +72,7 @@ public class TestCaseMethodFlowGenerator {
 
 		final Method returnInvocationMethod = flow.getReturnInvocationMethod();
 		if (returnInvocationMethod != null) {
-			sb.append("assertEquals(%sEsperado, %sReal);", returnInvocationMethod.getName(),
+			sb.appendln("assertEquals(%sEsperado, %sReal);", returnInvocationMethod.getName(),
 					method.getName());
 			infoAppended = true;
 		} else if (!method.isVoid()) {
@@ -82,7 +82,7 @@ public class TestCaseMethodFlowGenerator {
 
 		final JavaClass classUnderTest = flow.getMethod().getJavaClass();
 		for (final Field f : flow.getWrittenFields()) {
-			sb.append("assertEquals(expected, %s.%s());", classUnderTest.variableNameForType(),
+			sb.appendln("assertEquals(expected, %s.%s());", classUnderTest.variableNameForType(),
 					f.getGetter());
 			infoAppended = true;
 		}
