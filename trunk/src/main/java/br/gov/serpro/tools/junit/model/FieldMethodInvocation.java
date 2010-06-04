@@ -70,7 +70,7 @@ public class FieldMethodInvocation {
 		this.assignedVariable = assignedVariable;
 	}
 
-	public boolean isAssigned() {
+	public boolean isAssignedInvocation() {
 		return getAssignedVariable() != null;
 	}
 
@@ -90,4 +90,8 @@ public class FieldMethodInvocation {
 	public String toString() {
 		return this.method + "(" + this.getArgumentsAsString() + ")";
 	}
+
+    public boolean isVoidInvocation() {
+        return getMethod().isVoid();
+    }
 }

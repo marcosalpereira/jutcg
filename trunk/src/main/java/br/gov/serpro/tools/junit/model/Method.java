@@ -1,7 +1,12 @@
 package br.gov.serpro.tools.junit.model;
 
+import static br.gov.serpro.tools.junit.GeneratorHelper.upperCaseFirstChar;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 
 public class Method {
@@ -93,18 +98,27 @@ public class Method {
 	 * </p>
 	 */
 	public String getLoggingSignature() {
-		StringBuffer result = new StringBuffer(getName());
-		List<FormalParameter> params = getFormalParameters();
+		StringBuilder result = new StringBuilder(getName());
 		result.append('(');
-		for (int i = 0; i < params.size(); i++) {
-			if (i > 0) {
-				result.append(',');
-			}
-			result.append(params.get(i).getType().getName());
-		}
+		result.append(getFormalParametersAsString(","));
 		result.append(')');
 		return result.toString();
 	}
+
+    /**
+     * @param result
+     */
+    private String getFormalParametersAsString(String separator) {
+        StringBuilder ret = new StringBuilder();
+        List<FormalParameter> params = getFormalParameters();
+		for (int i = 0; i < params.size(); i++) {
+			if (i > 0) {
+				ret.append(separator);
+			}
+			ret.append(params.get(i).getType().getName());
+		}
+		return ret.toString();
+    }
 
 	public boolean isPrivate() {
 		return protection == Protection.PRIVATE;
@@ -122,9 +136,56 @@ public class Method {
 		return !isVoid();
 	}
 
-@Override
-public String toString() {
-	return this.name;
-}
+	/**
+	 * The name for a method that tests this method at flow informed.
+	 * @return the name founded
+	 */
+	public String getNameForTest(Flow flow) {
+	    String ret = "test" + upperCaseFirstChar(getName());
+	    if (isOverload()) {
+            ret += getFormalParametersAsString("");
+	    }
+	    if (getFlows().size() > 1) {
+	        ret += flow.getName();
+	    }
+	    return ret;
+	}
+
+
+	private boolean isOverload() {
+	    return getJavaClass().isAnOverloadedMethod(this);
+    }
+
+
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof Method) {
+            Method that = (Method) obj;
+            return new EqualsBuilder()
+                .append(this.getLoggingSignature(), that.getLoggingSignature())
+                .isEquals();
+        }
+
+        return false;
+    }
+
+    /**{@inheritDoc}*/
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(123, 445)
+            .append(this.getLoggingSignature())
+            .toHashCode();
+    }
+
+	@Override
+	public String toString() {
+	    return this.name;
+	}
+
 
 }

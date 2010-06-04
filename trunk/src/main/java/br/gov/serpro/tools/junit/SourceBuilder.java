@@ -26,6 +26,11 @@ public class SourceBuilder {
 		return this;
 	}
 
+	public SourceBuilder insertLineComment(int offset, String comment) {
+	    sb.insert(offset, "// " + comment + "\n");
+	    return this;
+	}
+
 	public SourceBuilder appendLineComment(String comment) {
 		sb.append("// " + comment + "\n");
 		return this;

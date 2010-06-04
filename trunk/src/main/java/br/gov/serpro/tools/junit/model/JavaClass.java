@@ -95,11 +95,16 @@ public class JavaClass {
 		return null;
 	}
 
-	public Method searchMethod(String methodName) {
+	public List<Method> searchMethods(String methodName) {
+	    List<Method> ret = new ArrayList<Method>();
 		for (Method m : getMethods()) {
-			if (m.getName().equals(methodName)) return m;
+			if (m.getName().equals(methodName)) ret.add(m);
 		}
-		return null;
+		return ret;
 	}
+
+    public boolean isAnOverloadedMethod(Method method) {
+        return searchMethods(method.getName()).size() > 1;
+    }
 
 }
