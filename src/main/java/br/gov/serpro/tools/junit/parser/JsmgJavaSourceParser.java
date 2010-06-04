@@ -6,6 +6,7 @@ package br.gov.serpro.tools.junit.parser;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -50,12 +51,8 @@ public class JsmgJavaSourceParser implements SourceParser {
 
 	/** {@inheritDoc} */
 	@Override
-	public void parse(File file) throws ParseException {
-		try {
-			javaSourceClassModel = JsmgParser.parse(new FileReader(file));
-		} catch (final FileNotFoundException e) {
-			throw new ParseException(e);
-		}
+	public void parse(InputStream file) throws ParseException {
+	    javaSourceClassModel = JsmgParser.parse(file);
 	}
 
 	/**

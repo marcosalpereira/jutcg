@@ -1,7 +1,5 @@
 package br.gov.serpro.tools.junit;
 
-import java.io.File;
-
 import br.gov.serpro.tools.junit.parser.JsmgJavaSourceParser;
 import br.gov.serpro.tools.junit.parser.ParseException;
 import br.gov.serpro.tools.junit.parser.SourceParser;
@@ -10,7 +8,7 @@ public class NewTestCase {
 
 	public static void main(String[] args) throws ParseException {
 
-		args = new String[] {"/home/54706424372/dev/java/workspaces/sgc/jutcg/src/main/resources/VinculoProvaFaseDaoBean.java.txt"};
+		args = new String[] {"VinculoProvaFaseDaoBean.java.txt"};
 
 		final NewTestCase newTestCase = new NewTestCase();
 
@@ -19,7 +17,8 @@ public class NewTestCase {
 		}
 
 		final SourceParser parser = new JsmgJavaSourceParser();
-		parser.parse(new File(args[0]));
+
+		parser.parse(NewTestCase.class.getClassLoader().getResourceAsStream(args[0]));
 		final String testCase = new TestCaseGenerator(parser.getSource()).generate();
 		System.out.println(testCase);
 
