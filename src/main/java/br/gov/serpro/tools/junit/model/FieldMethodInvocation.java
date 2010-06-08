@@ -64,9 +64,6 @@ public class FieldMethodInvocation {
 	}
 
 	public void setAssignedVariable(Variable assignedVariable) {
-		if(assignedVariable != null) {
-			System.out.println(assignedVariable);
-		}
 		this.assignedVariable = assignedVariable;
 	}
 
