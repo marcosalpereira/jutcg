@@ -32,6 +32,11 @@ public class Flow {
 	 */
 	private SortedSet<Field> writtenFields = new TreeSet<Field>();
 
+	/**
+	 * Description of the flow.
+	 */
+	private String description;
+
 
 	public SortedSet<Field> getWrittenFields() {
 		return writtenFields;
@@ -73,17 +78,22 @@ public class Flow {
 		this.name = name;
 	}
 
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
 	/**
 	 * Retorna o metodo que foi usado num return neste fluxo.
 	 * @return o metodo ou <code>null</code> se nao existir
 	 */
 	public Method getReturnInvocationMethod() {
-		for (FieldMethodInvocation invocation : invocations) {
-			if (invocation.isReturnInvocation() ) return invocation.getMethod();
+		for (final FieldMethodInvocation invocation : invocations) {
+			if (invocation.isReturnInvocation()) return invocation.getMethod();
 		}
 		return null;
 	}
-
-
-
 }
