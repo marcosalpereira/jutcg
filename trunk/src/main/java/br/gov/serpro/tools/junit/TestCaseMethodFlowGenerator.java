@@ -40,8 +40,9 @@ public class TestCaseMethodFlowGenerator {
 
 	public String generate() {
 		final SourceBuilder sb = new SourceBuilder();
-		sb.appendJavaDoc(String.format("Teste para o metodo {@link %s#%s}.", method.getJavaClass()
-				.getType(), method.getLoggingSignature()));
+		sb.appendJavaDoc(String.format("Teste para o metodo {@link %s#%s}.\n * Description: %s.",
+				method.getJavaClass().getType(), method.getLoggingSignature(),
+				flow.getDescription().replaceAll("\n", "\n * ")));
 
 		final String usedVars = generateUsedVars();
 		final String configMocks = generateConfigMocks();
