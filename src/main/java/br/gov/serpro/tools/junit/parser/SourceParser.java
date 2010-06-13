@@ -4,10 +4,15 @@ import java.io.File;
 
 import br.gov.serpro.tools.junit.model.JavaClass;
 
+/**
+ * Source parser.
+ */
 public interface SourceParser {
 
-	void parse(File file) throws ParseException;
-
-	JavaClass getSource();
-
+	/**
+	 * @param javaSourceFile java source file. 
+	 * @return {@link JavaClass} built from suplied file
+	 * @throws ParseException in case of some parsing error
+	 */
+	JavaClass parse(File javaSourceFile) throws ParseException;
 }

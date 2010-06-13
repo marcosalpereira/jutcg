@@ -38,7 +38,7 @@ private ResultadoProvaManualDao resultadoProvaManualDao;
 
 
 /**
- * Cria o mock {@link ResultadoProvaManualDao} e seta na classe sendo testada
+ * Cria o mock {@link ResultadoProvaManualDao} e seta na classe sendo testada.
  * @return o mock criado
  */
 private ResultadoProvaManualDao criarMockResultadoProvaManualDao() {
@@ -60,6 +60,8 @@ public void setUp() {
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#cadastrarResultado(ResultadoProvaManual)}.
+ * Description: In "if (resultadoProvaManual.isPersistido()) {"
+ * .
  */
 @Test
 public void testCadastrarResultadoPath1() {
@@ -85,6 +87,8 @@ verify(resultadoProvaManualDao);
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#cadastrarResultado(ResultadoProvaManual)}.
+ * Description: Out "if (resultadoProvaManual.isPersistido()) {"
+ * .
  */
 @Test
 public void testCadastrarResultadoPath2() {
@@ -110,6 +114,7 @@ verify(resultadoProvaManualDao);
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#desconectarResultado(ResultadoProvaManual)}.
+ * Description: normal flow.
  */
 @Test
 public void testDesconectarResultado() {
@@ -135,6 +140,7 @@ verify(resultadoProvaManualDao);
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#consultarResultadoProvaManual(Inscricao,Prova,VersaoResultadoProvaManual,Cidade)}.
+ * Description: normal flow.
  */
 @Test
 public void testConsultarResultadoProvaManual() {
@@ -167,6 +173,7 @@ assertEquals(selecionarResultadoProvaManualEsperado, consultarResultadoProvaManu
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#consultarResultadoProvaManualProvisorio(Inscricao,Prova)}.
+ * Description: normal flow.
  */
 @Test
 public void testConsultarResultadoProvaManualProvisorio() {
@@ -197,6 +204,7 @@ assertEquals(selecionarResultadoProvaManualValidoEsperado, consultarResultadoPro
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#consultarResultadoProvaManualDefintiva(Inscricao,Prova)}.
+ * Description: normal flow.
  */
 @Test
 public void testConsultarResultadoProvaManualDefintiva() {
@@ -227,6 +235,8 @@ assertEquals(selecionarResultadoProvaManualValidoEsperado, consultarResultadoPro
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#excluirResultado(Inscricao,Prova,Cidade)}.
+ * Description: In "if (resultadoProvaManual != null) {"
+ * .
  */
 @Test
 public void testExcluirResultadoPath1() {
@@ -257,6 +267,8 @@ verify(resultadoProvaManualDao);
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#excluirResultado(Inscricao,Prova,Cidade)}.
+ * Description: Out "if (resultadoProvaManual != null) {"
+ * .
  */
 @Test
 public void testExcluirResultadoPath2() {
@@ -286,6 +298,7 @@ verify(resultadoProvaManualDao);
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#existeNotaProvisoriaValidada(Prova)}.
+ * Description: normal flow.
  */
 @Test
 public void testExisteNotaProvisoriaValidada() {
@@ -315,6 +328,7 @@ assertEquals(existeResultadoEsperado, existeNotaProvisoriaValidadaReal);
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#existeNotaDefinitiva(Prova)}.
+ * Description: normal flow.
  */
 @Test
 public void testExisteNotaDefinitiva() {
@@ -344,6 +358,7 @@ assertEquals(existeResultadoEsperado, existeNotaDefinitivaReal);
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#existeNotaProvisoriaStatusCadastrada(Inscricao,Prova,Cidade)}.
+ * Description: normal flow.
  */
 @Test
 public void testExisteNotaProvisoriaStatusCadastrada() {
@@ -375,12 +390,13 @@ assertEquals(existeResultadoEsperado, existeNotaProvisoriaStatusCadastradaReal);
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#consultarInscricoesComNotaDefinitiva(Prova,String,String,TipoConsultaNome)}.
+ * Description: normal flow.
  */
 @Test
 public void testConsultarInscricoesComNotaDefinitiva() {
 
 // variaveis usadas
-final List selecionarInscricoesComNotaEsperado = new ArrayList();
+final List<Inscricao> selecionarInscricoesComNotaEsperado = new ArrayList<Inscricao>();
 final Prova prova = new Prova(1);
 final String numeroInscricao = new String(1);
 final String nomeCandidato = new String(1);
@@ -394,7 +410,7 @@ replay(resultadoProvaManualDao);
 
 
 // invocar metodo sendo testado
-final List consultarInscricoesComNotaDefinitivaReal = resultadoProvaManualBusinessBean.consultarInscricoesComNotaDefinitiva(prova,numeroInscricao,nomeCandidato,tipoConsultaNome);
+final List<Inscricao> consultarInscricoesComNotaDefinitivaReal = resultadoProvaManualBusinessBean.consultarInscricoesComNotaDefinitiva(prova,numeroInscricao,nomeCandidato,tipoConsultaNome);
 
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
@@ -407,6 +423,7 @@ assertEquals(selecionarInscricoesComNotaEsperado, consultarInscricoesComNotaDefi
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#alterarResultado(ResultadoProvaManual)}.
+ * Description: normal flow.
  */
 @Test
 public void testAlterarResultado() {
@@ -432,12 +449,13 @@ verify(resultadoProvaManualDao);
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#consultarResultadosRepetidos(Prova)}.
+ * Description: normal flow.
  */
 @Test
 public void testConsultarResultadosRepetidos() {
 
 // variaveis usadas
-final List selecionarResultadosRepetidosEsperado = new ArrayList();
+final List<ResultadoProvaManual> selecionarResultadosRepetidosEsperado = new ArrayList<ResultadoProvaManual>();
 final Prova prova = new Prova(1);
 
 // Configurando mocks (1)
@@ -448,7 +466,7 @@ replay(resultadoProvaManualDao);
 
 
 // invocar metodo sendo testado
-final List consultarResultadosRepetidosReal = resultadoProvaManualBusinessBean.consultarResultadosRepetidos(prova);
+final List<ResultadoProvaManual> consultarResultadosRepetidosReal = resultadoProvaManualBusinessBean.consultarResultadosRepetidos(prova);
 
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
@@ -461,6 +479,7 @@ assertEquals(selecionarResultadosRepetidosEsperado, consultarResultadosRepetidos
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#existeResultadoValidadoAplicacaoProva(AplicacaoProva)}.
+ * Description: normal flow.
  */
 @Test
 public void testExisteResultadoValidadoAplicacaoProva() {
@@ -490,12 +509,13 @@ assertEquals(existeResultadoValidadoAplicacaoProvaEsperado, existeResultadoValid
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#consultarConcursosAndamentoComResultadoCadastrado()}.
+ * Description: normal flow.
  */
 @Test
 public void testConsultarConcursosAndamentoComResultadoCadastrado() {
 
 // variaveis usadas
-final List selecionarConcursosAndamentoComResultadoCadastradoEsperado = new ArrayList();
+final List<Concurso> selecionarConcursosAndamentoComResultadoCadastradoEsperado = new ArrayList<Concurso>();
 
 // Configurando mocks (1)
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
@@ -505,7 +525,7 @@ replay(resultadoProvaManualDao);
 
 
 // invocar metodo sendo testado
-final List consultarConcursosAndamentoComResultadoCadastradoReal = resultadoProvaManualBusinessBean.consultarConcursosAndamentoComResultadoCadastrado();
+final List<Concurso> consultarConcursosAndamentoComResultadoCadastradoReal = resultadoProvaManualBusinessBean.consultarConcursosAndamentoComResultadoCadastrado();
 
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
@@ -518,12 +538,13 @@ assertEquals(selecionarConcursosAndamentoComResultadoCadastradoEsperado, consult
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#consultarProvasComResultadoCadastrado(Concurso)}.
+ * Description: normal flow.
  */
 @Test
 public void testConsultarProvasComResultadoCadastrado() {
 
 // variaveis usadas
-final List selecionarProvasComResultadoCadastradoEsperado = new ArrayList();
+final List<Prova> selecionarProvasComResultadoCadastradoEsperado = new ArrayList<Prova>();
 final Concurso concurso = new Concurso(1);
 
 // Configurando mocks (1)
@@ -534,7 +555,7 @@ replay(resultadoProvaManualDao);
 
 
 // invocar metodo sendo testado
-final List consultarProvasComResultadoCadastradoReal = resultadoProvaManualBusinessBean.consultarProvasComResultadoCadastrado(concurso);
+final List<Prova> consultarProvasComResultadoCadastradoReal = resultadoProvaManualBusinessBean.consultarProvasComResultadoCadastrado(concurso);
 
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
@@ -547,12 +568,13 @@ assertEquals(selecionarProvasComResultadoCadastradoEsperado, consultarProvasComR
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#consultarResultadosProvaManual(Prova,VersaoResultadoProvaManual,int,int)}.
+ * Description: normal flow.
  */
 @Test
 public void testConsultarResultadosProvaManual() {
 
 // variaveis usadas
-final List selecionarResultadosProvaManualEsperado = new ArrayList();
+final List<ResultadoProvaManual> selecionarResultadosProvaManualEsperado = new ArrayList<ResultadoProvaManual>();
 final Prova prova = new Prova(1);
 final VersaoResultadoProvaManual versao = new VersaoResultadoProvaManual(1);
 final int posicaoInicial = 0;
@@ -566,7 +588,7 @@ replay(resultadoProvaManualDao);
 
 
 // invocar metodo sendo testado
-final List consultarResultadosProvaManualReal = resultadoProvaManualBusinessBean.consultarResultadosProvaManual(prova,versao,posicaoInicial,quantidadeRegistros);
+final List<ResultadoProvaManual> consultarResultadosProvaManualReal = resultadoProvaManualBusinessBean.consultarResultadosProvaManual(prova,versao,posicaoInicial,quantidadeRegistros);
 
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
@@ -579,6 +601,7 @@ assertEquals(selecionarResultadosProvaManualEsperado, consultarResultadosProvaMa
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#contarResultadosProvaManual(Prova,VersaoResultadoProvaManual)}.
+ * Description: normal flow.
  */
 @Test
 public void testContarResultadosProvaManual() {
@@ -609,6 +632,8 @@ assertEquals(contarResultadosProvaManualEsperado, contarResultadosProvaManualRea
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#cancelarValidacaoNotas(Prova,VersaoResultadoProvaManual)}.
+ * Description: In "if (versao.isProvisoria()) {"
+ * .
  */
 @Test
 public void testCancelarValidacaoNotasPath1() {
@@ -636,6 +661,8 @@ verify(resultadoProvaManualDao);
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#cancelarValidacaoNotas(Prova,VersaoResultadoProvaManual)}.
+ * Description: Out "if (versao.isProvisoria()) {"
+ * .
  */
 @Test
 public void testCancelarValidacaoNotasPath2() {
@@ -662,6 +689,8 @@ verify(resultadoProvaManualDao);
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#validarNotas(Prova,VersaoResultadoProvaManual)}.
+ * Description: In "if (versao.isProvisoria()) {"
+ * .
  */
 @Test
 public void testValidarNotasPath1() {
@@ -689,6 +718,8 @@ verify(resultadoProvaManualDao);
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#validarNotas(Prova,VersaoResultadoProvaManual)}.
+ * Description: Out "if (versao.isProvisoria()) {"
+ * .
  */
 @Test
 public void testValidarNotasPath2() {
@@ -715,6 +746,7 @@ verify(resultadoProvaManualDao);
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#todasAsNotasForamPreenchidas(Prova,VersaoResultadoProvaManual)}.
+ * Description: normal flow.
  */
 @Test
 public void testTodasAsNotasForamPreenchidas() {
