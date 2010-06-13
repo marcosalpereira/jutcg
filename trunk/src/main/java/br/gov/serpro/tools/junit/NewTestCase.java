@@ -1,16 +1,17 @@
 package br.gov.serpro.tools.junit;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
+import br.gov.serpro.tools.junit.model.JavaClass;
 import br.gov.serpro.tools.junit.parser.JsmgJavaSourceParser;
 import br.gov.serpro.tools.junit.parser.ParseException;
 
 public class NewTestCase {
 
-	public static void main(String[] args) throws ParseException, FileNotFoundException {
+	public static void main(String[] args) throws ParseException, IOException {
 
-		args = new String[] {"/home/05473574602/workspaces/workspaceTestCode/jutcg/src/main/resources/CampoAtuacaoBusinessBean.java.txt"};
+		args = new String[] {"/CampoAtuacaoBusinessBean.java.txt"};
 
 		final NewTestCase newTestCase = new NewTestCase();
 
@@ -19,10 +20,9 @@ public class NewTestCase {
 		}
 
 		final JsmgJavaSourceParser parser = new JsmgJavaSourceParser();
-		parser.parse(new File(args[0]));
-		final String testCase = new TestCaseGenerator(parser.getSource()).generate();
+		final JavaClass javaClass = parser.parse(getFile(args[0]));
+		final String testCase = new TestCaseGenerator(javaClass).generate();
 		System.out.println(testCase);
-
 
 	}
 
@@ -34,5 +34,10 @@ public class NewTestCase {
 		return true;
 	}
 
+	private static File getFile(String filename) throws IOException {
+		final String fullname = NewTestCase.class.getResource(filename).getFile();
+		final File file = new File(fullname);
+		return file;
+	}
 
 }

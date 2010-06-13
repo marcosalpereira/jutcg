@@ -49,7 +49,7 @@ private DigitacaoNotaManualFacade digitacaoNotaManualFacade;
 
 
 /**
- * Cria o mock {@link DigitacaoNotaManualFacade} e seta na classe sendo testada
+ * Cria o mock {@link DigitacaoNotaManualFacade} e seta na classe sendo testada.
  * @return o mock criado
  */
 private DigitacaoNotaManualFacade criarMockDigitacaoNotaManualFacade() {
@@ -72,6 +72,8 @@ public void setUp() throws Exception {
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#validaTipoConsulta(FacesContext,UIComponent,Object)}.
+ * Description: In "if (StringHelper.isEmpty(nome) && StringHelper.isEmpty(numeroInscricao)) {"
+ * .
  */
 @Test
 public void testValidaTipoConsultaPath1() {
@@ -96,6 +98,9 @@ digitacaoNotaManualListarBean.validaTipoConsulta(context,component,value);
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#validaTipoConsulta(FacesContext,UIComponent,Object)}.
+ * Description: Out "if (StringHelper.isEmpty(nome) && StringHelper.isEmpty(numeroInscricao)) {"
+ * In "if (StringHelper.isNotEmpty(nome) && StringHelper.isNotEmpty(numeroInscricao)) {"
+ * .
  */
 @Test
 public void testValidaTipoConsultaPath2() {
@@ -120,6 +125,10 @@ digitacaoNotaManualListarBean.validaTipoConsulta(context,component,value);
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#validaTipoConsulta(FacesContext,UIComponent,Object)}.
+ * Description: Out "if (StringHelper.isEmpty(nome) && StringHelper.isEmpty(numeroInscricao)) {"
+ * Out "if (StringHelper.isNotEmpty(nome) && StringHelper.isNotEmpty(numeroInscricao)) {"
+ * In "if (StringHelper.isNotEmpty(nome) && nome.length() < 3) {"
+ * .
  */
 @Test
 public void testValidaTipoConsultaPath3() {
@@ -144,6 +153,10 @@ digitacaoNotaManualListarBean.validaTipoConsulta(context,component,value);
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#validaTipoConsulta(FacesContext,UIComponent,Object)}.
+ * Description: Out "if (StringHelper.isEmpty(nome) && StringHelper.isEmpty(numeroInscricao)) {"
+ * Out "if (StringHelper.isNotEmpty(nome) && StringHelper.isNotEmpty(numeroInscricao)) {"
+ * Out "if (StringHelper.isNotEmpty(nome) && nome.length() < 3) {"
+ * .
  */
 @Test
 public void testValidaTipoConsultaPath4() {
@@ -168,6 +181,7 @@ digitacaoNotaManualListarBean.validaTipoConsulta(context,component,value);
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#onChangeConcurso()}.
+ * Description: normal flow.
  */
 @Test
 public void testOnChangeConcurso() {
@@ -188,6 +202,7 @@ assertEquals(expected, digitacaoNotaManualListarBean.getProvaSelecionada());
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#onChangeProva()}.
+ * Description: normal flow.
  */
 @Test
 public void testOnChangeProva() {
@@ -210,6 +225,7 @@ assertEquals(expected, digitacaoNotaManualListarBean.getOrgaoSelecionado());
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#onChangeVersao()}.
+ * Description: normal flow.
  */
 @Test
 public void testOnChangeVersao() {
@@ -230,6 +246,7 @@ assertEquals(expected, digitacaoNotaManualListarBean.getUfSelecionada());
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#onChangeUf()}.
+ * Description: normal flow.
  */
 @Test
 public void testOnChangeUf() {
@@ -250,6 +267,7 @@ assertEquals(expected, digitacaoNotaManualListarBean.getCidadeSelecionada());
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#onChangeOrgao()}.
+ * Description: normal flow.
  */
 @Test
 public void testOnChangeOrgao() {
@@ -270,6 +288,7 @@ assertEquals(expected, digitacaoNotaManualListarBean.getCargoSelecionado());
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#onChangeCargo()}.
+ * Description: normal flow.
  */
 @Test
 public void testOnChangeCargo() {
@@ -290,6 +309,7 @@ assertEquals(expected, digitacaoNotaManualListarBean.getCampoAtuacaoSelecionado(
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#onChangeCampoAtuacao()}.
+ * Description: normal flow.
  */
 @Test
 public void testOnChangeCampoAtuacao() {
@@ -309,6 +329,7 @@ assertEquals(expected, digitacaoNotaManualListarBean.isMostrarLocalidades());
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#mostrarUfCidade()}.
+ * Description: normal flow.
  */
 @Test
 public void testMostrarUfCidade() {
@@ -340,6 +361,9 @@ assertEquals(esperado, mostrarUfCidadeReal);
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#pesquisar()}.
+ * Description: In "if (versaoSelecionada == VersaoResultadoProvaManual.PROVISORIA) {"
+ * In "for (Inscricao inscricao : inscricoes) {"
+ * .
  */
 @Test
 public void testPesquisarPath1() {
@@ -358,7 +382,7 @@ digitacaoNotaManualListarBean.setProvaSelecionada(new Prova(1));
 digitacaoNotaManualListarBean.setOrgaoSelecionado(new OrgaoContratante(1));
 digitacaoNotaManualListarBean.setNumeroInscricao(new String(1));
 digitacaoNotaManualListarBean.setNomeCandidato(new String(1));
-digitacaoNotaManualListarBean.setInscricoes(new ArrayList());
+digitacaoNotaManualListarBean.setInscricoes(new ArrayList<Inscricao>());
 digitacaoNotaManualListarBean.setCargoSelecionado(new Cargo(1));
 digitacaoNotaManualListarBean.setCampoAtuacaoSelecionado(new CampoAtuacao(1));
 
@@ -377,6 +401,9 @@ assertEquals(expected, digitacaoNotaManualListarBean.getInscricoes());
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#pesquisar()}.
+ * Description: In "if (versaoSelecionada == VersaoResultadoProvaManual.PROVISORIA) {"
+ * Out "for (Inscricao inscricao : inscricoes) {"
+ * .
  */
 @Test
 public void testPesquisarPath2() {
@@ -395,7 +422,7 @@ digitacaoNotaManualListarBean.setProvaSelecionada(new Prova(1));
 digitacaoNotaManualListarBean.setOrgaoSelecionado(new OrgaoContratante(1));
 digitacaoNotaManualListarBean.setNumeroInscricao(new String(1));
 digitacaoNotaManualListarBean.setNomeCandidato(new String(1));
-digitacaoNotaManualListarBean.setInscricoes(new ArrayList());
+digitacaoNotaManualListarBean.setInscricoes(new ArrayList<Inscricao>());
 digitacaoNotaManualListarBean.setCargoSelecionado(new Cargo(1));
 digitacaoNotaManualListarBean.setCampoAtuacaoSelecionado(new CampoAtuacao(1));
 
@@ -414,6 +441,9 @@ assertEquals(expected, digitacaoNotaManualListarBean.getInscricoes());
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#pesquisar()}.
+ * Description: Out "if (versaoSelecionada == VersaoResultadoProvaManual.PROVISORIA) {"
+ * In "for (Inscricao inscricao : inscricoes) {"
+ * .
  */
 @Test
 public void testPesquisarPath3() {
@@ -432,7 +462,7 @@ digitacaoNotaManualListarBean.setProvaSelecionada(new Prova(1));
 digitacaoNotaManualListarBean.setOrgaoSelecionado(new OrgaoContratante(1));
 digitacaoNotaManualListarBean.setNumeroInscricao(new String(1));
 digitacaoNotaManualListarBean.setNomeCandidato(new String(1));
-digitacaoNotaManualListarBean.setInscricoes(new ArrayList());
+digitacaoNotaManualListarBean.setInscricoes(new ArrayList<Inscricao>());
 digitacaoNotaManualListarBean.setCargoSelecionado(new Cargo(1));
 digitacaoNotaManualListarBean.setCampoAtuacaoSelecionado(new CampoAtuacao(1));
 
@@ -451,6 +481,9 @@ assertEquals(expected, digitacaoNotaManualListarBean.getInscricoes());
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#pesquisar()}.
+ * Description: Out "if (versaoSelecionada == VersaoResultadoProvaManual.PROVISORIA) {"
+ * Out "for (Inscricao inscricao : inscricoes) {"
+ * .
  */
 @Test
 public void testPesquisarPath4() {
@@ -469,7 +502,7 @@ digitacaoNotaManualListarBean.setProvaSelecionada(new Prova(1));
 digitacaoNotaManualListarBean.setOrgaoSelecionado(new OrgaoContratante(1));
 digitacaoNotaManualListarBean.setNumeroInscricao(new String(1));
 digitacaoNotaManualListarBean.setNomeCandidato(new String(1));
-digitacaoNotaManualListarBean.setInscricoes(new ArrayList());
+digitacaoNotaManualListarBean.setInscricoes(new ArrayList<Inscricao>());
 digitacaoNotaManualListarBean.setCargoSelecionado(new Cargo(1));
 digitacaoNotaManualListarBean.setCampoAtuacaoSelecionado(new CampoAtuacao(1));
 
@@ -488,6 +521,7 @@ assertEquals(expected, digitacaoNotaManualListarBean.getInscricoes());
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#excluivel(Inscricao)}.
+ * Description: normal flow.
  */
 @Test
 public void testExcluivel() {
@@ -520,6 +554,7 @@ assertEquals(existeNotaProvisoriaStatusCadastradaEsperado, excluivelReal);
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#excluirResultado(Inscricao)}.
+ * Description: normal flow.
  */
 @Test
 public void testExcluirResultado() {

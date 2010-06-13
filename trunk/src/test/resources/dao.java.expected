@@ -61,6 +61,7 @@ vinculoProvaFaseDaoBean.setEntityManager(getEntityManager());
 
 /**
  * Teste para o metodo {@link VinculoProvaFaseDaoBean#inserir(VinculoProvaFase)}.
+ * Description: normal flow.
  */
 @Test
 public void testInserir() {
@@ -80,6 +81,7 @@ vinculoProvaFaseDaoBean.inserir(vinculoProvaFase);
 
 /**
  * Teste para o metodo {@link VinculoProvaFaseDaoBean#atualizar(VinculoProvaFase)}.
+ * Description: normal flow.
  */
 @Test
 public void testAtualizar() {
@@ -99,6 +101,7 @@ vinculoProvaFaseDaoBean.atualizar(vinculoProvaFase);
 
 /**
  * Teste para o metodo {@link VinculoProvaFaseDaoBean#excluir(VinculoProvaFase)}.
+ * Description: normal flow.
  */
 @Test
 public void testExcluir() {
@@ -118,6 +121,7 @@ vinculoProvaFaseDaoBean.excluir(vinculoProvaFase);
 
 /**
  * Teste para o metodo {@link VinculoProvaFaseDaoBean#selecionar(Fase)}.
+ * Description: normal flow.
  */
 @Test
 public void testSelecionarFase() {
@@ -128,7 +132,7 @@ final Fase fase = new Fase(1);
 
 
 // invocar metodo sendo testado
-final Set selecionarReal = vinculoProvaFaseDaoBean.selecionar(fase);
+final Set<VinculoProvaFase> selecionarReal = vinculoProvaFaseDaoBean.selecionar(fase);
 
 
 // verificacoes do resultado do metodo sendo testado
@@ -139,6 +143,7 @@ assertEquals(esperado, selecionarReal);
 
 /**
  * Teste para o metodo {@link VinculoProvaFaseDaoBean#selecionar(OfertaCargoConcurso)}.
+ * Description: normal flow.
  */
 @Test
 public void testSelecionarOfertaCargoConcurso() {
@@ -149,7 +154,7 @@ final OfertaCargoConcurso oferta = new OfertaCargoConcurso(1);
 
 
 // invocar metodo sendo testado
-final List selecionarReal = vinculoProvaFaseDaoBean.selecionar(oferta);
+final List<VinculoProvaFase> selecionarReal = vinculoProvaFaseDaoBean.selecionar(oferta);
 
 
 // verificacoes do resultado do metodo sendo testado
