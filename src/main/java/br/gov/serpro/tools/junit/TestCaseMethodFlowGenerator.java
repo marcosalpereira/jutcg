@@ -12,6 +12,7 @@ import br.gov.serpro.tools.junit.model.Flow;
 import br.gov.serpro.tools.junit.model.FormalParameter;
 import br.gov.serpro.tools.junit.model.JavaClass;
 import br.gov.serpro.tools.junit.model.Method;
+import br.gov.serpro.tools.junit.model.Flow.FlowBranch;
 
 public class TestCaseMethodFlowGenerator {
 	final private Method method;
@@ -40,11 +41,13 @@ public class TestCaseMethodFlowGenerator {
 
 	public String generate() {
 		final SourceBuilder sb = new SourceBuilder();
-		
-		if (method.getFlows().size() > 1) {
+
+		if (!flow.getFlowBranches().isEmpty()) {
+
 			sb.appendJavaDoc("Teste para o metodo {@link %s#%s}.\nDescricao do Fluxo: %s.",
-				method.getJavaClass().getType(), method.getLoggingSignature(),
-				flow.getDescription());
+				method.getJavaClass().getType(),
+				method.getLoggingSignature(),
+				generateFlowDescription(flow.getFlowBranches()));
 		} else {
 			sb.appendJavaDoc("Teste para o metodo {@link %s#%s}.",
 					method.getJavaClass().getType(), method.getLoggingSignature());
@@ -69,7 +72,21 @@ public class TestCaseMethodFlowGenerator {
 		return sb.toString();
 	}
 
-	String generateEndMethod() {
+	private String generateFlowDescription(List<FlowBranch> flowBranches) {
+	    StringBuilder sb = new StringBuilder();
+        for (FlowBranch flowBranch : flowBranches) {
+            if (flowBranch.isEnter()) {
+                sb.append("\n    Entra: ");
+            } else {
+                sb.append("\nNAO Entra: ");
+            }
+            sb.append(flowBranch.getExpression());
+        }
+
+        return sb.toString();
+    }
+
+    String generateEndMethod() {
 		return "}";
 	}
 

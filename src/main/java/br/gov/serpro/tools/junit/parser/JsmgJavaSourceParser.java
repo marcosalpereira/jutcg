@@ -13,6 +13,7 @@ import java.util.TreeSet;
 import org.jsmg.JsmgParser;
 import org.jsmg.model.Annotation;
 import org.jsmg.model.ExecutionPath;
+import org.jsmg.model.ExecutionPathNode;
 import org.jsmg.model.ImportPath;
 import org.jsmg.model.JavaSourceClassModel;
 import org.jsmg.model.MethodInvocation;
@@ -29,6 +30,7 @@ import br.gov.serpro.tools.junit.model.Method;
 import br.gov.serpro.tools.junit.model.Protection;
 import br.gov.serpro.tools.junit.model.Scope;
 import br.gov.serpro.tools.junit.model.Type;
+import br.gov.serpro.tools.junit.model.Flow.FlowBranch;
 
 /**
  * Build java model class using the jsmg project's java source parser.
@@ -159,7 +161,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 		for (final ExecutionPath executionPath : executionsPath) {
 			final Flow flow = new Flow();
 			flow.setName(executionPath.getName());
-			flow.setDescription(executionPath.getPathDescription());
+			flow.setFlowBranches(translateFlowBranches(executionPath));
 			flow.setMethod(method);
 			flow.setReadFields(translateReadFields(executionPath, method.getJavaClass()));
 			flow.setWrittenFields(translateWrittenFields(executionPath, method.getJavaClass()));
@@ -169,7 +171,21 @@ public class JsmgJavaSourceParser implements SourceParser {
 		return flows;
 	}
 
-	private List<FieldMethodInvocation> translateInvocations(
+	private List<FlowBranch> translateFlowBranches(ExecutionPath executionPath) {
+	    final List<FlowBranch> flowBranches = new ArrayList<FlowBranch>();
+
+        for (final ExecutionPathNode pathNode : executionPath.getExecutionPathNodes()) {
+            if(pathNode.isBranch()) {
+                FlowBranch flowBranch = new FlowBranch();
+                flowBranch.setEnter(pathNode.isEntersConditionalExpression());
+                flowBranch.setExpression(pathNode.getNodeImage());
+                flowBranches.add(flowBranch);
+            }
+        }
+        return flowBranches;
+    }
+
+    private List<FieldMethodInvocation> translateInvocations(
 			ExecutionPath executionPath, Method method) {
 		final List<FieldMethodInvocation> fieldMethodInvocations = new ArrayList<FieldMethodInvocation>();
 		final List<MethodInvocation> methodInvocations = executionPath.getInternalMethodInvocations();

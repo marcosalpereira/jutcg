@@ -61,8 +61,8 @@ public void setUp() {
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#cadastrarResultado(ResultadoProvaManual)}.
- * Descricao do Fluxo: In "if (resultadoProvaManual.isPersistido()) {"
- * .
+ * Descricao do Fluxo: 
+ *     Entra: if (resultadoProvaManual.isPersistido()) {.
  */
 @Test
 public void testCadastrarResultadoPath1() {
@@ -88,8 +88,8 @@ verify(resultadoProvaManualDao);
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#cadastrarResultado(ResultadoProvaManual)}.
- * Descricao do Fluxo: Out "if (resultadoProvaManual.isPersistido()) {"
- * .
+ * Descricao do Fluxo: 
+ * NAO Entra: if (resultadoProvaManual.isPersistido()) {.
  */
 @Test
 public void testCadastrarResultadoPath2() {
@@ -232,8 +232,8 @@ assertEquals(selecionarResultadoProvaManualValidoEsperado, consultarResultadoPro
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#excluirResultado(Inscricao,Prova,Cidade)}.
- * Descricao do Fluxo: In "if (resultadoProvaManual != null) {"
- * .
+ * Descricao do Fluxo: 
+ *     Entra: if (resultadoProvaManual != null) {.
  */
 @Test
 public void testExcluirResultadoPath1() {
@@ -264,8 +264,8 @@ verify(resultadoProvaManualDao);
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#excluirResultado(Inscricao,Prova,Cidade)}.
- * Descricao do Fluxo: Out "if (resultadoProvaManual != null) {"
- * .
+ * Descricao do Fluxo: 
+ * NAO Entra: if (resultadoProvaManual != null) {.
  */
 @Test
 public void testExcluirResultadoPath2() {
@@ -618,8 +618,8 @@ assertEquals(contarResultadosProvaManualEsperado, contarResultadosProvaManualRea
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#cancelarValidacaoNotas(Prova,VersaoResultadoProvaManual)}.
- * Descricao do Fluxo: In "if (versao.isProvisoria()) {"
- * .
+ * Descricao do Fluxo: 
+ *     Entra: if (versao.isProvisoria()) {.
  */
 @Test
 public void testCancelarValidacaoNotasPath1() {
@@ -647,8 +647,8 @@ verify(resultadoProvaManualDao);
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#cancelarValidacaoNotas(Prova,VersaoResultadoProvaManual)}.
- * Descricao do Fluxo: Out "if (versao.isProvisoria()) {"
- * .
+ * Descricao do Fluxo: 
+ * NAO Entra: if (versao.isProvisoria()) {.
  */
 @Test
 public void testCancelarValidacaoNotasPath2() {
@@ -675,8 +675,8 @@ verify(resultadoProvaManualDao);
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#validarNotas(Prova,VersaoResultadoProvaManual)}.
- * Descricao do Fluxo: In "if (versao.isProvisoria()) {"
- * .
+ * Descricao do Fluxo: 
+ *     Entra: if (versao.isProvisoria()) {.
  */
 @Test
 public void testValidarNotasPath1() {
@@ -704,8 +704,8 @@ verify(resultadoProvaManualDao);
 
 /**
  * Teste para o metodo {@link ResultadoProvaManualBusinessBean#validarNotas(Prova,VersaoResultadoProvaManual)}.
- * Descricao do Fluxo: Out "if (versao.isProvisoria()) {"
- * .
+ * Descricao do Fluxo: 
+ * NAO Entra: if (versao.isProvisoria()) {.
  */
 @Test
 public void testValidarNotasPath2() {
