@@ -5,6 +5,7 @@ import static br.gov.serpro.tools.junit.GeneratorHelper.lowerCaseFirstChar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 
 import br.gov.serpro.tools.junit.model.Field;
 import br.gov.serpro.tools.junit.model.FieldMethodInvocation;
@@ -162,7 +163,7 @@ public class TestCaseMethodFlowGenerator {
 			sb.appendLineComment("Configurando estado interno da classe sob teste");
 		}
 		for (final Field f : flow.getReadFields()){
-			if (classUnderTest.getFields().contains(f)) {
+			if (!f.isStatic() && classUnderTest.getFields().contains(f)) {
 				sb.appendln("%s.%s(%s);", classUnderTest.variableNameForType(),
 						f.getSetter(), f.getType().getNewValue());
 			}
@@ -186,10 +187,20 @@ public class TestCaseMethodFlowGenerator {
 		final SourceBuilder sb = new SourceBuilder();
 		final List<FormalParameter> params = method.getFormalParameters();
 		final Method returnInvocationMethod = flow.getReturnInvocationMethod();
+		final SortedSet<Field> readFields = flow.getReadFields();
 
-		if (returnInvocationMethod != null || !params.isEmpty()) {
+		if (returnInvocationMethod != null || !params.isEmpty() || !readFields.isEmpty()) {
 			sb.appendLineComment("variaveis usadas");
 		}
+
+		//Declare readFields as local vars
+		//PAREI AQUI
+//		for (final Field f : flow.getReadFields()){
+//            if (!f.isStatic()) {
+//                sb.appendln("%s.%s(%s);", classUnderTest.variableNameForType(),
+//                        f.getSetter(), f.getType().getNewValue());
+//            }
+//        }
 
 		if (returnInvocationMethod != null) {
 			sb.appendln("final %s %sEsperado = %s;", returnInvocationMethod.getType(),

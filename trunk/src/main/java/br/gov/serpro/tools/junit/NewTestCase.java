@@ -11,7 +11,7 @@ public class NewTestCase {
 
 	public static void main(String[] args) throws ParseException, IOException {
 
-		args = new String[] {"/CampoAtuacaoBusinessBean.java.txt"};
+		//args = new String[] {"/CampoAtuacaoBusinessBean.java.txt"};
 
 		final NewTestCase newTestCase = new NewTestCase();
 
@@ -35,6 +35,11 @@ public class NewTestCase {
 	}
 
 	private static File getFile(String filename) throws IOException {
+	    File externalFile = new File(filename);
+	    if (externalFile.exists()) {
+	        return externalFile;
+	    }
+
 		final String fullname = NewTestCase.class.getResource(filename).getFile();
 		final File file = new File(fullname);
 		return file;
