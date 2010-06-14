@@ -21,30 +21,12 @@ public class SourceBuilder {
 		return this;
 	}
 
-	public BuildJavaDoc buildJavaDoc(String format, Object... args) {
-		return new BuildJavaDoc(format, args);
-	}
-	
 	public SourceBuilder appendJavaDoc(String format, Object... args) {
-		sb.append("\n/**\n * " + String.format(format, args).replaceAll("\n", "\n * ") + "\n */\n");
+		final String doc = String.format(format, args).replaceAll("\n", "\n * ");
+		sb.append("\n/**\n * " + doc + "\n */\n");
 		return this;
 	}
 	
-	public class BuildJavaDoc {
-		
-		public BuildJavaDoc (String format, Object... args) {
-			sb.append("\n/**\n * " + String.format(format, args) + "\n");
-		}
-		
-		public BuildJavaDoc appendln(String format, Object... args) {
-			sb.append("* " + String.format(format, args) + "\n");
-			return this;
-		}		
-		public void end() {
-			sb.append("\n */\n");
-		}
-	}
-
 	public SourceBuilder insertLineComment(int offset, String comment) {
 	    sb.insert(offset, "// " + comment + "\n");
 	    return this;

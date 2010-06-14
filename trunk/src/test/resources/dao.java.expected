@@ -27,6 +27,7 @@ import br.gov.esaf.sgc.model.prova.Prova.TipoCorrecaoProva;
 import br.gov.esaf.sgc.model.prova.ProvaObjetiva.NumeroAplicacaoProva;
 import static org.easymock.EasyMock.*;
 import org.junit.*;
+import java.util.*;
 import static org.junit.Assert.*;
 import br.gov.esaf.sgc.dao.impl.HibernateTestCase;
 
@@ -61,7 +62,6 @@ vinculoProvaFaseDaoBean.setEntityManager(getEntityManager());
 
 /**
  * Teste para o metodo {@link VinculoProvaFaseDaoBean#inserir(VinculoProvaFase)}.
- * Description: normal flow.
  */
 @Test
 public void testInserir() {
@@ -81,7 +81,6 @@ vinculoProvaFaseDaoBean.inserir(vinculoProvaFase);
 
 /**
  * Teste para o metodo {@link VinculoProvaFaseDaoBean#atualizar(VinculoProvaFase)}.
- * Description: normal flow.
  */
 @Test
 public void testAtualizar() {
@@ -101,7 +100,6 @@ vinculoProvaFaseDaoBean.atualizar(vinculoProvaFase);
 
 /**
  * Teste para o metodo {@link VinculoProvaFaseDaoBean#excluir(VinculoProvaFase)}.
- * Description: normal flow.
  */
 @Test
 public void testExcluir() {
@@ -121,7 +119,6 @@ vinculoProvaFaseDaoBean.excluir(vinculoProvaFase);
 
 /**
  * Teste para o metodo {@link VinculoProvaFaseDaoBean#selecionar(Fase)}.
- * Description: normal flow.
  */
 @Test
 public void testSelecionarFase() {
@@ -143,7 +140,6 @@ assertEquals(esperado, selecionarReal);
 
 /**
  * Teste para o metodo {@link VinculoProvaFaseDaoBean#selecionar(OfertaCargoConcurso)}.
- * Description: normal flow.
  */
 @Test
 public void testSelecionarOfertaCargoConcurso() {

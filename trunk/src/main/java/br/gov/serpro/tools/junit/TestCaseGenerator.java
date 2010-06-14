@@ -46,7 +46,7 @@ public class TestCaseGenerator {
 	String generateCreateMockMethod(Field field) {
 		final SourceBuilder sb = new SourceBuilder();
 		sb.appendJavaDoc("Cria o mock {@link %s} e seta na classe sendo testada.\n" +
-				" * @return o mock criado", field.getType());
+				"@return o mock criado", field.getType());
 		sb.appendln("private %1$s criarMock%1$s() {", field.getType());
 		sb.appendln("  %1$s mock = createStrictMock(%1$s.class);", field.getType());
 		sb.appendln("  %s.set%s(mock);", varNameForClassUnderTest, field.getType());
@@ -151,7 +151,7 @@ public class TestCaseGenerator {
 
 	String generateFieldForType(Type type, String prefix) {
 		final SourceBuilder sb = new SourceBuilder();
-		sb.appendJavaDoc(String.format("%s {@link %s}.", prefix, type));
+		sb.appendJavaDoc("%s {@link %s}.", prefix, type);
 		sb.appendln("private %s %s;", type, type.getVariableName());
 		return sb.toString();
 	}
@@ -182,6 +182,7 @@ public class TestCaseGenerator {
 
 		sb.appendln("import static org.easymock.EasyMock.*;");
 		sb.appendln("import org.junit.*;");
+		sb.appendln("import java.util.*;");
 		sb.appendln("import static org.junit.Assert.*;");
 		if (classUnderTest.isAtView()) {
 			sb.appendln("import br.gov.esaf.sgc.view.JsfTestCase;");
