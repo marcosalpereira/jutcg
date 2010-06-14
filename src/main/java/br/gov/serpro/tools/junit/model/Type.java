@@ -14,6 +14,8 @@ public class Type {
 		if (!isPrimitive()) {
 			if (isCollection()) {
 				return collectionInstance();
+			} else if (getName().equals("String")) {
+			    return "\"1\"";
 			}
 			return String.format("new %s(1)", getName());
 		}
@@ -42,11 +44,11 @@ public class Type {
 		Type ret = null;
 		int iniGen = this.name.indexOf('<');
 		int lastIniGen = this.name.lastIndexOf('<');
-		
+
 		//if a complex generic, like List<List<?>>
-		//we will ignore		
+		//we will ignore
 		if (iniGen != lastIniGen) return null;
-		
+
 		if (iniGen > 0) {
 			//List<Cargo>
 			int endGen = this.name.indexOf('>');
@@ -56,7 +58,7 @@ public class Type {
 			ret.setFullName(nome);
 			ret.setPrimitive(Character.isLowerCase(nome.charAt(0)));
 		}
-		
+
 		return ret;
 	}
 

@@ -1,0 +1,196 @@
+package br.gov.esaf.sgc.view.consultas;
+
+import static org.easymock.EasyMock.createStrictMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.Test;
+
+import br.gov.esaf.sgc.facade.ConsultaLocalProvaFacade;
+import br.gov.esaf.sgc.model.Concurso;
+import br.gov.esaf.sgc.model.TipoConsultaNome;
+import br.gov.esaf.sgc.model.Usuario;
+import br.gov.esaf.sgc.model.UsuarioLogado;
+import br.gov.esaf.sgc.model.alocacao.AlocacaoInscricao;
+import br.gov.esaf.sgc.view.JsfTestCase;
+
+/**
+ * Testes unitarios para a classe {@link ConsultaLocalProvaBean}.
+ */
+public class TestConsultaLocalProvaBean extends JsfTestCase {
+
+    /**
+     * Classe sendo testada {@link ConsultaLocalProvaBean}.
+     */
+    private ConsultaLocalProvaBean consultaLocalProvaBean;
+
+    /**
+     * Cria o mock {@link ConsultaLocalProvaFacade} e seta na classe sendo
+     * testada.
+     * @return o mock criado
+     */
+    private ConsultaLocalProvaFacade criarMockConsultaLocalProvaFacade() {
+        ConsultaLocalProvaFacade mock = createStrictMock(ConsultaLocalProvaFacade.class);
+        consultaLocalProvaBean.setFacade(mock);
+        return mock;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        consultaLocalProvaBean = new ConsultaLocalProvaBean();
+    }
+
+    /**
+     * Teste para o metodo {@link ConsultaLocalProvaBean#consultarConcursos()}.
+     */
+    @Test
+    public void testConsultarConcursos() {
+
+        // variaveis usadas
+        final UsuarioLogado usuarioLogado = new Usuario(1);
+        final List<Concurso> consultarConcursosAndamentoRetornado =
+            Arrays.asList(new Concurso(1));
+        final List<Concurso> consultarConcursosEsperado =
+            Arrays.asList(new Concurso(1));
+
+        // Configurando mocks (1)
+        ConsultaLocalProvaFacade facade = criarMockConsultaLocalProvaFacade();
+        expect(facade.consultarConcursosAndamento(usuarioLogado)).andReturn(
+            consultarConcursosAndamentoRetornado);
+        replay(facade);
+
+        // Configurando estado interno da classe sob teste
+        consultaLocalProvaBean.setUsuarioLogado(usuarioLogado);
+
+        // invocar metodo sendo testado
+        final List<Concurso> consultarConcursosReal = consultaLocalProvaBean
+            .consultarConcursos();
+
+        // checar estados dos mocks
+        verify(facade);
+
+        // verificacoes do resultado do metodo sendo testado
+        assertEquals(consultarConcursosEsperado, consultarConcursosReal);
+
+    }
+
+    /**
+     * Teste para o metodo {@link ConsultaLocalProvaBean#pesquisar()}.
+     * Descricao do Fluxo:
+     *  Entra: if (this.alocacoes.size() == 201) {.
+     */
+    @Test
+    public void testPesquisarPath1() {
+        final Concurso concursoSelecionado = new Concurso(1);
+        final UsuarioLogado usuarioLogado = new Usuario(1);
+        final String numeroInscricao = "1";
+        final String nomeCandidato = null;
+        final TipoConsultaNome tipoConsultaNome = TipoConsultaNome.INICIO;
+
+        // Configurando mocks (1)
+        final ConsultaLocalProvaFacade facade = criarMockConsultaLocalProvaFacade();
+        final List<AlocacaoInscricao> alocacoes201 = criarAlocacoesInscricoes(201);
+        expect(facade.consultarAlocacoesLocalProva(concursoSelecionado, usuarioLogado,
+            numeroInscricao, nomeCandidato, tipoConsultaNome))
+            .andReturn(alocacoes201);
+        replay(facade);
+
+        // Configurando estado interno da classe sob teste
+        consultaLocalProvaBean.setUsuarioLogado(usuarioLogado);
+        consultaLocalProvaBean.setConcursoSelecionado(concursoSelecionado);
+        FiltroNumeroInscricaoNomeCandidatoBean filtroInscricaoNome =
+            new FiltroNumeroInscricaoNomeCandidatoBean();
+        consultaLocalProvaBean.setFiltroInscricaoNomeCandidatoBean(filtroInscricaoNome);
+        filtroInscricaoNome.setTipoConsultaNome(tipoConsultaNome);
+        filtroInscricaoNome.setNumeroInscricao(numeroInscricao);
+        filtroInscricaoNome.setNomeCandidato(nomeCandidato);
+
+        // invocar metodo sendo testado
+        consultaLocalProvaBean.pesquisar();
+
+        // checar estados dos mocks
+        verify(facade);
+
+        // verificacoes do resultado do metodo sendo testado
+        List<AlocacaoInscricao> alocacoesEsperado = criarAlocacoesInscricoes(200);
+        assertEquals(alocacoesEsperado, consultaLocalProvaBean.getAlocacoes());
+        certificaQueSotemEstaMensagem("page.consultaLocalProva.msg.refineConsulta");
+
+    }
+
+    /**
+     * Criar <code>n</code> {@link AlocacaoInscricao}.
+     * @param n quantidade itens para criar
+     * @return os itens criados
+     */
+    private List<AlocacaoInscricao> criarAlocacoesInscricoes(int n) {
+        final List<AlocacaoInscricao> ret = new ArrayList<AlocacaoInscricao>(n);
+        for (int i = 0; i < n; i++) {
+            ret.add(new AlocacaoInscricao(i));
+        }
+        return ret;
+    }
+
+    /**
+     * Teste para o metodo {@link ConsultaLocalProvaBean#pesquisar()}. Descricao
+     * do Fluxo: NAO Entra: if (this.alocacoes.size() == 201) {.
+     */
+    @Test
+    public void testPesquisarPath2() {
+
+        final Concurso concursoSelecionado = new Concurso(1);
+        final UsuarioLogado usuarioLogado = new Usuario(1);
+        final String numeroInscricao = "1";
+        final String nomeCandidato = null;
+        final TipoConsultaNome tipoConsultaNome = TipoConsultaNome.INICIO;
+
+        // Configurando mocks (1)
+        final ConsultaLocalProvaFacade facade = criarMockConsultaLocalProvaFacade();
+        final List<AlocacaoInscricao> alocacoes10 = criarAlocacoesInscricoes(10);
+        expect(facade.consultarAlocacoesLocalProva(concursoSelecionado, usuarioLogado,
+            numeroInscricao, nomeCandidato, tipoConsultaNome))
+            .andReturn(alocacoes10);
+        replay(facade);
+
+        // Configurando estado interno da classe sob teste
+        consultaLocalProvaBean.setUsuarioLogado(usuarioLogado);
+        consultaLocalProvaBean.setConcursoSelecionado(concursoSelecionado);
+        FiltroNumeroInscricaoNomeCandidatoBean filtroInscricaoNome =
+            new FiltroNumeroInscricaoNomeCandidatoBean();
+        consultaLocalProvaBean.setFiltroInscricaoNomeCandidatoBean(filtroInscricaoNome);
+        filtroInscricaoNome.setTipoConsultaNome(tipoConsultaNome);
+        filtroInscricaoNome.setNumeroInscricao(numeroInscricao);
+        filtroInscricaoNome.setNomeCandidato(nomeCandidato);
+
+        // invocar metodo sendo testado
+        consultaLocalProvaBean.pesquisar();
+
+        // checar estados dos mocks
+        verify(facade);
+
+        // verificacoes do resultado do metodo sendo testado
+        List<AlocacaoInscricao> alocacoesEsperado = criarAlocacoesInscricoes(10);
+        assertEquals(alocacoesEsperado, consultaLocalProvaBean.getAlocacoes());
+        checkMessageCount(0);
+
+    }
+
+    /**
+     * Teste para o metodo {@link ConsultaLocalProvaBean#imprimir()}.
+     */
+    @Test
+    public void testImprimir() {
+
+        // invocar metodo sendo testado
+        consultaLocalProvaBean.imprimir();
+
+    }
+
+}

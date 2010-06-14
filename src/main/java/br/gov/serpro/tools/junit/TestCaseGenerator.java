@@ -49,7 +49,7 @@ public class TestCaseGenerator {
 				"@return o mock criado", field.getType());
 		sb.appendln("private %1$s criarMock%1$s() {", field.getType());
 		sb.appendln("  %1$s mock = createStrictMock(%1$s.class);", field.getType());
-		sb.appendln("  %s.set%s(mock);", varNameForClassUnderTest, field.getType());
+		sb.appendln("  %s.set%s(mock);", varNameForClassUnderTest, GeneratorHelper.upperCaseFirstChar(field.getName()));
 		sb.appendln("  return mock;\n}");
 		return sb.toString();
 	}
@@ -141,11 +141,6 @@ public class TestCaseGenerator {
 	String generateFields() {
 		final SourceBuilder sb = new SourceBuilder();
 		sb.append(generateFieldForType(classUnderTest.getType(), "Classe sendo testada"));
-
-		for (final Field field : dependencies) {
-			sb.append(generateFieldForType(field.getType(), ""));
-			sb.appendln();
-		}
 		return sb.toString();
 	}
 
