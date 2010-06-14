@@ -1,5 +1,6 @@
 package br.gov.serpro.tools.junit.model;
 
+
 public class Type {
 	private String name;
 
@@ -12,7 +13,7 @@ public class Type {
 	public String getNewValue() {
 		if (!isPrimitive()) {
 			if (isCollection()) {
-				return String.format("new %s()", getCollectionImpl());
+				return collectionInstance();
 			}
 			return String.format("new %s(1)", getName());
 		}
@@ -24,10 +25,39 @@ public class Type {
 		return "0";
 	}
 
-	private String getCollectionImpl() {
-		if (isSet()) return "Hash" + name;
-		if (isList()) return "Array" + name;
+	private String collectionInstance() {
+		if (isSet()) return "new Hash" + name + "()";
+		if (isList()) {
+			Type generic = getGeneric();
+			if (generic != null) {
+				return "Arrays.asList(" + generic.getNewValue() + ")";
+			} else {
+				return "new Array" + name + "()";
+			}
+		}
 		return name;
+	}
+
+	private Type getGeneric() {
+		Type ret = null;
+		int iniGen = this.name.indexOf('<');
+		int lastIniGen = this.name.lastIndexOf('<');
+		
+		//if a complex generic, like List<List<?>>
+		//we will ignore		
+		if (iniGen != lastIniGen) return null;
+		
+		if (iniGen > 0) {
+			//List<Cargo>
+			int endGen = this.name.indexOf('>');
+			String nome = this.name.substring(iniGen+1, endGen);
+			ret = new Type();
+			ret.setName(nome);
+			ret.setFullName(nome);
+			ret.setPrimitive(Character.isLowerCase(nome.charAt(0)));
+		}
+		
+		return ret;
 	}
 
 	private boolean isCollection() {
@@ -64,7 +94,6 @@ public class Type {
 	}
 
 	private String defineVariableName() {
-
 		if (name == null) {
 			return null;
 		} else {
@@ -85,7 +114,5 @@ public class Type {
 	public String getFullName() {
 		return fullName;
 	}
-
-
 
 }
