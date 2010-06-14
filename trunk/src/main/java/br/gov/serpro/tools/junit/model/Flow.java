@@ -32,11 +32,48 @@ public class Flow {
 	 */
 	private SortedSet<Field> writtenFields = new TreeSet<Field>();
 
-	/**
-	 * Description of the flow.
-	 */
-	private String description;
+	private List<FlowBranch> flowBranches = new ArrayList<FlowBranch>();
 
+	public void setFlowBranches(List<FlowBranch> flowBranches) {
+        this.flowBranches = flowBranches;
+    }
+
+	public List<FlowBranch> getFlowBranches() {
+        return flowBranches;
+    }
+
+	/**
+	 * A branch on a flow.
+	 */
+	public static class FlowBranch {
+
+	    /**
+	     * Branch expression.
+	     */
+	    private String expression;
+
+	    /**
+	     * If enter or not at branch.
+	     */
+	    private boolean enter;
+
+        public String getExpression() {
+            return expression;
+        }
+
+        public void setExpression(String expression) {
+            this.expression = expression;
+        }
+
+        public boolean isEnter() {
+            return enter;
+        }
+
+        public void setEnter(boolean enter) {
+            this.enter = enter;
+        }
+
+	}
 
 	public SortedSet<Field> getWrittenFields() {
 		return writtenFields;
@@ -76,14 +113,6 @@ public class Flow {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getDescription() {
-		return description;
 	}
 
 	/**

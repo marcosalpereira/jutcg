@@ -73,8 +73,8 @@ public void setUp() throws Exception {
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#validaTipoConsulta(FacesContext,UIComponent,Object)}.
- * Descricao do Fluxo: In "if (StringHelper.isEmpty(nome) && StringHelper.isEmpty(numeroInscricao)) {"
- * .
+ * Descricao do Fluxo: 
+ *     Entra: if (StringHelper.isEmpty(nome) && StringHelper.isEmpty(numeroInscricao)) {.
  */
 @Test
 public void testValidaTipoConsultaPath1() {
@@ -99,9 +99,9 @@ digitacaoNotaManualListarBean.validaTipoConsulta(context,component,value);
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#validaTipoConsulta(FacesContext,UIComponent,Object)}.
- * Descricao do Fluxo: Out "if (StringHelper.isEmpty(nome) && StringHelper.isEmpty(numeroInscricao)) {"
- * In "if (StringHelper.isNotEmpty(nome) && StringHelper.isNotEmpty(numeroInscricao)) {"
- * .
+ * Descricao do Fluxo: 
+ * NAO Entra: if (StringHelper.isEmpty(nome) && StringHelper.isEmpty(numeroInscricao)) {
+ *     Entra: if (StringHelper.isNotEmpty(nome) && StringHelper.isNotEmpty(numeroInscricao)) {.
  */
 @Test
 public void testValidaTipoConsultaPath2() {
@@ -126,10 +126,10 @@ digitacaoNotaManualListarBean.validaTipoConsulta(context,component,value);
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#validaTipoConsulta(FacesContext,UIComponent,Object)}.
- * Descricao do Fluxo: Out "if (StringHelper.isEmpty(nome) && StringHelper.isEmpty(numeroInscricao)) {"
- * Out "if (StringHelper.isNotEmpty(nome) && StringHelper.isNotEmpty(numeroInscricao)) {"
- * In "if (StringHelper.isNotEmpty(nome) && nome.length() < 3) {"
- * .
+ * Descricao do Fluxo: 
+ * NAO Entra: if (StringHelper.isEmpty(nome) && StringHelper.isEmpty(numeroInscricao)) {
+ * NAO Entra: if (StringHelper.isNotEmpty(nome) && StringHelper.isNotEmpty(numeroInscricao)) {
+ *     Entra: if (StringHelper.isNotEmpty(nome) && nome.length() < 3) {.
  */
 @Test
 public void testValidaTipoConsultaPath3() {
@@ -154,10 +154,10 @@ digitacaoNotaManualListarBean.validaTipoConsulta(context,component,value);
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#validaTipoConsulta(FacesContext,UIComponent,Object)}.
- * Descricao do Fluxo: Out "if (StringHelper.isEmpty(nome) && StringHelper.isEmpty(numeroInscricao)) {"
- * Out "if (StringHelper.isNotEmpty(nome) && StringHelper.isNotEmpty(numeroInscricao)) {"
- * Out "if (StringHelper.isNotEmpty(nome) && nome.length() < 3) {"
- * .
+ * Descricao do Fluxo: 
+ * NAO Entra: if (StringHelper.isEmpty(nome) && StringHelper.isEmpty(numeroInscricao)) {
+ * NAO Entra: if (StringHelper.isNotEmpty(nome) && StringHelper.isNotEmpty(numeroInscricao)) {
+ * NAO Entra: if (StringHelper.isNotEmpty(nome) && nome.length() < 3) {.
  */
 @Test
 public void testValidaTipoConsultaPath4() {
@@ -354,9 +354,9 @@ assertEquals(esperado, mostrarUfCidadeReal);
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#pesquisar()}.
- * Descricao do Fluxo: In "if (versaoSelecionada == VersaoResultadoProvaManual.PROVISORIA) {"
- * In "for (Inscricao inscricao : inscricoes) {"
- * .
+ * Descricao do Fluxo: 
+ *     Entra: if (versaoSelecionada == VersaoResultadoProvaManual.PROVISORIA) {
+ *     Entra: for (Inscricao inscricao : inscricoes) {.
  */
 @Test
 public void testPesquisarPath1() {
@@ -394,9 +394,9 @@ assertEquals(expected, digitacaoNotaManualListarBean.getInscricoes());
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#pesquisar()}.
- * Descricao do Fluxo: In "if (versaoSelecionada == VersaoResultadoProvaManual.PROVISORIA) {"
- * Out "for (Inscricao inscricao : inscricoes) {"
- * .
+ * Descricao do Fluxo: 
+ *     Entra: if (versaoSelecionada == VersaoResultadoProvaManual.PROVISORIA) {
+ * NAO Entra: for (Inscricao inscricao : inscricoes) {.
  */
 @Test
 public void testPesquisarPath2() {
@@ -434,9 +434,9 @@ assertEquals(expected, digitacaoNotaManualListarBean.getInscricoes());
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#pesquisar()}.
- * Descricao do Fluxo: Out "if (versaoSelecionada == VersaoResultadoProvaManual.PROVISORIA) {"
- * In "for (Inscricao inscricao : inscricoes) {"
- * .
+ * Descricao do Fluxo: 
+ * NAO Entra: if (versaoSelecionada == VersaoResultadoProvaManual.PROVISORIA) {
+ *     Entra: for (Inscricao inscricao : inscricoes) {.
  */
 @Test
 public void testPesquisarPath3() {
@@ -474,9 +474,9 @@ assertEquals(expected, digitacaoNotaManualListarBean.getInscricoes());
 
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#pesquisar()}.
- * Descricao do Fluxo: Out "if (versaoSelecionada == VersaoResultadoProvaManual.PROVISORIA) {"
- * Out "for (Inscricao inscricao : inscricoes) {"
- * .
+ * Descricao do Fluxo: 
+ * NAO Entra: if (versaoSelecionada == VersaoResultadoProvaManual.PROVISORIA) {
+ * NAO Entra: for (Inscricao inscricao : inscricoes) {.
  */
 @Test
 public void testPesquisarPath4() {
