@@ -61,14 +61,14 @@ public class TestCaseMethodFlowGenerator {
 		final String checkMocks = generateCheckMocks();
 		final String verifys = generateVerifys();
 
-		sb.appendln(generateStartMethod());
-		sb.appendln(usedVars);
-		sb.appendln(configMocks);
-		sb.appendln(configInternalState);
-		sb.appendln(invokeMethod);
-		sb.appendln(checkMocks);
-		sb.appendln(verifys);
-		sb.appendln(generateEndMethod());
+		sb.append(generateStartMethod());
+		sb.append(usedVars);
+		sb.append(configMocks);
+		sb.append(configInternalState);
+		sb.append(invokeMethod);
+		sb.append(checkMocks);
+		sb.append(verifys);
+		sb.append(generateEndMethod());
 
 		return sb.toString();
 	}
@@ -88,7 +88,7 @@ public class TestCaseMethodFlowGenerator {
     }
 
     String generateEndMethod() {
-		return "}";
+		return "}\n";
 	}
 
 	String generateVerifys() {
@@ -156,18 +156,22 @@ public class TestCaseMethodFlowGenerator {
 
 	String generateConfigInternalState() {
 		final SourceBuilder sb = new SourceBuilder();
+		boolean infoAppended = false;
 
 		final JavaClass classUnderTest = flow.getMethod().getJavaClass();
 
-		if (!flow.getReadFields().isEmpty()) {
-			sb.appendLineComment("Configurando estado interno da classe sob teste");
-		}
 		for (final Field f : flow.getReadFields()){
 			if (!f.isStatic()) {
 				sb.appendln("%s.%s(%s);", classUnderTest.variableNameForType(),
-						f.getSetter(), f.getType().getVariableName());
+						f.getSetter(), f.getName());
+				infoAppended = true;
 			}
 		}
+
+        if (infoAppended) {
+            sb.insertLineComment(0, "Configurando estado interno da classe sob teste");
+        }
+
 		return sb.toString();
 	}
 

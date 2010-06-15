@@ -47,12 +47,12 @@
       <version>0.0.1-alfa</version>
       <scope>compile</scope>
     </dependency>
-    <dependency>
-    	<groupId>junit-addons</groupId>
-    	<artifactId>junit-addons</artifactId>
-    	<scope>test</scope>
-    	<version>1.4</version>
-    </dependency>
+<!--    <dependency>-->
+<!--    	<groupId>junit-addons</groupId>-->
+<!--    	<artifactId>junit-addons</artifactId>-->
+<!--    	<scope>test</scope>-->
+<!--    	<version>1.4</version>-->
+<!--    </dependency>-->
     <dependency>
     	<groupId>junit</groupId>
     	<artifactId>junit</artifactId>

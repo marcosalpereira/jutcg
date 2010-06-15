@@ -121,44 +121,6 @@ public class ConsultaLocalProvaBean {
     }
 
 
-
-    /**
-     * Valida se preencheu algum campo de pesquisa e nome com comprimento Minimo.
-     * @param context context
-     * @param component component
-     * @param value component
-     * @throws ValidatorException se deu erro
-     */
-    public void validaTipoConsulta(@SuppressWarnings("unused") FacesContext context,
-        UIComponent component, @SuppressWarnings("unused") Object value)
-        throws ValidatorException {
-
-        final String nome = UIHelper.valorComponente(component, ID_INPUT_NOME_CANDIDATO);
-
-        final String numeroInscricaoInformado = UIHelper.valorComponente(component,
-            ID_INPUT_NUMERO_INSCRICAO);
-
-        // valida se NAO preencheu os campos nome e numeroInscrição
-        if (StringHelper.isEmpty(nome) && StringHelper.isEmpty(numeroInscricaoInformado)) {
-            throw new ValidatorException(MessageHelper
-                .createErrorMessage("commons.pesquisaNome.msg.required"));
-        }
-
-        // valida se preencheu os campos nome e numeroInscrição
-        if (StringHelper.isNotEmpty(nome)
-            && StringHelper.isNotEmpty(numeroInscricaoInformado)) {
-            throw new ValidatorException(MessageHelper
-                .createErrorMessage("commons.pesquisaNome.msg.numeroOuInscricao"));
-        }
-
-        // Valida tamanho minimo do nome
-        if (StringHelper.isNotEmpty(nome) && nome.length() < 3) {
-            throw new ValidatorException(MessageHelper
-                .createErrorMessage("commons.pesquisaNome.msg.tamanhoMinimo"));
-        }
-
-    }
-
     public Concurso getConcursoSelecionado() {
         return concursoSelecionado;
     }
