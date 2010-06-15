@@ -1,4 +1,5 @@
 package br.gov.esaf.sgc.business.impl;
+
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -54,12 +55,15 @@ public void setUp() {
 public void testCadastrarResultadoPath1() {
 // variaveis usadas
 final ResultadoProvaManual resultadoProvaManual = new ResultadoProvaManual(1);
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 resultadoProvaManualDao.alterarResultado(resultadoProvaManual);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 resultadoProvaManualBusinessBean.cadastrarResultado(resultadoProvaManual);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
 }
@@ -73,12 +77,15 @@ verify(resultadoProvaManualDao);
 public void testCadastrarResultadoPath2() {
 // variaveis usadas
 final ResultadoProvaManual resultadoProvaManual = new ResultadoProvaManual(1);
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 resultadoProvaManualDao.inserirResultado(resultadoProvaManual);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 resultadoProvaManualBusinessBean.cadastrarResultado(resultadoProvaManual);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
 }
@@ -90,12 +97,15 @@ verify(resultadoProvaManualDao);
 public void testDesconectarResultado() {
 // variaveis usadas
 final ResultadoProvaManual resultadoProvaManual = new ResultadoProvaManual(1);
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 resultadoProvaManualDao.desconectarResultado(resultadoProvaManual);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 resultadoProvaManualBusinessBean.desconectarResultado(resultadoProvaManual);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
 }
@@ -112,15 +122,19 @@ final Inscricao inscricao = new Inscricao(1);
 final Prova prova = new Prova(1);
 final VersaoResultadoProvaManual versao = new VersaoResultadoProvaManual(1);
 final Cidade cidade = new Cidade(1);
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 expect(resultadoProvaManualDao.selecionarResultadoProvaManual(prova,inscricao,versao,null,cidade))
   .andReturn(selecionarResultadoProvaManualFromMock);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 final ResultadoProvaManual consultarResultadoProvaManualReal = resultadoProvaManualBusinessBean.consultarResultadoProvaManual(inscricao,prova,versao,cidade);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(selecionarResultadoProvaManualEsperado, consultarResultadoProvaManualReal);
 }
@@ -135,15 +149,19 @@ final ResultadoProvaManual selecionarResultadoProvaManualValidoFromMock = new Re
 final ResultadoProvaManual selecionarResultadoProvaManualValidoEsperado = new ResultadoProvaManual(1);
 final Inscricao inscricao = new Inscricao(1);
 final Prova prova = new Prova(1);
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 expect(resultadoProvaManualDao.selecionarResultadoProvaManualValido(prova,inscricao,VersaoResultadoProvaManual.PROVISORIA,StatusResultadoProvaManual.VALIDADO))
   .andReturn(selecionarResultadoProvaManualValidoFromMock);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 final ResultadoProvaManual consultarResultadoProvaManualProvisorioReal = resultadoProvaManualBusinessBean.consultarResultadoProvaManualProvisorio(inscricao,prova);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(selecionarResultadoProvaManualValidoEsperado, consultarResultadoProvaManualProvisorioReal);
 }
@@ -158,15 +176,19 @@ final ResultadoProvaManual selecionarResultadoProvaManualValidoFromMock = new Re
 final ResultadoProvaManual selecionarResultadoProvaManualValidoEsperado = new ResultadoProvaManual(1);
 final Inscricao inscricao = new Inscricao(1);
 final Prova prova = new Prova(1);
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 expect(resultadoProvaManualDao.selecionarResultadoProvaManualValido(prova,inscricao,VersaoResultadoProvaManual.DEFINITIVA,StatusResultadoProvaManual.VALIDADO))
   .andReturn(selecionarResultadoProvaManualValidoFromMock);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 final ResultadoProvaManual consultarResultadoProvaManualDefintivaReal = resultadoProvaManualBusinessBean.consultarResultadoProvaManualDefintiva(inscricao,prova);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(selecionarResultadoProvaManualValidoEsperado, consultarResultadoProvaManualDefintivaReal);
 }
@@ -182,15 +204,18 @@ public void testExcluirResultadoPath1() {
 final Inscricao inscricao = new Inscricao(1);
 final Prova prova = new Prova(1);
 final Cidade cidade = new Cidade(1);
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 ResultadoProvaManual resultadoProvaManual = new ResultadoProvaManual(1);
 expect(resultadoProvaManualDao.selecionarResultadoProvaManual(prova,inscricao,VersaoResultadoProvaManual.PROVISORIA,StatusResultadoProvaManual.CADASTRADO,cidade))
   .andReturn(resultadoProvaManual);
 resultadoProvaManualDao.excluirResultado(resultadoProvaManual);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 resultadoProvaManualBusinessBean.excluirResultado(inscricao,prova,cidade);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
 }
@@ -206,14 +231,17 @@ public void testExcluirResultadoPath2() {
 final Inscricao inscricao = new Inscricao(1);
 final Prova prova = new Prova(1);
 final Cidade cidade = new Cidade(1);
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 ResultadoProvaManual resultadoProvaManual = new ResultadoProvaManual(1);
 expect(resultadoProvaManualDao.selecionarResultadoProvaManual(prova,inscricao,VersaoResultadoProvaManual.PROVISORIA,StatusResultadoProvaManual.CADASTRADO,cidade))
   .andReturn(resultadoProvaManual);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 resultadoProvaManualBusinessBean.excluirResultado(inscricao,prova,cidade);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
 }
@@ -227,15 +255,19 @@ public void testExisteNotaProvisoriaValidada() {
 final boolean existeResultadoFromMock = false;
 final boolean existeResultadoEsperado = false;
 final Prova prova = new Prova(1);
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 expect(resultadoProvaManualDao.existeResultado(prova,VersaoResultadoProvaManual.PROVISORIA,StatusResultadoProvaManual.VALIDADO))
   .andReturn(existeResultadoFromMock);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 final boolean existeNotaProvisoriaValidadaReal = resultadoProvaManualBusinessBean.existeNotaProvisoriaValidada(prova);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(existeResultadoEsperado, existeNotaProvisoriaValidadaReal);
 }
@@ -249,15 +281,19 @@ public void testExisteNotaDefinitiva() {
 final boolean existeResultadoFromMock = false;
 final boolean existeResultadoEsperado = false;
 final Prova prova = new Prova(1);
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 expect(resultadoProvaManualDao.existeResultado(prova,VersaoResultadoProvaManual.DEFINITIVA))
   .andReturn(existeResultadoFromMock);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 final boolean existeNotaDefinitivaReal = resultadoProvaManualBusinessBean.existeNotaDefinitiva(prova);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(existeResultadoEsperado, existeNotaDefinitivaReal);
 }
@@ -273,15 +309,19 @@ final boolean existeResultadoEsperado = false;
 final Inscricao inscricao = new Inscricao(1);
 final Prova prova = new Prova(1);
 final Cidade cidade = new Cidade(1);
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 expect(resultadoProvaManualDao.existeResultado(prova,VersaoResultadoProvaManual.PROVISORIA,StatusResultadoProvaManual.CADASTRADO,inscricao,cidade))
   .andReturn(existeResultadoFromMock);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 final boolean existeNotaProvisoriaStatusCadastradaReal = resultadoProvaManualBusinessBean.existeNotaProvisoriaStatusCadastrada(inscricao,prova,cidade);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(existeResultadoEsperado, existeNotaProvisoriaStatusCadastradaReal);
 }
@@ -298,15 +338,19 @@ final Prova prova = new Prova(1);
 final String numeroInscricao = "1";
 final String nomeCandidato = "1";
 final TipoConsultaNome tipoConsultaNome = new TipoConsultaNome(1);
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 expect(resultadoProvaManualDao.selecionarInscricoesComNota(VersaoResultadoProvaManual.DEFINITIVA,prova,numeroInscricao,nomeCandidato,tipoConsultaNome))
   .andReturn(selecionarInscricoesComNotaFromMock);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 final List<Inscricao> consultarInscricoesComNotaDefinitivaReal = resultadoProvaManualBusinessBean.consultarInscricoesComNotaDefinitiva(prova,numeroInscricao,nomeCandidato,tipoConsultaNome);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(selecionarInscricoesComNotaEsperado, consultarInscricoesComNotaDefinitivaReal);
 }
@@ -318,12 +362,15 @@ assertEquals(selecionarInscricoesComNotaEsperado, consultarInscricoesComNotaDefi
 public void testAlterarResultado() {
 // variaveis usadas
 final ResultadoProvaManual resultadoProvaManual = new ResultadoProvaManual(1);
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 resultadoProvaManualDao.alterarResultado(resultadoProvaManual);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 resultadoProvaManualBusinessBean.alterarResultado(resultadoProvaManual);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
 }
@@ -337,15 +384,19 @@ public void testConsultarResultadosRepetidos() {
 final List<ResultadoProvaManual> selecionarResultadosRepetidosFromMock = Arrays.asList(new ResultadoProvaManual(1));
 final List<ResultadoProvaManual> selecionarResultadosRepetidosEsperado = Arrays.asList(new ResultadoProvaManual(1));
 final Prova prova = new Prova(1);
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 expect(resultadoProvaManualDao.selecionarResultadosRepetidos(prova))
   .andReturn(selecionarResultadosRepetidosFromMock);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 final List<ResultadoProvaManual> consultarResultadosRepetidosReal = resultadoProvaManualBusinessBean.consultarResultadosRepetidos(prova);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(selecionarResultadosRepetidosEsperado, consultarResultadosRepetidosReal);
 }
@@ -359,15 +410,19 @@ public void testExisteResultadoValidadoAplicacaoProva() {
 final boolean existeResultadoValidadoAplicacaoProvaFromMock = false;
 final boolean existeResultadoValidadoAplicacaoProvaEsperado = false;
 final AplicacaoProva aplicacaoProva = new AplicacaoProva(1);
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 expect(resultadoProvaManualDao.existeResultadoValidadoAplicacaoProva(aplicacaoProva))
   .andReturn(existeResultadoValidadoAplicacaoProvaFromMock);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 final boolean existeResultadoValidadoAplicacaoProvaReal = resultadoProvaManualBusinessBean.existeResultadoValidadoAplicacaoProva(aplicacaoProva);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(existeResultadoValidadoAplicacaoProvaEsperado, existeResultadoValidadoAplicacaoProvaReal);
 }
@@ -380,15 +435,19 @@ public void testConsultarConcursosAndamentoComResultadoCadastrado() {
 // variaveis usadas
 final List<Concurso> selecionarConcursosAndamentoComResultadoCadastradoFromMock = Arrays.asList(new Concurso(1));
 final List<Concurso> selecionarConcursosAndamentoComResultadoCadastradoEsperado = Arrays.asList(new Concurso(1));
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 expect(resultadoProvaManualDao.selecionarConcursosAndamentoComResultadoCadastrado())
   .andReturn(selecionarConcursosAndamentoComResultadoCadastradoFromMock);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 final List<Concurso> consultarConcursosAndamentoComResultadoCadastradoReal = resultadoProvaManualBusinessBean.consultarConcursosAndamentoComResultadoCadastrado();
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(selecionarConcursosAndamentoComResultadoCadastradoEsperado, consultarConcursosAndamentoComResultadoCadastradoReal);
 }
@@ -402,15 +461,19 @@ public void testConsultarProvasComResultadoCadastrado() {
 final List<Prova> selecionarProvasComResultadoCadastradoFromMock = Arrays.asList(new Prova(1));
 final List<Prova> selecionarProvasComResultadoCadastradoEsperado = Arrays.asList(new Prova(1));
 final Concurso concurso = new Concurso(1);
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 expect(resultadoProvaManualDao.selecionarProvasComResultadoCadastrado(concurso))
   .andReturn(selecionarProvasComResultadoCadastradoFromMock);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 final List<Prova> consultarProvasComResultadoCadastradoReal = resultadoProvaManualBusinessBean.consultarProvasComResultadoCadastrado(concurso);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(selecionarProvasComResultadoCadastradoEsperado, consultarProvasComResultadoCadastradoReal);
 }
@@ -427,15 +490,19 @@ final Prova prova = new Prova(1);
 final VersaoResultadoProvaManual versao = new VersaoResultadoProvaManual(1);
 final int posicaoInicial = 0;
 final int quantidadeRegistros = 0;
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 expect(resultadoProvaManualDao.selecionarResultadosProvaManual(prova,versao,posicaoInicial,quantidadeRegistros))
   .andReturn(selecionarResultadosProvaManualFromMock);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 final List<ResultadoProvaManual> consultarResultadosProvaManualReal = resultadoProvaManualBusinessBean.consultarResultadosProvaManual(prova,versao,posicaoInicial,quantidadeRegistros);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(selecionarResultadosProvaManualEsperado, consultarResultadosProvaManualReal);
 }
@@ -450,15 +517,19 @@ final int contarResultadosProvaManualFromMock = 0;
 final int contarResultadosProvaManualEsperado = 0;
 final Prova prova = new Prova(1);
 final VersaoResultadoProvaManual versao = new VersaoResultadoProvaManual(1);
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 expect(resultadoProvaManualDao.contarResultadosProvaManual(prova,versao))
   .andReturn(contarResultadosProvaManualFromMock);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 final int contarResultadosProvaManualReal = resultadoProvaManualBusinessBean.contarResultadosProvaManual(prova,versao);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(contarResultadosProvaManualEsperado, contarResultadosProvaManualReal);
 }
@@ -473,13 +544,16 @@ public void testCancelarValidacaoNotasPath1() {
 // variaveis usadas
 final Prova prova = new Prova(1);
 final VersaoResultadoProvaManual versao = new VersaoResultadoProvaManual(1);
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 resultadoProvaManualDao.alterarStatus(prova,versao,StatusResultadoProvaManual.CADASTRADO,null);
 resultadoProvaManualDao.excluirResultadosDefinitivos(prova);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 resultadoProvaManualBusinessBean.cancelarValidacaoNotas(prova,versao);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
 }
@@ -494,12 +568,15 @@ public void testCancelarValidacaoNotasPath2() {
 // variaveis usadas
 final Prova prova = new Prova(1);
 final VersaoResultadoProvaManual versao = new VersaoResultadoProvaManual(1);
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 resultadoProvaManualDao.alterarStatus(prova,versao,StatusResultadoProvaManual.CADASTRADO,null);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 resultadoProvaManualBusinessBean.cancelarValidacaoNotas(prova,versao);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
 }
@@ -514,13 +591,16 @@ public void testValidarNotasPath1() {
 // variaveis usadas
 final Prova prova = new Prova(1);
 final VersaoResultadoProvaManual versao = new VersaoResultadoProvaManual(1);
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 resultadoProvaManualDao.alterarStatus(prova,versao,StatusResultadoProvaManual.VALIDADO,null);
 resultadoProvaManualDao.gerarResultadoDefinitivoApartirProvisorio(prova);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 resultadoProvaManualBusinessBean.validarNotas(prova,versao);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
 }
@@ -535,12 +615,15 @@ public void testValidarNotasPath2() {
 // variaveis usadas
 final Prova prova = new Prova(1);
 final VersaoResultadoProvaManual versao = new VersaoResultadoProvaManual(1);
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 resultadoProvaManualDao.alterarStatus(prova,versao,StatusResultadoProvaManual.VALIDADO,null);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 resultadoProvaManualBusinessBean.validarNotas(prova,versao);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
 }
@@ -555,15 +638,19 @@ final boolean todasAsNotasForamPreenchidasFromMock = false;
 final boolean todasAsNotasForamPreenchidasEsperado = false;
 final Prova prova = new Prova(1);
 final VersaoResultadoProvaManual versao = new VersaoResultadoProvaManual(1);
-// Configurando mocks (1)
+
+// Configurando mock
 ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
 expect(resultadoProvaManualDao.todasAsNotasForamPreenchidas(prova,versao))
   .andReturn(todasAsNotasForamPreenchidasFromMock);
 replay(resultadoProvaManualDao);
+
 // invocar metodo sendo testado
 final boolean todasAsNotasForamPreenchidasReal = resultadoProvaManualBusinessBean.todasAsNotasForamPreenchidas(prova,versao);
+
 // checar estados dos mocks
 verify(resultadoProvaManualDao);
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(todasAsNotasForamPreenchidasEsperado, todasAsNotasForamPreenchidasReal);
 }

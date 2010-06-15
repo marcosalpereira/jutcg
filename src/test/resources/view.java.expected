@@ -1,4 +1,5 @@
 package br.gov.esaf.sgc.view.correcao;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,6 +69,7 @@ public void testValidaTipoConsultaPath1() {
 final FacesContext context = new FacesContext(1);
 final UIComponent component = new UIComponent(1);
 final Object value = new Object(1);
+
 // invocar metodo sendo testado
 digitacaoNotaManualListarBean.validaTipoConsulta(context,component,value);
 }
@@ -84,6 +86,7 @@ public void testValidaTipoConsultaPath2() {
 final FacesContext context = new FacesContext(1);
 final UIComponent component = new UIComponent(1);
 final Object value = new Object(1);
+
 // invocar metodo sendo testado
 digitacaoNotaManualListarBean.validaTipoConsulta(context,component,value);
 }
@@ -101,6 +104,7 @@ public void testValidaTipoConsultaPath3() {
 final FacesContext context = new FacesContext(1);
 final UIComponent component = new UIComponent(1);
 final Object value = new Object(1);
+
 // invocar metodo sendo testado
 digitacaoNotaManualListarBean.validaTipoConsulta(context,component,value);
 }
@@ -118,6 +122,7 @@ public void testValidaTipoConsultaPath4() {
 final FacesContext context = new FacesContext(1);
 final UIComponent component = new UIComponent(1);
 final Object value = new Object(1);
+
 // invocar metodo sendo testado
 digitacaoNotaManualListarBean.validaTipoConsulta(context,component,value);
 }
@@ -127,8 +132,10 @@ digitacaoNotaManualListarBean.validaTipoConsulta(context,component,value);
  */
 @Test
 public void testOnChangeConcurso() {
+
 // invocar metodo sendo testado
 digitacaoNotaManualListarBean.onChangeConcurso();
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(expected, digitacaoNotaManualListarBean.getProvas());
 assertEquals(expected, digitacaoNotaManualListarBean.getProvaSelecionada());
@@ -139,8 +146,10 @@ assertEquals(expected, digitacaoNotaManualListarBean.getProvaSelecionada());
  */
 @Test
 public void testOnChangeProva() {
+
 // invocar metodo sendo testado
 digitacaoNotaManualListarBean.onChangeProva();
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(expected, digitacaoNotaManualListarBean.getVersoes());
 assertEquals(expected, digitacaoNotaManualListarBean.getVersaoSelecionada());
@@ -153,8 +162,10 @@ assertEquals(expected, digitacaoNotaManualListarBean.getOrgaoSelecionado());
  */
 @Test
 public void testOnChangeVersao() {
+
 // invocar metodo sendo testado
 digitacaoNotaManualListarBean.onChangeVersao();
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(expected, digitacaoNotaManualListarBean.getUfs());
 assertEquals(expected, digitacaoNotaManualListarBean.getUfSelecionada());
@@ -165,8 +176,10 @@ assertEquals(expected, digitacaoNotaManualListarBean.getUfSelecionada());
  */
 @Test
 public void testOnChangeUf() {
+
 // invocar metodo sendo testado
 digitacaoNotaManualListarBean.onChangeUf();
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(expected, digitacaoNotaManualListarBean.getCidades());
 assertEquals(expected, digitacaoNotaManualListarBean.getCidadeSelecionada());
@@ -177,8 +190,10 @@ assertEquals(expected, digitacaoNotaManualListarBean.getCidadeSelecionada());
  */
 @Test
 public void testOnChangeOrgao() {
+
 // invocar metodo sendo testado
 digitacaoNotaManualListarBean.onChangeOrgao();
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(expected, digitacaoNotaManualListarBean.getCargos());
 assertEquals(expected, digitacaoNotaManualListarBean.getCargoSelecionado());
@@ -189,8 +204,10 @@ assertEquals(expected, digitacaoNotaManualListarBean.getCargoSelecionado());
  */
 @Test
 public void testOnChangeCargo() {
+
 // invocar metodo sendo testado
 digitacaoNotaManualListarBean.onChangeCargo();
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(expected, digitacaoNotaManualListarBean.getCamposAtuacao());
 assertEquals(expected, digitacaoNotaManualListarBean.getCampoAtuacaoSelecionado());
@@ -201,8 +218,10 @@ assertEquals(expected, digitacaoNotaManualListarBean.getCampoAtuacaoSelecionado(
  */
 @Test
 public void testOnChangeCampoAtuacao() {
+
 // invocar metodo sendo testado
 digitacaoNotaManualListarBean.onChangeCampoAtuacao();
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(expected, digitacaoNotaManualListarBean.isMostrarLocalidades());
 }
@@ -218,20 +237,25 @@ final Prova provaSelecionada = new Prova(1);
 final OrgaoContratante orgaoSelecionado = new OrgaoContratante(1);
 final Cargo cargoSelecionado = new Cargo(1);
 final CampoAtuacao campoAtuacaoSelecionado = new CampoAtuacao(1);
-// Configurando mocks (1)
+
+// Configurando mock
 DigitacaoNotaManualFacade digitacaoNotaManualFacade = criarMockDigitacaoNotaManualFacade();
 digitacaoNotaManualFacade.provaEstaVinculadaFaseComFasePredecessoraMesmaAplicacaoProva(provaSelecionada,orgaoSelecionado,cargoSelecionado,campoAtuacaoSelecionado);
 replay(digitacaoNotaManualFacade);
+
 // Configurando estado interno da classe sob teste
 digitacaoNotaManualListarBean.setVersaoSelecionada(versaoSelecionada);
 digitacaoNotaManualListarBean.setProvaSelecionada(provaSelecionada);
 digitacaoNotaManualListarBean.setOrgaoSelecionado(orgaoSelecionado);
 digitacaoNotaManualListarBean.setCargoSelecionado(cargoSelecionado);
 digitacaoNotaManualListarBean.setCampoAtuacaoSelecionado(campoAtuacaoSelecionado);
+
 // invocar metodo sendo testado
 final boolean mostrarUfCidadeReal = digitacaoNotaManualListarBean.mostrarUfCidade();
+
 // checar estados dos mocks
 verify(digitacaoNotaManualFacade);
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(esperado, mostrarUfCidadeReal);
 }
@@ -254,11 +278,13 @@ final String nomeCandidato = "1";
 final List<Inscricao> inscricoes = Arrays.asList(new Inscricao(1));
 final Cargo cargoSelecionado = new Cargo(1);
 final CampoAtuacao campoAtuacaoSelecionado = new CampoAtuacao(1);
-// Configurando mocks (1)
+
+// Configurando mock
 DigitacaoNotaManualFacade digitacaoNotaManualFacade = criarMockDigitacaoNotaManualFacade();
 expect(digitacaoNotaManualFacade.consultarInscricoes(provaSelecionada,orgaoSelecionado,cargoSelecionado,campoAtuacaoSelecionado,numeroInscricao,nomeCandidato,tipoConsultaNome))
   .andReturn(inscricoes);
 replay(digitacaoNotaManualFacade);
+
 // Configurando estado interno da classe sob teste
 digitacaoNotaManualListarBean.setVersaoSelecionada(versaoSelecionada);
 digitacaoNotaManualListarBean.setTipoConsultaNome(tipoConsultaNome);
@@ -269,10 +295,13 @@ digitacaoNotaManualListarBean.setNomeCandidato(nomeCandidato);
 digitacaoNotaManualListarBean.setInscricoes(inscricoes);
 digitacaoNotaManualListarBean.setCargoSelecionado(cargoSelecionado);
 digitacaoNotaManualListarBean.setCampoAtuacaoSelecionado(campoAtuacaoSelecionado);
+
 // invocar metodo sendo testado
 digitacaoNotaManualListarBean.pesquisar();
+
 // checar estados dos mocks
 verify(digitacaoNotaManualFacade);
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(expected, digitacaoNotaManualListarBean.getInscricoesExcluiveis());
 assertEquals(expected, digitacaoNotaManualListarBean.getInscricoes());
@@ -296,11 +325,13 @@ final String nomeCandidato = "1";
 final List<Inscricao> inscricoes = Arrays.asList(new Inscricao(1));
 final Cargo cargoSelecionado = new Cargo(1);
 final CampoAtuacao campoAtuacaoSelecionado = new CampoAtuacao(1);
-// Configurando mocks (1)
+
+// Configurando mock
 DigitacaoNotaManualFacade digitacaoNotaManualFacade = criarMockDigitacaoNotaManualFacade();
 expect(digitacaoNotaManualFacade.consultarInscricoes(provaSelecionada,orgaoSelecionado,cargoSelecionado,campoAtuacaoSelecionado,numeroInscricao,nomeCandidato,tipoConsultaNome))
   .andReturn(inscricoes);
 replay(digitacaoNotaManualFacade);
+
 // Configurando estado interno da classe sob teste
 digitacaoNotaManualListarBean.setVersaoSelecionada(versaoSelecionada);
 digitacaoNotaManualListarBean.setTipoConsultaNome(tipoConsultaNome);
@@ -311,10 +342,13 @@ digitacaoNotaManualListarBean.setNomeCandidato(nomeCandidato);
 digitacaoNotaManualListarBean.setInscricoes(inscricoes);
 digitacaoNotaManualListarBean.setCargoSelecionado(cargoSelecionado);
 digitacaoNotaManualListarBean.setCampoAtuacaoSelecionado(campoAtuacaoSelecionado);
+
 // invocar metodo sendo testado
 digitacaoNotaManualListarBean.pesquisar();
+
 // checar estados dos mocks
 verify(digitacaoNotaManualFacade);
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(expected, digitacaoNotaManualListarBean.getInscricoesExcluiveis());
 assertEquals(expected, digitacaoNotaManualListarBean.getInscricoes());
@@ -338,11 +372,13 @@ final String nomeCandidato = "1";
 final List<Inscricao> inscricoes = Arrays.asList(new Inscricao(1));
 final Cargo cargoSelecionado = new Cargo(1);
 final CampoAtuacao campoAtuacaoSelecionado = new CampoAtuacao(1);
-// Configurando mocks (1)
+
+// Configurando mock
 DigitacaoNotaManualFacade digitacaoNotaManualFacade = criarMockDigitacaoNotaManualFacade();
 expect(digitacaoNotaManualFacade.consultarInscricoesNotaDefinitiva(provaSelecionada,numeroInscricao,nomeCandidato,tipoConsultaNome))
   .andReturn(inscricoes);
 replay(digitacaoNotaManualFacade);
+
 // Configurando estado interno da classe sob teste
 digitacaoNotaManualListarBean.setVersaoSelecionada(versaoSelecionada);
 digitacaoNotaManualListarBean.setTipoConsultaNome(tipoConsultaNome);
@@ -353,10 +389,13 @@ digitacaoNotaManualListarBean.setNomeCandidato(nomeCandidato);
 digitacaoNotaManualListarBean.setInscricoes(inscricoes);
 digitacaoNotaManualListarBean.setCargoSelecionado(cargoSelecionado);
 digitacaoNotaManualListarBean.setCampoAtuacaoSelecionado(campoAtuacaoSelecionado);
+
 // invocar metodo sendo testado
 digitacaoNotaManualListarBean.pesquisar();
+
 // checar estados dos mocks
 verify(digitacaoNotaManualFacade);
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(expected, digitacaoNotaManualListarBean.getInscricoesExcluiveis());
 assertEquals(expected, digitacaoNotaManualListarBean.getInscricoes());
@@ -380,11 +419,13 @@ final String nomeCandidato = "1";
 final List<Inscricao> inscricoes = Arrays.asList(new Inscricao(1));
 final Cargo cargoSelecionado = new Cargo(1);
 final CampoAtuacao campoAtuacaoSelecionado = new CampoAtuacao(1);
-// Configurando mocks (1)
+
+// Configurando mock
 DigitacaoNotaManualFacade digitacaoNotaManualFacade = criarMockDigitacaoNotaManualFacade();
 expect(digitacaoNotaManualFacade.consultarInscricoesNotaDefinitiva(provaSelecionada,numeroInscricao,nomeCandidato,tipoConsultaNome))
   .andReturn(inscricoes);
 replay(digitacaoNotaManualFacade);
+
 // Configurando estado interno da classe sob teste
 digitacaoNotaManualListarBean.setVersaoSelecionada(versaoSelecionada);
 digitacaoNotaManualListarBean.setTipoConsultaNome(tipoConsultaNome);
@@ -395,10 +436,13 @@ digitacaoNotaManualListarBean.setNomeCandidato(nomeCandidato);
 digitacaoNotaManualListarBean.setInscricoes(inscricoes);
 digitacaoNotaManualListarBean.setCargoSelecionado(cargoSelecionado);
 digitacaoNotaManualListarBean.setCampoAtuacaoSelecionado(campoAtuacaoSelecionado);
+
 // invocar metodo sendo testado
 digitacaoNotaManualListarBean.pesquisar();
+
 // checar estados dos mocks
 verify(digitacaoNotaManualFacade);
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(expected, digitacaoNotaManualListarBean.getInscricoesExcluiveis());
 assertEquals(expected, digitacaoNotaManualListarBean.getInscricoes());
@@ -415,18 +459,23 @@ final Cidade cidadeSelecionada = new Cidade(1);
 final boolean existeNotaProvisoriaStatusCadastradaFromMock = false;
 final boolean existeNotaProvisoriaStatusCadastradaEsperado = false;
 final Inscricao inscricao = new Inscricao(1);
-// Configurando mocks (1)
+
+// Configurando mock
 DigitacaoNotaManualFacade digitacaoNotaManualFacade = criarMockDigitacaoNotaManualFacade();
 expect(digitacaoNotaManualFacade.existeNotaProvisoriaStatusCadastrada(inscricao,provaSelecionada,cidadeSelecionada))
   .andReturn(existeNotaProvisoriaStatusCadastradaFromMock);
 replay(digitacaoNotaManualFacade);
+
 // Configurando estado interno da classe sob teste
 digitacaoNotaManualListarBean.setProvaSelecionada(provaSelecionada);
 digitacaoNotaManualListarBean.setCidadeSelecionada(cidadeSelecionada);
+
 // invocar metodo sendo testado
 final boolean excluivelReal = digitacaoNotaManualListarBean.excluivel(inscricao);
+
 // checar estados dos mocks
 verify(digitacaoNotaManualFacade);
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(existeNotaProvisoriaStatusCadastradaEsperado, excluivelReal);
 }
@@ -440,15 +489,19 @@ public void testExcluirResultado() {
 final Prova provaSelecionada = new Prova(1);
 final Cidade cidadeSelecionada = new Cidade(1);
 final Inscricao inscricao = new Inscricao(1);
-// Configurando mocks (1)
+
+// Configurando mock
 DigitacaoNotaManualFacade digitacaoNotaManualFacade = criarMockDigitacaoNotaManualFacade();
 digitacaoNotaManualFacade.excluirResultado(inscricao,provaSelecionada,cidadeSelecionada);
 replay(digitacaoNotaManualFacade);
+
 // Configurando estado interno da classe sob teste
 digitacaoNotaManualListarBean.setProvaSelecionada(provaSelecionada);
 digitacaoNotaManualListarBean.setCidadeSelecionada(cidadeSelecionada);
+
 // invocar metodo sendo testado
 digitacaoNotaManualListarBean.excluirResultado(inscricao);
+
 // checar estados dos mocks
 verify(digitacaoNotaManualFacade);
 }

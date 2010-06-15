@@ -23,9 +23,19 @@ public class ConfigMocksGenerator {
     }
 
     public String generate() {
+    	
+    	if (mocks.size() > 0) {
+    		sb.appendln();
+    		if (mocks.size() == 1) {
+    			sb.appendln("// Configurando mock");
+    		} else  {
+    			sb.appendln("// Configurando mocks (" + mocks.size() + ")");
+    		}
+        }
+    	
         for(final Field mock : mocks) {
             if (mocks.size() > 1) {
-                sb.appendLineComment(mock.getName());
+                sb.appendln("// " + mock.getName());
             }
             sb.appendln("%s %s = criarMock%s();", mock.getType(), mock.getName(), mock.getType());
             for (final FieldMethodInvocation invocation : flow.getInvocations()) {
@@ -43,11 +53,7 @@ public class ConfigMocksGenerator {
                     }
                 }
             }
-            sb.append("replay(%s);", mock.getName());
-            sb.appendln();
-        }
-        if (!mocks.isEmpty()) {
-            sb.insertLineComment(0, "Configurando mocks (" + mocks.size() + ")");
+            sb.appendln("replay(%s);", mock.getName());
         }
         return sb.toString();
 
