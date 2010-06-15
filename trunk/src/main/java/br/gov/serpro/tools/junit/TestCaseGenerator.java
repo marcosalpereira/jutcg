@@ -186,7 +186,7 @@ public class TestCaseGenerator {
 	}
 
 	String generateClassEnd() {
-		return "}";
+		return "}\n";
 	}
 
 	String generateClassStart() {
