@@ -163,9 +163,9 @@ public class TestCaseMethodFlowGenerator {
 			sb.appendLineComment("Configurando estado interno da classe sob teste");
 		}
 		for (final Field f : flow.getReadFields()){
-			if (!f.isStatic() && classUnderTest.getFields().contains(f)) {
+			if (!f.isStatic()) {
 				sb.appendln("%s.%s(%s);", classUnderTest.variableNameForType(),
-						f.getSetter(), f.getType().getNewValue());
+						f.getSetter(), f.getType().getVariableName());
 			}
 		}
 		return sb.toString();
@@ -194,15 +194,17 @@ public class TestCaseMethodFlowGenerator {
 		}
 
 		//Declare readFields as local vars
-		//PAREI AQUI
-//		for (final Field f : flow.getReadFields()){
-//            if (!f.isStatic()) {
-//                sb.appendln("%s.%s(%s);", classUnderTest.variableNameForType(),
-//                        f.getSetter(), f.getType().getNewValue());
-//            }
-//        }
+		for (final Field f : flow.getReadFields()){
+            if (!f.isStatic()) {
+                sb.appendln("final %s %s = %s;", f.getType(), f.getName(),
+                        f.getType().getNewValue());
+            }
+        }
 
 		if (returnInvocationMethod != null) {
+			sb.appendln("final %s %sFromMock = %s;", returnInvocationMethod.getType(),
+					lowerCaseFirstChar(returnInvocationMethod.getName()),
+					returnInvocationMethod.getType().getNewValue());
 			sb.appendln("final %s %sEsperado = %s;", returnInvocationMethod.getType(),
 					lowerCaseFirstChar(returnInvocationMethod.getName()),
 					returnInvocationMethod.getType().getNewValue());

@@ -94,7 +94,7 @@ public class ConfigMocksGenerator {
      */
     private void configReturnInvocation(final Field mock,
         final FieldMethodInvocation invocation) {
-        sb.appendln("expect(%s.%s(%s))\n  .andReturn(%sEsperado);", mock.getName(),
+        sb.appendln("expect(%s.%s(%s))\n  .andReturn(%sFromMock);", mock.getName(),
                 invocation.getMethod().getName(),
                 invocation.getArgumentsAsString(),
                 lowerCaseFirstChar(invocation.getMethod().getName()));
