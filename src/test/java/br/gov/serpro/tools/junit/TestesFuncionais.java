@@ -4,13 +4,9 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
 
 import org.junit.Test;
 
@@ -53,29 +49,6 @@ public class TestesFuncionais {
 	}
 
 	public String getContents(String resource) throws IOException {
-	    FileInputStream stream = new FileInputStream(getFile(resource));
-	    try {
-	      FileChannel fc = stream.getChannel();
-	      MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
-	      /* Instead of using default, pass in a decoder. */
-	      return Charset.defaultCharset().decode(bb).toString();
-	    }
-	    finally {
-	      stream.close();
-	    }
-
-	}
-
-	public String getContents3(String resource) throws IOException {
-	    final InputStream is = this.getClass().getResourceAsStream(resource);
-	    //FileInputStream input = new FileInputStream(is);
-	    byte[] fileData = new byte[is.available()];
-	    is.read(fileData);
-	    is.close();
-	    return new String(fileData, "US-ASCII");
-	}
-
-	public String getContents2(String resource) throws IOException {
 		final InputStream is = this.getClass().getResourceAsStream(resource);
 
 		StringBuilder sb = new StringBuilder();
