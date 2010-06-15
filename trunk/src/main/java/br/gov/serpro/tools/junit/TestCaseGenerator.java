@@ -23,22 +23,22 @@ public class TestCaseGenerator {
 
 	public String generate() {
 		final SourceBuilder sb = new SourceBuilder();
-		sb.appendln(generatePackageName());
-		sb.appendln(generateImports());
-		sb.appendln(generateClassStart());
-		sb.appendln(generateFields());
-		sb.appendln(generateCreateMockMethods());
-		sb.appendln(generateAbstractImpls());
-		sb.appendln(generateSetup());
-		sb.appendln(generateMethods());
-		sb.appendln(generateClassEnd());
+		sb.append(generatePackageName());
+		sb.append(generateImports());
+		sb.append(generateClassStart());
+		sb.append(generateFields());
+		sb.append(generateCreateMockMethods());
+		sb.append(generateAbstractImpls());
+		sb.append(generateSetup());
+		sb.append(generateMethods());
+		sb.append(generateClassEnd());
 		return sb.toString();
 	}
 
 	String generateCreateMockMethods() {
 		final SourceBuilder sb = new SourceBuilder();
 		for (final Field field : dependencies) {
-			sb.appendln(generateCreateMockMethod(field)).appendln();
+			sb.append(generateCreateMockMethod(field)).appendln();
 		}
 		return sb.toString();
 	}
@@ -103,12 +103,11 @@ public class TestCaseGenerator {
 		}
 		final SourceBuilder sb = new SourceBuilder();
 		final String dsxml = varNameForClassUnderTest.replace("DaoBean", "") + "DS.xml";
-		sb.appendln()
-			.appendln("/** {@inheritDoc} */")
-			.appendln("@Override")
-			.appendln("protected IDataSet getDataSet() {")
-			.appendln("  return recuperarDataSet(\"%s\");", dsxml)
-			.appendln("}");
+		sb.appendln("/** {@inheritDoc} */")
+    		.appendln("@Override")
+    		.appendln("protected IDataSet getDataSet() {")
+    		.appendln("  return recuperarDataSet(\"%s\");", dsxml)
+    		.appendln("}");
 		return sb.toString();
 
 	}
@@ -117,13 +116,11 @@ public class TestCaseGenerator {
 		final SourceBuilder sb = new SourceBuilder();
 
 		if (classUnderTest.isAtView()) {
-			sb.appendln();
 			sb.appendln("/** {@inheritDoc} */");
 			sb.appendln("@Override");
 			sb.appendln("public void setUp() throws Exception {");
 			sb.appendln("  super.setUp();");
 		} else {
-			sb.appendln();
 			sb.appendln("/** Configuracoes iniciais. */");
 			sb.appendln("@Before");
 			sb.appendln("public void setUp() {");
@@ -210,7 +207,7 @@ public class TestCaseGenerator {
 	}
 
 	String generatePackageName() {
-		return "package " + classUnderTest.getPackageName() + ";";
+		return "package " + classUnderTest.getPackageName() + ";\n";
 	}
 
 }

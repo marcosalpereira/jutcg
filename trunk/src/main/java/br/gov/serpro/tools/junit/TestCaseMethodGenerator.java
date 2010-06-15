@@ -18,7 +18,7 @@ public class TestCaseMethodGenerator {
 	public String generate() {
 		SourceBuilder sb = new SourceBuilder();
 		for(Flow flow : method.getFlows()) {
-			sb.appendln(new TestCaseMethodFlowGenerator(flow, dependencies).generate());
+			sb.append(new TestCaseMethodFlowGenerator(flow, dependencies).generate());
 		}
 		return sb.toString();
 	}

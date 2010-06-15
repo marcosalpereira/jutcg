@@ -31,27 +31,20 @@ import java.util.*;
 import static org.junit.Assert.*;
 import br.gov.esaf.sgc.dao.impl.HibernateTestCase;
 
-
 /**
  * Testes unitarios para a classe {@link VinculoProvaFaseDaoBean}.
  */
 public class TestVinculoProvaFaseDaoBean extends HibernateTestCase {
 
-
 /**
  * Classe sendo testada {@link VinculoProvaFaseDaoBean}.
  */
 private VinculoProvaFaseDaoBean vinculoProvaFaseDaoBean;
-
-
-
 /** {@inheritDoc} */
 @Override
 protected IDataSet getDataSet() {
   return recuperarDataSet("vinculoProvaFaseDS.xml");
 }
-
-
 /** Configuracoes iniciais. */
 @Before
 public void setUp() {
@@ -59,104 +52,62 @@ public void setUp() {
 vinculoProvaFaseDaoBean.setEntityManager(getEntityManager());
 }
 
-
 /**
  * Teste para o metodo {@link VinculoProvaFaseDaoBean#inserir(VinculoProvaFase)}.
  */
 @Test
 public void testInserir() {
-
 // variaveis usadas
 final VinculoProvaFase vinculoProvaFase = new VinculoProvaFase(1);
-
-
-
 // invocar metodo sendo testado
 vinculoProvaFaseDaoBean.inserir(vinculoProvaFase);
-
-
-
 }
-
 
 /**
  * Teste para o metodo {@link VinculoProvaFaseDaoBean#atualizar(VinculoProvaFase)}.
  */
 @Test
 public void testAtualizar() {
-
 // variaveis usadas
 final VinculoProvaFase vinculoProvaFase = new VinculoProvaFase(1);
-
-
-
 // invocar metodo sendo testado
 vinculoProvaFaseDaoBean.atualizar(vinculoProvaFase);
-
-
-
 }
-
 
 /**
  * Teste para o metodo {@link VinculoProvaFaseDaoBean#excluir(VinculoProvaFase)}.
  */
 @Test
 public void testExcluir() {
-
 // variaveis usadas
 final VinculoProvaFase vinculoProvaFase = new VinculoProvaFase(1);
-
-
-
 // invocar metodo sendo testado
 vinculoProvaFaseDaoBean.excluir(vinculoProvaFase);
-
-
-
 }
-
 
 /**
  * Teste para o metodo {@link VinculoProvaFaseDaoBean#selecionar(Fase)}.
  */
 @Test
 public void testSelecionarFase() {
-
 // variaveis usadas
 final Fase fase = new Fase(1);
-
-
-
 // invocar metodo sendo testado
 final Set<VinculoProvaFase> selecionarReal = vinculoProvaFaseDaoBean.selecionar(fase);
-
-
 // verificacoes do resultado do metodo sendo testado
 assertEquals(esperado, selecionarReal);
-
 }
-
 
 /**
  * Teste para o metodo {@link VinculoProvaFaseDaoBean#selecionar(OfertaCargoConcurso)}.
  */
 @Test
 public void testSelecionarOfertaCargoConcurso() {
-
 // variaveis usadas
 final OfertaCargoConcurso oferta = new OfertaCargoConcurso(1);
-
-
-
 // invocar metodo sendo testado
 final List<VinculoProvaFase> selecionarReal = vinculoProvaFaseDaoBean.selecionar(oferta);
-
-
 // verificacoes do resultado do metodo sendo testado
 assertEquals(esperado, selecionarReal);
-
 }
-
-
 }
