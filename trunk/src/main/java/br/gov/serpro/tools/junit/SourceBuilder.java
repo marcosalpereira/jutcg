@@ -23,19 +23,19 @@ public class SourceBuilder {
 
 	public SourceBuilder appendJavaDoc(String format, Object... args) {
 		final String doc = String.format(format, args).replaceAll("\n", "\n * ");
-		sb.append("\n/**\n * " + doc + "\n */\n");
+		sb.append("/**\n * " + doc + "\n */\n");
 		return this;
 	}
 	
-	public SourceBuilder insertLineComment(int offset, String comment) {
-	    sb.insert(offset, "// " + comment + "\n");
+	public SourceBuilder insertln(int offset, String str) {
+	    sb.insert(offset, str + "\n");
 	    return this;
 	}
 
-	public SourceBuilder appendLineComment(String comment) {
-		sb.append("// " + comment + "\n");
-		return this;
-	}
+//	public SourceBuilder appendLineComment(String comment) {
+//		sb.append("// " + comment + "\n");
+//		return this;
+//	}
 
 	/** {@inheritDoc} */
 	@Override

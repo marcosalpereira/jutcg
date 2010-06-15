@@ -1,4 +1,5 @@
 package br.gov.esaf.sgc.dao.impl;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -40,11 +41,13 @@ public class TestVinculoProvaFaseDaoBean extends HibernateTestCase {
  * Classe sendo testada {@link VinculoProvaFaseDaoBean}.
  */
 private VinculoProvaFaseDaoBean vinculoProvaFaseDaoBean;
+
 /** {@inheritDoc} */
 @Override
 protected IDataSet getDataSet() {
   return recuperarDataSet("vinculoProvaFaseDS.xml");
 }
+
 /** Configuracoes iniciais. */
 @Before
 public void setUp() {
@@ -59,6 +62,7 @@ vinculoProvaFaseDaoBean.setEntityManager(getEntityManager());
 public void testInserir() {
 // variaveis usadas
 final VinculoProvaFase vinculoProvaFase = new VinculoProvaFase(1);
+
 // invocar metodo sendo testado
 vinculoProvaFaseDaoBean.inserir(vinculoProvaFase);
 }
@@ -70,6 +74,7 @@ vinculoProvaFaseDaoBean.inserir(vinculoProvaFase);
 public void testAtualizar() {
 // variaveis usadas
 final VinculoProvaFase vinculoProvaFase = new VinculoProvaFase(1);
+
 // invocar metodo sendo testado
 vinculoProvaFaseDaoBean.atualizar(vinculoProvaFase);
 }
@@ -81,6 +86,7 @@ vinculoProvaFaseDaoBean.atualizar(vinculoProvaFase);
 public void testExcluir() {
 // variaveis usadas
 final VinculoProvaFase vinculoProvaFase = new VinculoProvaFase(1);
+
 // invocar metodo sendo testado
 vinculoProvaFaseDaoBean.excluir(vinculoProvaFase);
 }
@@ -92,8 +98,10 @@ vinculoProvaFaseDaoBean.excluir(vinculoProvaFase);
 public void testSelecionarFase() {
 // variaveis usadas
 final Fase fase = new Fase(1);
+
 // invocar metodo sendo testado
 final Set<VinculoProvaFase> selecionarReal = vinculoProvaFaseDaoBean.selecionar(fase);
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(esperado, selecionarReal);
 }
@@ -105,8 +113,10 @@ assertEquals(esperado, selecionarReal);
 public void testSelecionarOfertaCargoConcurso() {
 // variaveis usadas
 final OfertaCargoConcurso oferta = new OfertaCargoConcurso(1);
+
 // invocar metodo sendo testado
 final List<VinculoProvaFase> selecionarReal = vinculoProvaFaseDaoBean.selecionar(oferta);
+
 // verificacoes do resultado do metodo sendo testado
 assertEquals(esperado, selecionarReal);
 }

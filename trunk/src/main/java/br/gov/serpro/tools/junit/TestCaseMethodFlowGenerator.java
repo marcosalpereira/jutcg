@@ -42,7 +42,8 @@ public class TestCaseMethodFlowGenerator {
 
 	public String generate() {
 		final SourceBuilder sb = new SourceBuilder();
-
+		sb.appendln();
+		
 		if (!flow.getFlowBranches().isEmpty()) {
 			sb.appendJavaDoc("Teste para o metodo {@link %s#%s}."
 			    + "\nDescricao do Fluxo: %s.",
@@ -105,15 +106,14 @@ public class TestCaseMethodFlowGenerator {
 			infoAppended = true;
 		}
 
-		final JavaClass classUnderTest = flow.getMethod().getJavaClass();
 		for (final Field f : flow.getWrittenFields()) {
-			sb.appendln("assertEquals(expected, %s.%s());", classUnderTest.variableNameForType(),
+			sb.appendln("assertEquals(expected, %s.%s());", varNameForClassUnderTest,
 					f.getGetter());
 			infoAppended = true;
 		}
 
 		if (infoAppended) {
-		    sb.insertLineComment(0, "verificacoes do resultado do metodo sendo testado");
+		    sb.insertln(0, "\n// verificacoes do resultado do metodo sendo testado");
 		}
 
 		return sb.toString();
@@ -121,7 +121,8 @@ public class TestCaseMethodFlowGenerator {
 
 	String generateInvokeMethod() {
 		final SourceBuilder sb = new SourceBuilder();
-		sb.appendLineComment("invocar metodo sendo testado");
+		sb.appendln();
+		sb.appendln("// invocar metodo sendo testado");
 		final String strParams = concatMethodParams(method.getFormalParameters());
 		if (method.isVoid()) {
 			sb.appendln("%s.%s(%s);",
@@ -155,22 +156,16 @@ public class TestCaseMethodFlowGenerator {
 	}
 
 	String generateConfigInternalState() {
+
+		List<Field> fields = flow.selectNonStaticReadFields();
+		if (fields.isEmpty()) return "";
+		
 		final SourceBuilder sb = new SourceBuilder();
-		boolean infoAppended = false;
+		sb.appendln("\n// Configurando estado interno da classe sob teste");
 
-		final JavaClass classUnderTest = flow.getMethod().getJavaClass();
-
-		for (final Field f : flow.getReadFields()){
-			if (!f.isStatic()) {
-				sb.appendln("%s.%s(%s);", classUnderTest.variableNameForType(),
-						f.getSetter(), f.getName());
-				infoAppended = true;
-			}
+		for (final Field f : fields){
+			sb.appendln("%s.%s(%s);", varNameForClassUnderTest, f.getSetter(), f.getName());
 		}
-
-        if (infoAppended) {
-            sb.insertLineComment(0, "Configurando estado interno da classe sob teste");
-        }
 
 		return sb.toString();
 	}
@@ -194,7 +189,7 @@ public class TestCaseMethodFlowGenerator {
 		final SortedSet<Field> readFields = flow.getReadFields();
 
 		if (returnInvocationMethod != null || !params.isEmpty() || !readFields.isEmpty()) {
-			sb.appendLineComment("variaveis usadas");
+			sb.appendln("// variaveis usadas");
 		}
 
 		//Declare readFields as local vars
@@ -226,6 +221,10 @@ public class TestCaseMethodFlowGenerator {
 
 
 	String generateCheckMocks() {
+		if (usedDependencies.isEmpty()) {
+			return "";
+		}
+		
 		final SourceBuilder sb = new SourceBuilder();
 
 		String mocks = "";
@@ -233,10 +232,9 @@ public class TestCaseMethodFlowGenerator {
 			mocks += dep.getName() + ",";
 		}
 
-		if (!usedDependencies.isEmpty()) {
-		    sb.appendLineComment("checar estados dos mocks");
-		    sb.appendln("verify(" + mocks.substring(0, mocks.length() - 1) + ");");
-		}
+		sb.appendln();
+		sb.appendln("// checar estados dos mocks");
+		sb.appendln("verify(" + mocks.substring(0, mocks.length() - 1) + ");");
 		return sb.toString();
 	}
 

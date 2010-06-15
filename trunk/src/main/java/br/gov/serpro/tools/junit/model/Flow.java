@@ -35,43 +35,43 @@ public class Flow {
 	private List<FlowBranch> flowBranches = new ArrayList<FlowBranch>();
 
 	public void setFlowBranches(List<FlowBranch> flowBranches) {
-        this.flowBranches = flowBranches;
-    }
+		this.flowBranches = flowBranches;
+	}
 
 	public List<FlowBranch> getFlowBranches() {
-        return flowBranches;
-    }
+		return flowBranches;
+	}
 
 	/**
 	 * A branch on a flow.
 	 */
 	public static class FlowBranch {
 
-	    /**
-	     * Branch expression.
-	     */
-	    private String expression;
+		/**
+		 * Branch expression.
+		 */
+		private String expression;
 
-	    /**
-	     * If enter or not at branch.
-	     */
-	    private boolean enter;
+		/**
+		 * If enter or not at branch.
+		 */
+		private boolean enter;
 
-        public String getExpression() {
-            return expression;
-        }
+		public String getExpression() {
+			return expression;
+		}
 
-        public void setExpression(String expression) {
-            this.expression = expression;
-        }
+		public void setExpression(String expression) {
+			this.expression = expression;
+		}
 
-        public boolean isEnter() {
-            return enter;
-        }
+		public boolean isEnter() {
+			return enter;
+		}
 
-        public void setEnter(boolean enter) {
-            this.enter = enter;
-        }
+		public void setEnter(boolean enter) {
+			this.enter = enter;
+		}
 
 	}
 
@@ -85,6 +85,16 @@ public class Flow {
 
 	public SortedSet<Field> getReadFields() {
 		return readFields;
+	}
+
+	public List<Field> selectNonStaticReadFields() {
+		final List<Field> ret = new ArrayList<Field>();
+		for (Field field : getReadFields()) {
+			if (!field.isStatic()) {
+				ret.add(field);
+			}
+		}
+		return ret;
 	}
 
 	public void setReadFields(SortedSet<Field> usedFields) {
@@ -117,12 +127,15 @@ public class Flow {
 
 	/**
 	 * Retorna o metodo que foi usado num return neste fluxo.
+	 * 
 	 * @return o metodo ou <code>null</code> se nao existir
 	 */
 	public Method getReturnInvocationMethod() {
 		for (final FieldMethodInvocation invocation : invocations) {
-			if (invocation.isReturnInvocation()) return invocation.getMethod();
+			if (invocation.isReturnInvocation())
+				return invocation.getMethod();
 		}
 		return null;
 	}
+
 }

@@ -9,6 +9,8 @@ import br.gov.serpro.tools.junit.model.Method;
 import br.gov.serpro.tools.junit.model.Type;
 
 public class TestCaseGenerator {
+	private static final String IMPL_DAO_SUFIX = "DaoBean";
+	
 	final private JavaClass classUnderTest;
 	final private List<Field> dependencies;
 	final private List<Method> selectedMethods;
@@ -38,19 +40,21 @@ public class TestCaseGenerator {
 	String generateCreateMockMethods() {
 		final SourceBuilder sb = new SourceBuilder();
 		for (final Field field : dependencies) {
-			sb.append(generateCreateMockMethod(field)).appendln();
+			sb.append(generateCreateMockMethod(field));
 		}
 		return sb.toString();
 	}
 
 	String generateCreateMockMethod(Field field) {
 		final SourceBuilder sb = new SourceBuilder();
+		sb.appendln();
 		sb.appendJavaDoc("Cria o mock {@link %s} e seta na classe sendo testada.\n" +
 				"@return o mock criado", field.getType());
 		sb.appendln("private %1$s criarMock%1$s() {", field.getType());
 		sb.appendln("  %1$s mock = createStrictMock(%1$s.class);", field.getType());
 		sb.appendln("  %s.set%s(mock);", varNameForClassUnderTest, GeneratorHelper.upperCaseFirstChar(field.getName()));
-		sb.appendln("  return mock;\n}");
+		sb.appendln("  return mock;");
+		sb.appendln("}");
 		return sb.toString();
 	}
 
@@ -102,8 +106,9 @@ public class TestCaseGenerator {
 			return "";
 		}
 		final SourceBuilder sb = new SourceBuilder();
-		final String dsxml = varNameForClassUnderTest.replace("DaoBean", "") + "DS.xml";
-		sb.appendln("/** {@inheritDoc} */")
+		final String dsxml = varNameForClassUnderTest.replace(IMPL_DAO_SUFIX, "") + "DS.xml";
+		sb.appendln()
+			.appendln("/** {@inheritDoc} */")
     		.appendln("@Override")
     		.appendln("protected IDataSet getDataSet() {")
     		.appendln("  return recuperarDataSet(\"%s\");", dsxml)
@@ -114,7 +119,7 @@ public class TestCaseGenerator {
 
 	String generateSetup() {
 		final SourceBuilder sb = new SourceBuilder();
-
+		sb.appendln();
 		if (classUnderTest.isAtView()) {
 			sb.appendln("/** {@inheritDoc} */");
 			sb.appendln("@Override");
@@ -137,13 +142,9 @@ public class TestCaseGenerator {
 
 	String generateFields() {
 		final SourceBuilder sb = new SourceBuilder();
-		sb.append(generateFieldForType(classUnderTest.getType(), "Classe sendo testada"));
-		return sb.toString();
-	}
-
-	String generateFieldForType(Type type, String prefix) {
-		final SourceBuilder sb = new SourceBuilder();
-		sb.appendJavaDoc("%s {@link %s}.", prefix, type);
+		final Type type = classUnderTest.getType();
+		sb.appendln();
+		sb.appendJavaDoc("Classe sendo testada {@link %s}.", type);
 		sb.appendln("private %s %s;", type, type.getVariableName());
 		return sb.toString();
 	}
@@ -167,6 +168,7 @@ public class TestCaseGenerator {
 	String generateImports() {
 		final SourceBuilder sb = new SourceBuilder();
 
+		sb.appendln();
 		//include all imports of class under test
 		for (final String imp : classUnderTest.getImports()) {
 			sb.appendln("import %s;", imp);
@@ -191,7 +193,7 @@ public class TestCaseGenerator {
 
 	String generateClassStart() {
 		final SourceBuilder sb = new SourceBuilder();
-
+		sb.appendln();
 		String extendz = "";
 		if (classUnderTest.isAtView()) {
 			extendz = "extends JsfTestCase";
