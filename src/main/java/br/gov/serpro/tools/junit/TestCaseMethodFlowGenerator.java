@@ -44,8 +44,8 @@ public class TestCaseMethodFlowGenerator {
 		final SourceBuilder sb = new SourceBuilder();
 
 		if (!flow.getFlowBranches().isEmpty()) {
-
-			sb.appendJavaDoc("Teste para o metodo {@link %s#%s}.\nDescricao do Fluxo: %s.",
+			sb.appendJavaDoc("Teste para o metodo {@link %s#%s}."
+			    + "\nDescricao do Fluxo: %s.",
 				method.getJavaClass().getType(),
 				method.getLoggingSignature(),
 				generateFlowDescription(flow.getFlowBranches()));

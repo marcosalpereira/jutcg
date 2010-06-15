@@ -100,7 +100,7 @@ public class Method {
 	public String getLoggingSignature() {
 		StringBuilder result = new StringBuilder(getName());
 		result.append('(');
-		result.append(getFormalParametersAsString(","));
+		result.append(getFormalParametersAsString(", "));
 		result.append(')');
 		return result.toString();
 	}
