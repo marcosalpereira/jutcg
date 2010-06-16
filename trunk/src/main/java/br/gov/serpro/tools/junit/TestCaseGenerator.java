@@ -10,7 +10,7 @@ import br.gov.serpro.tools.junit.model.Type;
 
 public class TestCaseGenerator {
 	private static final String IMPL_DAO_SUFIX = "DaoBean";
-	
+
 	final private JavaClass classUnderTest;
 	final private List<Field> dependencies;
 	final private List<Method> selectedMethods;
@@ -39,20 +39,23 @@ public class TestCaseGenerator {
 
 	String generateCreateMockMethods() {
 		final SourceBuilder sb = new SourceBuilder();
-		for (final Field field : dependencies) {
-			sb.append(generateCreateMockMethod(field));
+		for (final Field dependency : dependencies) {
+		    if (classUnderTest.existsAnyInvocation(dependency)) {
+		        sb.append(generateCreateMockMethod(dependency));
+		    }
 		}
 		return sb.toString();
 	}
 
-	String generateCreateMockMethod(Field field) {
+	String generateCreateMockMethod(Field dependency) {
 		final SourceBuilder sb = new SourceBuilder();
 		sb.appendln();
 		sb.appendJavaDoc("Cria o mock {@link %s} e seta na classe sendo testada.\n" +
-				"@return o mock criado", field.getType());
-		sb.appendln("private %1$s criarMock%1$s() {", field.getType());
-		sb.appendln("  %1$s mock = createStrictMock(%1$s.class);", field.getType());
-		sb.appendln("  %s.set%s(mock);", varNameForClassUnderTest, GeneratorHelper.upperCaseFirstChar(field.getName()));
+				"@return o mock criado", dependency.getType());
+		sb.appendln("private %1$s criarMock%1$s() {", dependency.getType());
+		sb.appendln("  %1$s mock = createStrictMock(%1$s.class);", dependency.getType());
+		sb.appendln("  %s.set%s(mock);", varNameForClassUnderTest,
+		    GeneratorHelper.upperCaseFirstChar(dependency.getName()));
 		sb.appendln("  return mock;");
 		sb.appendln("}");
 		return sb.toString();
