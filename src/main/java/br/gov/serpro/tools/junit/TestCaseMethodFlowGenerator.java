@@ -189,6 +189,7 @@ public class TestCaseMethodFlowGenerator {
 		final List<FormalParameter> params = method.getFormalParameters();
 		final Method returnInvocationMethod = flow.getReturnInvocationMethod();
 		final SortedSet<Field> readFields = flow.getReadFields();
+		readFields.removeAll(usedDependencies);
 
 		if (returnInvocationMethod != null || !params.isEmpty() || !readFields.isEmpty()) {
 			sb.appendln("// variaveis usadas");
