@@ -43,7 +43,7 @@ public class TestCaseMethodFlowGenerator {
 	public String generate() {
 		final SourceBuilder sb = new SourceBuilder();
 		sb.appendln();
-		
+
 		if (!flow.getFlowBranches().isEmpty()) {
 			sb.appendJavaDoc("Teste para o metodo {@link %s#%s}."
 			    + "\nDescricao do Fluxo: %s.",
@@ -75,8 +75,8 @@ public class TestCaseMethodFlowGenerator {
 	}
 
 	private String generateFlowDescription(List<FlowBranch> flowBranches) {
-	    StringBuilder sb = new StringBuilder();
-        for (FlowBranch flowBranch : flowBranches) {
+	    final StringBuilder sb = new StringBuilder();
+        for (final FlowBranch flowBranch : flowBranches) {
             if (flowBranch.isEnter()) {
                 sb.append("\n    Entra: ");
             } else {
@@ -157,9 +157,11 @@ public class TestCaseMethodFlowGenerator {
 
 	String generateConfigInternalState() {
 
-		List<Field> fields = flow.selectNonStaticReadFields();
+		final List<Field> fields = flow.selectNonStaticReadFields();
+		fields.removeAll(usedDependencies);
+
 		if (fields.isEmpty()) return "";
-		
+
 		final SourceBuilder sb = new SourceBuilder();
 		sb.appendln("\n// Configurando estado interno da classe sob teste");
 
@@ -224,7 +226,7 @@ public class TestCaseMethodFlowGenerator {
 		if (usedDependencies.isEmpty()) {
 			return "";
 		}
-		
+
 		final SourceBuilder sb = new SourceBuilder();
 
 		String mocks = "";
