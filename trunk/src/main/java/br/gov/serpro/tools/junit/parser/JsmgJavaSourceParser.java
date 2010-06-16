@@ -130,7 +130,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 		for (final org.jsmg.model.Method jsmgMethod : jsmgMethods) {
 			final Method method = new Method();
 			method.setName(jsmgMethod.getName());
-			method.setProtection(null);
+			method.setProtection(translateProtection(jsmgMethod));
 			if (!jsmgMethod.isVoid()) {
 				method.setType(translateTypeName(jsmgMethod.getReturnType()));
 			}
@@ -140,6 +140,18 @@ public class JsmgJavaSourceParser implements SourceParser {
 			methods.add(method);
 		}
 		return methods;
+	}
+
+	private Protection translateProtection(org.jsmg.model.Method jsmgMethod) {
+		if (jsmgMethod.isPublic()) {
+			return Protection.PUBLIC;
+		} else if (jsmgMethod.isPrivate()) {
+			return Protection.PRIVATE;
+		} else if (jsmgMethod.isProtected()) {
+			return Protection.PROTECTED;
+		}
+
+		return Protection.DEFAULT;
 	}
 
 	private List<FormalParameter> translateParameters(
@@ -176,7 +188,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 
         for (final ExecutionPathNode pathNode : executionPath.getExecutionPathNodes()) {
             if(pathNode.isBranch()) {
-                FlowBranch flowBranch = new FlowBranch();
+                final FlowBranch flowBranch = new FlowBranch();
                 flowBranch.setEnter(pathNode.isEntersConditionalExpression());
                 flowBranch.setExpression(pathNode.getNodeImage());
                 flowBranches.add(flowBranch);
