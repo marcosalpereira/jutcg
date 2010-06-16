@@ -107,4 +107,23 @@ public class JavaClass {
         return searchMethods(method.getName()).size() > 1;
     }
 
+    /**
+     * Check is exists any invocation for a field.
+     * @param field field
+     * @return <code>true</code> if exists any invocation
+     * for the dependency
+     */
+    public boolean existsAnyInvocation(Field field) {
+        for (Method met : getMethods()) {
+            for (Flow flow : met.getFlows()) {
+                for (FieldMethodInvocation invocation : flow.getInvocations()) {
+                    if (field.equals(invocation.getInvokedAtField())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 }

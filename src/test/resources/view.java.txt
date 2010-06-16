@@ -162,6 +162,12 @@ public class DigitacaoNotaManualListarBean {
      */
     @In("digitacaoNotaManualFacade")
     private transient DigitacaoNotaManualFacade digitacaoNotaManualFacade;
+    
+    /**
+     * Usuário logado.
+     */
+    @In
+    private UsuarioLogado usuarioLogado;    
 
     public void setDigitacaoNotaManualFacade(
         DigitacaoNotaManualFacade digitacaoNotaManualFacade) {
