@@ -16,10 +16,12 @@ public class ConfigMocksGenerator {
 	private Set<Field> mocks;
 	final SourceBuilder sb = new SourceBuilder();
 	final Set<Variable> variablesDeclared = new HashSet<Variable>();
+	final private NextValueForType nextValueForType;
 
-	public ConfigMocksGenerator(Flow flow, Set<Field> mocks) {
+	public ConfigMocksGenerator(Flow flow, Set<Field> mocks, NextValueForType nextValueForType) {
         this.flow = flow;
         this.mocks = mocks;
+        this.nextValueForType = nextValueForType;
     }
 
     public String generate() {
@@ -69,7 +71,7 @@ public class ConfigMocksGenerator {
         sb.appendln("expect(%s.%s(%s))\n  .andReturn(%s);", mock.getName(),
                 invocation.getMethod().getName(),
                 invocation.getArgumentsAsString(),
-                methodType.getNewValue());
+                nextValueForType.next(methodType));
     }
 
     /**
@@ -85,7 +87,7 @@ public class ConfigMocksGenerator {
             sb.appendln("%s %s = %s;",
                     assignedVariable.getType().getName(),
                     assignedVariable.getName(),
-                    assignedVariable.getType().getNewValue());
+                    nextValueForType.next(assignedVariable.getType()));
             variablesDeclared.add(assignedVariable);
         }
         sb.appendln("expect(%s.%s(%s))\n  .andReturn(%s);", mock.getName(),

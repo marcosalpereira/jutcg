@@ -21,6 +21,7 @@ public class TestCaseMethodFlowGenerator {
 	final private JavaClass classUnderTest;
 	final private String varNameForClassUnderTest;
 	final private Set<Field> usedDependencies;
+	final private NextValueForType nextValueForType;
 
 	public TestCaseMethodFlowGenerator(Flow flow, List<Field> dependencies) {
 		this.flow = flow;
@@ -28,6 +29,7 @@ public class TestCaseMethodFlowGenerator {
 		this.classUnderTest = method.getJavaClass();
 		this.varNameForClassUnderTest = classUnderTest.variableNameForType();
 		this.usedDependencies = selectUsedDependencies(dependencies);
+		this.nextValueForType = new NextValueForType();
 	}
 
 	private Set<Field> selectUsedDependencies(List<Field> dependencies) {
@@ -107,7 +109,10 @@ public class TestCaseMethodFlowGenerator {
 		}
 
 		for (final Field f : flow.getWrittenFields()) {
-			sb.appendln("assertEquals(expected, %s.%s());", varNameForClassUnderTest,
+			sb.appendln("final %s %sExpected = %s;", f.getType(), f.getGetter(), "<IDontKnowButYouDo>");
+			sb.appendln("assertEquals(%sExpected, %s.%s());",
+					f.getGetter(),
+					varNameForClassUnderTest,
 					f.getGetter());
 			infoAppended = true;
 		}
@@ -180,7 +185,7 @@ public class TestCaseMethodFlowGenerator {
 	}
 
 	String generateConfigMocks() {
-	    return new ConfigMocksGenerator(flow, usedDependencies)
+	    return new ConfigMocksGenerator(flow, usedDependencies, nextValueForType)
 	       .generate();
 	}
 
@@ -199,24 +204,25 @@ public class TestCaseMethodFlowGenerator {
 		for (final Field f : flow.getReadFields()){
             if (!f.isStatic()) {
                 sb.appendln("final %s %s = %s;", f.getType(), f.getName(),
-                        f.getType().getNewValue());
+                        nextValueForType.next(f.getType()));
             }
         }
 
 		if (returnInvocationMethod != null) {
+			String nextValue = nextValueForType.next(returnInvocationMethod.getType());
 			sb.appendln("final %s %sFromMock = %s;", returnInvocationMethod.getType(),
 					lowerCaseFirstChar(returnInvocationMethod.getName()),
-					returnInvocationMethod.getType().getNewValue());
+					nextValue);
 			sb.appendln("final %s %sEsperado = %s;", returnInvocationMethod.getType(),
 					lowerCaseFirstChar(returnInvocationMethod.getName()),
-					returnInvocationMethod.getType().getNewValue());
+					nextValue);
 		}
 
 		if (!params.isEmpty()) {
 
 			for (final FormalParameter fp : params) {
 				sb.appendln("final %s %s = %s;", fp.getType().getName(), fp
-						.getVariableId(), fp.getType().getNewValue());
+						.getVariableId(), nextValueForType.next(fp.getType()));
 			}
 		}
 		return sb.toString();
