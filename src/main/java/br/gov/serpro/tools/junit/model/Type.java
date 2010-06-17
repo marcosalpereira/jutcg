@@ -1,5 +1,8 @@
 package br.gov.serpro.tools.junit.model;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 
 public class Type {
 	private String name;
@@ -10,38 +13,11 @@ public class Type {
 
 	private String fullName;
 
-	public String getNewValue() {
-		if (!isPrimitive()) {
-			if (isCollection()) {
-				return collectionInstance();
-			} else if (getName().equals("String")) {
-			    return "\"1\"";
-			}
-			return String.format("new %s(1)", getName());
-		}
+	private Type[] generic; 
 
-		if (getName().equals("boolean")) {
-			return "false";
-		}
-
-		return "0";
-	}
-
-	private String collectionInstance() {
-		if (isSet()) return "new Hash" + name + "()";
-		if (isList()) {
-			Type generic = getGeneric();
-			if (generic != null) {
-				return "Arrays.asList(" + generic.getNewValue() + ")";
-			} else {
-				return "new Array" + name + "()";
-			}
-		}
-		return name;
-	}
-
-	private Type getGeneric() {
-		Type ret = null;
+	public Type[] getGeneric() {
+		if (generic != null) return generic;
+		
 		int iniGen = this.name.indexOf('<');
 		int lastIniGen = this.name.lastIndexOf('<');
 
@@ -50,27 +26,46 @@ public class Type {
 		if (iniGen != lastIniGen) return null;
 
 		if (iniGen > 0) {
-			//List<Cargo>
 			int endGen = this.name.indexOf('>');
-			String nome = this.name.substring(iniGen+1, endGen);
-			ret = new Type();
-			ret.setName(nome);
-			ret.setFullName(nome);
-			ret.setPrimitive(Character.isLowerCase(nome.charAt(0)));
+			String sNomes = this.name.substring(iniGen+1, endGen);
+			String[] aNomes = sNomes.split(",");
+			generic = new Type[aNomes.length];
+			for(int i=0; i<aNomes.length; i++) {
+				final String nome = aNomes[i].trim();
+				generic[i] = new Type();
+				generic[i].setName(nome);
+				generic[i].setFullName(nome);
+				generic[i].setPrimitive(Character.isLowerCase(nome.charAt(0)));
+			}
 		}
 
-		return ret;
+		return generic;
 	}
 
-	private boolean isCollection() {
-		return isList() || isSet();
+	/**
+	 * note: map is considered a collection too.
+	 * @return <code>true</code> if is a List, Set or Map
+	 */
+	public boolean isCollection() {
+		return isList() || isSet() || isMap();
 	}
 
-	private boolean isSet() {
+	public String getDefaultCollectionImpl() {
+		if (isMap()) return "HashMap";
+		if (isSet()) return "HashSet";
+		if (isList()) return "ArrayList";
+		return null;
+	}
+
+	public boolean isSet() {
 		return name.startsWith("Set");
 	}
+	
+	public boolean isMap() {
+		return name.startsWith("Map");
+	}
 
-	private boolean isList() {
+	public boolean isList() {
 		return name.startsWith("List");
 		}
 
@@ -114,7 +109,31 @@ public class Type {
 	}
 
 	public String getFullName() {
+		if (fullName == null) fullName = name;
 		return fullName;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj instanceof Type) {
+			Type that = (Type) obj;
+			return new EqualsBuilder()
+				.append(this.getFullName(), that.getFullName())
+				.isEquals();
+		}
+
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(795681801, 961628501).append(
+				this.getFullName()).toHashCode();
 	}
 
 }
