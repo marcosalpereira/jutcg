@@ -5,6 +5,7 @@ package br.gov.serpro.tools.junit.parser;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -176,7 +177,8 @@ public class JsmgJavaSourceParser implements SourceParser {
 		final List<Flow> flows = new ArrayList<Flow>(executionsPath.size());
 		for (final ExecutionPath executionPath : executionsPath) {
 
-			augmentExecutionPathWithOneFlowClassMethodClass(executionPath, jsmgClassModel);
+			augmentExecutionPathWithOneFlowClassMethodClass(executionPath, jsmgClassModel,
+					new HashMap<ExecutionPathNode, List<MethodInvocation>>(0));
 
 			final Flow flow = new Flow();
 			flow.setName(executionPath.getName());
@@ -195,15 +197,48 @@ public class JsmgJavaSourceParser implements SourceParser {
 	 * If the method called has only one execution path, then the nodes of this path are
 	 * inserted in the enclosing execution path.
 	 * @param executionPath execution path
+	 * @return if the execution path was augmented
 	 */
-	private void augmentExecutionPathWithOneFlowClassMethodClass(
-			ExecutionPath executionPath, JavaSourceClassModel jsmgClassModel) {
+	private Map<ExecutionPathNode, List<MethodInvocation>> augmentExecutionPathWithOneFlowClassMethodClass(
+			ExecutionPath executionPath, JavaSourceClassModel jsmgClassModel,
+			Map<ExecutionPathNode, List<MethodInvocation>> lastIterationResultMap) {
 		final Map<ExecutionPathNode, List<MethodInvocation>> mapNodeWithOwnClassMethodInvocations =
 			getMapNodeWithOwnClassMethodInvocations(executionPath, jsmgClassModel);
-		for ( final Entry<ExecutionPathNode, List<MethodInvocation>> nodeWithInvocations
-			: mapNodeWithOwnClassMethodInvocations.entrySet()) {
-			final List<ExecutionPathNode> nodesToBeInserted = getNodesToBeInsertedExecutionPath(jsmgClassModel, nodeWithInvocations);
-			addNodesToPath(executionPath, nodeWithInvocations, nodesToBeInserted);
+		final boolean newOwnClassMethodInvocationsFound = mapNodeWithOwnClassMethodInvocations.size()
+			> lastIterationResultMap.size();
+		if (newOwnClassMethodInvocationsFound) {
+			Map<ExecutionPathNode, List<MethodInvocation>> newInvocationsFound =
+				getMapWithNewInvocations(lastIterationResultMap, mapNodeWithOwnClassMethodInvocations);
+			addNodesFromNewMethodsFound(executionPath, jsmgClassModel, newInvocationsFound);
+			// recursive search
+			return augmentExecutionPathWithOneFlowClassMethodClass(executionPath, jsmgClassModel,
+					mapNodeWithOwnClassMethodInvocations);
+		}
+		// else, end recursion
+		return mapNodeWithOwnClassMethodInvocations;
+	}
+
+	private Map<ExecutionPathNode, List<MethodInvocation>> getMapWithNewInvocations(
+			Map<ExecutionPathNode, List<MethodInvocation>> lastIterationResultMap,
+			final Map<ExecutionPathNode, List<MethodInvocation>> mapNodeWithOwnClassMethodInvocations) {
+		Map<ExecutionPathNode, List<MethodInvocation>> newInvocationsFound =
+			new HashMap<ExecutionPathNode, List<MethodInvocation>>(mapNodeWithOwnClassMethodInvocations);
+		for (ExecutionPathNode alreadyAugmentedNode : lastIterationResultMap.keySet()) {
+			newInvocationsFound.remove(alreadyAugmentedNode);
+		}
+		return newInvocationsFound;
+	}
+
+	private void addNodesFromNewMethodsFound(
+			ExecutionPath executionPath,
+			JavaSourceClassModel jsmgClassModel,
+			final Map<ExecutionPathNode, List<MethodInvocation>> mapNodeWithOwnClassMethodInvocations) {
+		for (final Entry<ExecutionPathNode, List<MethodInvocation>> nodeWithInvocations : mapNodeWithOwnClassMethodInvocations
+				.entrySet()) {
+			final List<ExecutionPathNode> nodesToBeInserted = getNodesToBeInsertedExecutionPath(
+					jsmgClassModel, nodeWithInvocations);
+			addNodesToPath(executionPath, nodeWithInvocations,
+					nodesToBeInserted);
 		}
 	}
 
@@ -238,7 +273,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 		final Map<ExecutionPathNode, List<MethodInvocation>> mapNodeWithOwnClassMethosInvocations =
 			new HashMap<ExecutionPathNode, List<MethodInvocation>>();
 		for (final ExecutionPathNode node : executionPath.getExecutionPathNodes()) {
-			final List<MethodInvocation> ownClassMethodInvocations = getOwnClassMethodInvocations(
+			final List<MethodInvocation> ownClassMethodInvocations = getOwnClassMethodInvocationsWithOneExecutionPath(
 					jsmgClassModel, node);
 			if(!ownClassMethodInvocations.isEmpty()) {
 				mapNodeWithOwnClassMethosInvocations.put(node, ownClassMethodInvocations);
@@ -247,22 +282,24 @@ public class JsmgJavaSourceParser implements SourceParser {
 		return mapNodeWithOwnClassMethosInvocations;
 	}
 
-	private List<MethodInvocation> getOwnClassMethodInvocations(
+	private List<MethodInvocation> getOwnClassMethodInvocationsWithOneExecutionPath(
 			JavaSourceClassModel jsmgClassModel, ExecutionPathNode node) {
 		final List<MethodInvocation> methodsInvocations = new ArrayList<MethodInvocation>();
 		for (final MethodInvocation methodInvocation : node
 				.getInternalMethodInvocations()) {
-			if (isOwnClassMethodInvocation(jsmgClassModel, methodInvocation)) {
+			if (isOwnClassMethodInvocationWithOneExecutionPath(jsmgClassModel, methodInvocation)) {
 				methodsInvocations.add(methodInvocation);
 			}
 		}
 		return methodsInvocations;
 	}
 
-	private boolean isOwnClassMethodInvocation(JavaSourceClassModel jsmgClassModel,
+	private boolean isOwnClassMethodInvocationWithOneExecutionPath(JavaSourceClassModel jsmgClassModel,
 			final MethodInvocation methodInvocation) {
-		return !methodInvocation.hasInvokerVariable() && jsmgClassModel.getMethod(methodInvocation
-						.getMethodInvoked()) != null;
+		final org.jsmg.model.Method classMethod = jsmgClassModel.getMethod(methodInvocation
+								.getMethodInvoked());
+		return !methodInvocation.hasInvokerVariable() && classMethod != null
+			&& classMethod.getExecutionsPath().size() == 1;
 	}
 
 	private List<FlowBranch> translateFlowBranches(ExecutionPath executionPath) {
