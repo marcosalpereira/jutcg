@@ -213,8 +213,10 @@ public class JsmgJavaSourceParser implements SourceParser {
 		final ExecutionPathNode pathNode = nodeWithInvocations.getKey();
 		final List<ExecutionPathNode> executionPathNodes = executionPath.getExecutionPathNodes();
 		final int insertionIndex = executionPathNodes.indexOf(pathNode) + 1;
-		if(insertionIndex + 1 > executionPathNodes.size()) {
+		if(insertionIndex + 1 <= executionPathNodes.size()) {
 			executionPathNodes.addAll(insertionIndex, nodesToBeInserted);
+		} else {
+			executionPathNodes.addAll(nodesToBeInserted);
 		}
 	}
 
