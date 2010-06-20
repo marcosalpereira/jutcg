@@ -32,7 +32,11 @@ public class NextValueForType {
 			} else if (name.equals("String")) {
 			    return String.format("\"%d\"", nextId(type));
 			}
-			return String.format("new %s(%d)", name, nextId(type));
+			//Check for impl definition for this type
+			String typeImpl = Config.getString(String.format("interfaceImpl.%s", name));
+			if (typeImpl == null) typeImpl = name;
+			
+			return String.format("new %s(%d)", typeImpl, nextId(type));
 		}
 
 		if (name.equals("boolean")) {

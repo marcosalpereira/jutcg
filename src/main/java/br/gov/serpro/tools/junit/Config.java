@@ -16,7 +16,7 @@ public class Config {
 		try {
 			return RESOURCE_BUNDLE.getString(key);
 		} catch (final MissingResourceException e) {
-			return '!' + key + '!';
+			return null;
 		}
 	}
 }
