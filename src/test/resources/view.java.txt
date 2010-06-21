@@ -4,30 +4,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
-import javax.faces.context.FacesContext;
-import javax.faces.validator.ValidatorException;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
 
 import br.gov.esaf.sgc.facade.DigitacaoNotaManualFacade;
-import br.gov.esaf.sgc.model.CampoAtuacao;
-import br.gov.esaf.sgc.model.Cargo;
-import br.gov.esaf.sgc.model.Cidade;
-import br.gov.esaf.sgc.model.Concurso;
 import br.gov.esaf.sgc.model.Inscricao;
-import br.gov.esaf.sgc.model.OrgaoContratante;
-import br.gov.esaf.sgc.model.TipoConsultaNome;
-import br.gov.esaf.sgc.model.Uf;
+import br.gov.esaf.sgc.model.UsuarioLogado;
 import br.gov.esaf.sgc.model.prova.Prova;
-import br.gov.esaf.sgc.model.prova.ConteudoProva.TipoConteudoProva;
 import br.gov.esaf.sgc.model.resultado.ResultadoProvaManual.VersaoResultadoProvaManual;
-import br.gov.serpro.util.StringHelper;
-import br.gov.serpro.view.util.MessageHelper;
 
 /**
  * Bean para o caso de uso Digitar Resultado Manual.
@@ -35,21 +22,6 @@ import br.gov.serpro.view.util.MessageHelper;
 @Name("digitacaoNotaManualListarBean")
 @Scope(ScopeType.CONVERSATION)
 public class DigitacaoNotaManualListarBean {
-
-    /**
-     * Id do componente com o numero da inscricao na tela.
-     */
-    static final String ID_INPUT_NUMERO_INSCRICAO = "numeroInscricao";
-
-    /**
-     * Id do componente com o nome do candidato na tela.
-     */
-    static final String ID_INPUT_NOME_CANDIDATO = "nomeCandidato";
-
-    /**
-     * Concurso selecionado.
-     */
-    private Concurso concursoSelecionado;
 
     /**
      * Prova selecionada.
@@ -62,62 +34,6 @@ public class DigitacaoNotaManualListarBean {
     private VersaoResultadoProvaManual versaoSelecionada;
 
     /**
-     * Numero de Inscricao.
-     */
-    private String numeroInscricao;
-
-    /**
-     * Nome Candidato.
-     */
-    private String nomeCandidato;
-
-    /**
-     * Lista de concursos.
-     */
-    private List<Concurso> concursos;
-
-    /**
-     * Lista de provas.
-     */
-    private List<Prova> provas;
-
-    /**
-     * Lista de versões de nota.
-     */
-    private List<VersaoResultadoProvaManual> versoes;
-
-    /**
-     * Tipo de consulta pelo nome.
-     */
-    private TipoConsultaNome tipoConsultaNome = TipoConsultaNome.INICIO;
-
-    /**
-     * Flag que indica se deve ser mostrada a selecao de localidade de provas.
-     */
-    private boolean mostrarLocalidades;
-
-    /**
-     * Uf Selecionada.
-     */
-    private Uf ufSelecionada;
-
-
-    /**
-     * Lista de UFs.
-     */
-    private List<Uf> ufs;
-
-    /**
-     * Cidade Selecionada.
-     */
-    private Cidade cidadeSelecionada;
-
-    /**
-     * Cidades.
-     */
-    private List<Cidade> cidades;
-
-    /**
      * Inscrições Pesquisadas.
      */
     private List<Inscricao> inscricoes;
@@ -128,199 +44,25 @@ public class DigitacaoNotaManualListarBean {
     private Map<Inscricao, Boolean> inscricoesExcluiveis;
 
     /**
-     * Cargos vinculados ao orgao/concurso/prova.
-     */
-    private List<Cargo> cargos;
-
-    /**
-     * Cargo selecionado.
-     */
-    private Cargo cargoSelecionado;
-
-    /**
-     * Cargos vinculados ao orgao/concurso/prova.
-     */
-    private List<CampoAtuacao> camposAtuacao;
-
-    /**
-     * Cargo selecionado.
-     */
-    private CampoAtuacao campoAtuacaoSelecionado;
-
-    /**
-     * Orgaos vinculados ao concurso/prova.
-     */
-    private List<OrgaoContratante> orgaos;
-
-    /**
-     * Orgao selecionado.
-     */
-    private OrgaoContratante orgaoSelecionado;
-
-    /**
      * Fachada Digitacao Resultado Nota Manual.
      */
     @In("digitacaoNotaManualFacade")
     private transient DigitacaoNotaManualFacade digitacaoNotaManualFacade;
-    
+
     /**
      * Usuário logado.
      */
     @In
-    private UsuarioLogado usuarioLogado;    
+    private UsuarioLogado usuarioLogado;
 
     public void setDigitacaoNotaManualFacade(
         DigitacaoNotaManualFacade digitacaoNotaManualFacade) {
         this.digitacaoNotaManualFacade = digitacaoNotaManualFacade;
     }
 
-    public void setCargos(List<Cargo> cargos) {
-        this.cargos = cargos;
+    public void setUsuarioLogado(UsuarioLogado usuarioLogado) {
+        this.usuarioLogado = usuarioLogado;
     }
-
-    public Cargo getCargoSelecionado() {
-        return cargoSelecionado;
-    }
-
-    public void setCargoSelecionado(Cargo cargoSelecionado) {
-        this.cargoSelecionado = cargoSelecionado;
-    }
-
-    public void setCamposAtuacao(List<CampoAtuacao> camposAtuacao) {
-        this.camposAtuacao = camposAtuacao;
-    }
-
-    public CampoAtuacao getCampoAtuacaoSelecionado() {
-        return campoAtuacaoSelecionado;
-    }
-
-    public void setCampoAtuacaoSelecionado(CampoAtuacao campoAtuacaoSelecionado) {
-        this.campoAtuacaoSelecionado = campoAtuacaoSelecionado;
-    }
-
-    public void setOrgaoSelecionado(OrgaoContratante orgaoSelecionado) {
-        this.orgaoSelecionado = orgaoSelecionado;
-    }
-
-    public OrgaoContratante getOrgaoSelecionado() {
-        return orgaoSelecionado;
-    }
-
-    public void setOrgaos(List<OrgaoContratante> orgaos) {
-        this.orgaos = orgaos;
-    }
-
-    public TipoConsultaNome getTipoConsultaNome() {
-        return tipoConsultaNome;
-    }
-
-    public void setTipoConsultaNome(TipoConsultaNome tipoConsultaNome) {
-        this.tipoConsultaNome = tipoConsultaNome;
-    }
-
-    public Concurso getConcursoSelecionado() {
-        return concursoSelecionado;
-    }
-
-    public void setConcursoSelecionado(Concurso concursoSelecionado) {
-        this.concursoSelecionado = concursoSelecionado;
-    }
-
-    public Prova getProvaSelecionada() {
-        return provaSelecionada;
-    }
-
-    public void setProvaSelecionada(Prova provaSelecionada) {
-        this.provaSelecionada = provaSelecionada;
-    }
-
-    public VersaoResultadoProvaManual getVersaoSelecionada() {
-        return versaoSelecionada;
-    }
-
-    public void setVersaoSelecionada(VersaoResultadoProvaManual versaoSelecionada) {
-        this.versaoSelecionada = versaoSelecionada;
-    }
-
-    public String getNumeroInscricao() {
-        return numeroInscricao;
-    }
-
-    public void setNumeroInscricao(String numeroInscricao) {
-        this.numeroInscricao = numeroInscricao;
-    }
-
-    public String getNomeCandidato() {
-        return nomeCandidato;
-    }
-
-    public void setNomeCandidato(String nomeCandidato) {
-        this.nomeCandidato = nomeCandidato;
-    }
-
-    public void setConcursos(List<Concurso> concursos) {
-        this.concursos = concursos;
-    }
-
-    /**
-     * Lista de provas.
-     * @return lista de provas
-     */
-    public List<Prova> getProvas() {
-        if (concursoSelecionado != null && provas == null) {
-            provas = digitacaoNotaManualFacade.consultarProvas(this.concursoSelecionado);
-        }
-        return provas;
-    }
-
-    public void setProvas(List<Prova> provas) {
-        this.provas = provas;
-    }
-
-    public void setVersoes(List<VersaoResultadoProvaManual> versoes) {
-        this.versoes = versoes;
-    }
-
-    public Uf getUfSelecionada() {
-        return ufSelecionada;
-    }
-
-    public void setUfSelecionada(Uf ufSelecionada) {
-        this.ufSelecionada = ufSelecionada;
-    }
-
-    public void setUfs(List<Uf> ufs) {
-        this.ufs = ufs;
-    }
-
-    public Cidade getCidadeSelecionada() {
-        return cidadeSelecionada;
-    }
-
-    public void setCidadeSelecionada(Cidade cidadeSelecionada) {
-        this.cidadeSelecionada = cidadeSelecionada;
-    }
-
-    public void setCidades(List<Cidade> cidades) {
-        this.cidades = cidades;
-    }
-
-    public List<Inscricao> getInscricoes() {
-        return inscricoes;
-    }
-
-    public void setInscricoes(List<Inscricao> inscricoes) {
-        this.inscricoes = inscricoes;
-    }
-
-    public Map<Inscricao, Boolean> getInscricoesExcluiveis() {
-        return inscricoesExcluiveis;
-    }
-
-    public void setInscricoesExcluiveis(Map<Inscricao, Boolean> inscricoesExcluiveis) {
-        this.inscricoesExcluiveis = inscricoesExcluiveis;
-    }
-
 
     /**
      * Pesquisar candidatos habilitados para etapa/fase a qual pertence a prova,
@@ -329,21 +71,23 @@ public class DigitacaoNotaManualListarBean {
     public void pesquisar() {
         inscricoesExcluiveis = new HashMap<Inscricao, Boolean>();
         if (versaoSelecionada == VersaoResultadoProvaManual.PROVISORIA) {
-            inscricoes = digitacaoNotaManualFacade.consultarInscricoes(provaSelecionada,
-                orgaoSelecionado, cargoSelecionado, campoAtuacaoSelecionado,
-                numeroInscricao, nomeCandidato, tipoConsultaNome);
-
+            inscricoes = digitacaoNotaManualFacade.consultarInscricoes(usuarioLogado);
             for (Inscricao inscricao : inscricoes) {
                 inscricoesExcluiveis.put(inscricao, excluivel(inscricao));
             }
-        } else {
-            inscricoes = digitacaoNotaManualFacade.consultarInscricoesNotaDefinitiva(
-                provaSelecionada, numeroInscricao, nomeCandidato, tipoConsultaNome);
-
-            for (Inscricao inscricao : inscricoes) {
-                inscricoesExcluiveis.put(inscricao, Boolean.FALSE);
-            }
         }
+    }
+
+    /**
+     * Verifica se pode excluir a versao da nota para a inscricao passada.
+     * @param inscricao inscricao
+     * @return <code>true</code> se:
+     * <li> a versão da nota é provisória e seu status seja cadastrado</li>
+     * <li> para prova cuja aplicação de prova não possua relatório de fechamento para
+     * localidade da prova do candidato com situação "Fechada".</li>
+     */
+    private boolean excluivel(Inscricao inscricao) {
+        return digitacaoNotaManualFacade.existeNotaProvisoriaStatusCadastrada(inscricao);
     }
 
 }

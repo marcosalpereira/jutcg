@@ -1,7 +1,9 @@
 package br.gov.serpro.tools.junit.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -127,7 +129,7 @@ public class Flow {
 
 	/**
 	 * Retorna o metodo que foi usado num return neste fluxo.
-	 * 
+	 *
 	 * @return o metodo ou <code>null</code> se nao existir
 	 */
 	public Method getReturnInvocationMethod() {
@@ -137,5 +139,11 @@ public class Flow {
 		}
 		return null;
 	}
+
+    public Set<Field> getReadWrittensFields() {
+        Set<Field> ret = new HashSet<Field>(getReadFields());
+        ret.addAll(getWrittenFields());
+        return ret;
+    }
 
 }

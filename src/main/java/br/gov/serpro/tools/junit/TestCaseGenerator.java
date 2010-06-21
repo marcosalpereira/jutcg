@@ -191,7 +191,34 @@ public class TestCaseGenerator {
 	}
 
 	String generateClassEnd() {
-		return "}\n";
+	    SourceBuilder sb = new SourceBuilder();
+	    if (GlobalFlags.isNewHashMapUsed()) {
+            sb.appendJavaDoc("Criar um HashMap e colocar a chave/valor passados nele."
+                    + "\n @param <K> tipo base da chave"
+                    + "\n @param <V> tipo base do valor"
+                    + "\n @param key chave"
+                    + "\n @param value valor"
+                    + "\n @return o HashMap criado. ");
+            sb.appendln("private <K, V> Map<K, V> newHashMap(K key, V value) {");
+            sb.appendln("    Map<K, V> ret = new HashMap<K, V>();");
+            sb.appendln("    ret.put(key, value);");
+            sb.appendln("    return ret;");
+            sb.appendln("}");
+	    }
+
+	    if (GlobalFlags.isNewHashSet()) {
+	        sb.appendJavaDoc("Criar um HashSet e colocar o valor passado nele."
+	            + "\n @param <T> tipo base do valor"
+	            + "\n @param value valor"
+	            + "\n @return o HashSet criado. ");
+	        sb.appendln("private <V> Set<V> newHashSet(V value) {");
+	        sb.appendln("    Set<V> ret = new HashSet<V>();");
+	        sb.appendln("    ret.add(value);");
+	        sb.appendln("    return ret;");
+	        sb.appendln("}");
+	    }
+	    sb.appendln("}");
+		return sb.toString();
 	}
 
 	String generateClassStart() {
