@@ -200,8 +200,8 @@ public class TestCaseMethodFlowGenerator {
 			sb.appendln("// variaveis usadas");
 		}
 
-		//Declare readFields as local vars
-		for (final Field f : flow.getReadFields()){
+		//Declare readFields/written as local vars
+		for (final Field f : flow.getReadWrittensFields()){
             if (!f.isStatic()) {
                 sb.appendln("final %s %s = %s;", f.getType(), f.getName(),
                         nextValueForType.next(f.getType()));
