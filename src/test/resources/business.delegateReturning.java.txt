@@ -1,0 +1,32 @@
+package br.gov.esaf.sgc.business.impl;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+
+import br.gov.esaf.sgc.dao.CampoAtuacaoDao;
+import br.gov.esaf.sgc.model.Cargo;
+
+/**
+ * Classe Business para entidade {@link CampoAtuacao}.
+ */
+@Stateless
+public class CampoAtuacaoBusinessBean implements CampoAtuacaoBusiness {
+
+    /**
+     * Dao de CampoAtuacao.
+     */
+    @EJB
+    private CampoAtuacaoDao campoAtuacaoDao;
+
+    public void setCampoAtuacaoDao(CampoAtuacaoDao campoAtuacaoDao) {
+        this.campoAtuacaoDao = campoAtuacaoDao;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean alterarSituacaoDosCamposDeAtuacaoDoCargo(Cargo cargo, boolean novaSituacao) {
+        return campoAtuacaoDao.alterarSituacaoDosCamposDeAtuacaoDoCargo(cargo, novaSituacao);
+    }
+
+}

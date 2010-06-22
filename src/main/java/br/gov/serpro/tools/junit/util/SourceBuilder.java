@@ -1,4 +1,4 @@
-package br.gov.serpro.tools.junit;
+package br.gov.serpro.tools.junit.util;
 
 //TODO try to extends AbstractStringBuilder
 public class SourceBuilder {

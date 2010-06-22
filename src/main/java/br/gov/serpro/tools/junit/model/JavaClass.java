@@ -3,7 +3,7 @@ package br.gov.serpro.tools.junit.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.gov.serpro.tools.junit.Config;
+import br.gov.serpro.tools.junit.util.Config;
 
 /**
  * A class representing a Java source file.

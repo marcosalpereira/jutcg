@@ -3,6 +3,7 @@ package br.gov.serpro.tools.junit;
 import java.io.File;
 import java.io.IOException;
 
+import br.gov.serpro.tools.junit.generate.TestCaseGenerator;
 import br.gov.serpro.tools.junit.model.JavaClass;
 import br.gov.serpro.tools.junit.parser.JsmgJavaSourceParser;
 import br.gov.serpro.tools.junit.parser.ParseException;

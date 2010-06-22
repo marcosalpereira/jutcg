@@ -1,4 +1,4 @@
-package br.gov.serpro.tools.junit;
+package br.gov.serpro.tools.junit.util;
 
 public class GlobalFlags {
 
@@ -23,8 +23,8 @@ public class GlobalFlags {
 	}
 
 	public static void init() {
-		newHashMapUsed = false;
-		newHashSet = false;
+		setNewHashSet(false);
+		setNewHashMapUsed(false);
 	}
 
 }

@@ -1,6 +1,6 @@
 package br.gov.serpro.tools.junit.model;
 
-import static br.gov.serpro.tools.junit.GeneratorHelper.upperCaseFirstChar;
+import static br.gov.serpro.tools.junit.util.GeneratorHelper.upperCaseFirstChar;
 
 import java.util.ArrayList;
 import java.util.List;

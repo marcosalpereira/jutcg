@@ -1,6 +1,6 @@
-package br.gov.serpro.tools.junit;
+package br.gov.serpro.tools.junit.generate;
 
-import static br.gov.serpro.tools.junit.GeneratorHelper.lowerCaseFirstChar;
+import static br.gov.serpro.tools.junit.util.GeneratorHelper.lowerCaseFirstChar;
 
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +13,7 @@ import br.gov.serpro.tools.junit.model.FormalParameter;
 import br.gov.serpro.tools.junit.model.JavaClass;
 import br.gov.serpro.tools.junit.model.Method;
 import br.gov.serpro.tools.junit.model.Flow.FlowBranch;
+import br.gov.serpro.tools.junit.util.SourceBuilder;
 
 public class TestCaseMethodFlowGenerator {
 	final private Method method;
