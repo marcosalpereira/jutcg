@@ -1,0 +1,95 @@
+package br.gov.esaf.sgc.view.correcao;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
+import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
+
+import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.In;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
+
+import br.gov.esaf.sgc.facade.DigitacaoNotaManualFacade;
+import br.gov.esaf.sgc.model.CampoAtuacao;
+import br.gov.esaf.sgc.model.Cargo;
+import br.gov.esaf.sgc.model.Cidade;
+import br.gov.esaf.sgc.model.Concurso;
+import br.gov.esaf.sgc.model.Inscricao;
+import br.gov.esaf.sgc.model.OrgaoContratante;
+import br.gov.esaf.sgc.model.TipoConsultaNome;
+import br.gov.esaf.sgc.model.Uf;
+import br.gov.esaf.sgc.model.prova.Prova;
+import br.gov.esaf.sgc.model.prova.ConteudoProva.TipoConteudoProva;
+import br.gov.esaf.sgc.model.resultado.ResultadoProvaManual.VersaoResultadoProvaManual;
+import br.gov.serpro.util.StringHelper;
+import br.gov.serpro.view.util.MessageHelper;
+
+/**
+ * Bean para o caso de uso Digitar Resultado Manual.
+ */
+@Name("digitacaoNotaManualListarBean")
+@Scope(ScopeType.CONVERSATION)
+public class DigitacaoNotaManualListarBean {
+
+    /**
+     * Id do componente com o numero da inscricao na tela.
+     */
+    static final String ID_INPUT_NUMERO_INSCRICAO = "numeroInscricao";
+
+    /**
+     * Id do componente com o nome do candidato na tela.
+     */
+    static final String ID_INPUT_NOME_CANDIDATO = "nomeCandidato";
+
+    /**
+     * Valida se preencheu algum campo de pesquisa e nome com comprimento Minimo.
+     * @param context context
+     * @param component component
+     * @param value component
+     * @throws ValidatorException se deu erro
+     */
+    public void validaTipoConsulta(@SuppressWarnings("unused") FacesContext context,
+        UIComponent component, @SuppressWarnings("unused") Object value)
+        throws ValidatorException {
+        //TODO Poderiamos reaproveitar este código(usado em varios lugares)???
+
+        final UIInput nomeUI = (UIInput) component.findComponent(ID_INPUT_NOME_CANDIDATO);
+        final String nome = (String) nomeUI.getValue();
+
+        final UIInput inscricaoUI = (UIInput) component
+            .findComponent(ID_INPUT_NUMERO_INSCRICAO);
+        final String numeroInscricao = (String) inscricaoUI.getValue();
+
+        // valida se NAO preencheu os campos nome e numeroInscrição
+        if (StringHelper.isEmpty(nome) && StringHelper.isEmpty(numeroInscricao)) {
+            throw new ValidatorException(
+                MessageHelper
+                .createErrorMessage(
+                    "page.digitacaoNotaManualListar.tipoConsulta.msg.required"));
+        }
+
+        // valida se preencheu os campos nome e numeroInscrição
+        if (StringHelper.isNotEmpty(nome) && StringHelper.isNotEmpty(numeroInscricao)) {
+            throw new ValidatorException(
+                MessageHelper
+                .createErrorMessage(
+                    "page.digitacaoNotaManualListar.tipoConsulta.msg.numeroOuInscricao"));
+        }
+
+        // Valida tamanho minimo do nome
+        if (StringHelper.isNotEmpty(nome) && nome.length() < 3) {
+            throw new ValidatorException(
+                MessageHelper
+                .createErrorMessage(
+                    "page.digitacaoNotaManualListar.tipoConsultaNome.msg.tamanhoMinimo"));
+        }
+
+
+    }
+
+}

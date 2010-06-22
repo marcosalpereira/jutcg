@@ -336,7 +336,7 @@ final List<Inscricao> selecionarInscricoesComNotaFromMock = Arrays.asList(new In
 final List<Inscricao> selecionarInscricoesComNotaEsperado = Arrays.asList(new Inscricao(1));
 final Prova prova = new Prova(1);
 final String numeroInscricao = "1";
-final String nomeCandidato = "1";
+final String nomeCandidato = "2";
 final TipoConsultaNome tipoConsultaNome = new TipoConsultaNome(1);
 
 // Configurando mock
@@ -653,5 +653,36 @@ verify(resultadoProvaManualDao);
 
 // verificacoes do resultado do metodo sendo testado
 assertEquals(todasAsNotasForamPreenchidasEsperado, todasAsNotasForamPreenchidasReal);
+}
+
+/**
+ * Teste para o metodo {@link ResultadoProvaManualBusinessBean#artificial()}.
+ */
+@Test
+public void testArtificial() {
+// variaveis usadas
+final Concurso choiceFromMock = new Concurso(1);
+final Concurso choiceEsperado = new Concurso(1);
+
+// Configurando mock
+ResultadoProvaManualDao resultadoProvaManualDao = criarMockResultadoProvaManualDao();
+Concurso c1 = new Concurso(2);
+expect(resultadoProvaManualDao.selectConcurso(1))
+  .andReturn(c1);
+Concurso c2 = new Concurso(3);
+expect(resultadoProvaManualDao.selectConcurso(2))
+  .andReturn(c2);
+expect(resultadoProvaManualDao.choice(c1,c2))
+  .andReturn(choiceFromMock);
+replay(resultadoProvaManualDao);
+
+// invocar metodo sendo testado
+final Concurso artificialReal = resultadoProvaManualBusinessBean.artificial();
+
+// checar estados dos mocks
+verify(resultadoProvaManualDao);
+
+// verificacoes do resultado do metodo sendo testado
+assertEquals(choiceEsperado, artificialReal);
 }
 }

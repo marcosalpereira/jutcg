@@ -5,7 +5,6 @@ import static br.gov.serpro.tools.junit.GeneratorHelper.lowerCaseFirstChar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.SortedSet;
 
 import br.gov.serpro.tools.junit.model.Field;
 import br.gov.serpro.tools.junit.model.FieldMethodInvocation;
@@ -193,7 +192,7 @@ public class TestCaseMethodFlowGenerator {
 		final SourceBuilder sb = new SourceBuilder();
 		final List<FormalParameter> params = method.getFormalParameters();
 		final Method returnInvocationMethod = flow.getReturnInvocationMethod();
-		final SortedSet<Field> readFields = flow.getReadFields();
+		final List<Field> readFields = flow.selectNonStaticReadFields();
 		readFields.removeAll(usedDependencies);
 
 		if (returnInvocationMethod != null || !params.isEmpty() || !readFields.isEmpty()) {
@@ -201,11 +200,9 @@ public class TestCaseMethodFlowGenerator {
 		}
 
 		//Declare readFields/written as local vars
-		for (final Field f : flow.getReadWrittensFields()){
-            if (!f.isStatic()) {
-                sb.appendln("final %s %s = %s;", f.getType(), f.getName(),
-                        nextValueForType.next(f.getType()));
-            }
+		for (final Field f : readFields){
+			sb.appendln("final %s %s = %s;", f.getType(), f.getName(),
+					nextValueForType.next(f.getType()));
         }
 
 		if (returnInvocationMethod != null) {

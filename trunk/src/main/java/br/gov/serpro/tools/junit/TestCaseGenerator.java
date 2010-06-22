@@ -17,6 +17,7 @@ public class TestCaseGenerator {
 	final private String varNameForClassUnderTest;
 
 	public TestCaseGenerator(JavaClass classUnderTest) {
+		GlobalFlags.init(); 
 		this.classUnderTest = classUnderTest;
 		this.dependencies = selectDependencies();
 		this.selectedMethods = selectMethods();

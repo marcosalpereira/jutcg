@@ -21,20 +21,10 @@ public class TestesFuncionais {
 	@Test
 	public final void testGenerateView() throws IOException, ParseException {
 		final SourceParser parser = new JsmgJavaSourceParser();
-		final JavaClass javaClass = parser.parse(getFile("/view.java.txt"));
+		final JavaClass javaClass = parser.parse(getFile("/view.semExtensaoFluxo.java.txt"));
 		final TestCaseGenerator testCaseGenerator = new TestCaseGenerator(
 				javaClass);
-		assertEquals(getContents("/view.java.expected"), testCaseGenerator
-				.generate());
-	}
-
-	@Test
-	public final void testGenerateBusiness() throws IOException, ParseException {
-		final SourceParser parser = new JsmgJavaSourceParser();
-		final JavaClass javaClass = parser.parse(getFile("/business.java.txt"));
-		final TestCaseGenerator testCaseGenerator = new TestCaseGenerator(
-				javaClass);
-		assertEquals(getContents("/business.java.expected"), testCaseGenerator
+		assertEquals(getContents("/view.semExtensaoFluxo.java.expected"), testCaseGenerator
 				.generate());
 	}
 

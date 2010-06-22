@@ -142,7 +142,7 @@ public class Flow {
 
     public Set<Field> getReadWrittensFields() {
         Set<Field> ret = new HashSet<Field>(getReadFields());
-        ret.addAll(getWrittenFields());
+        //ret.addAll(getWrittenFields());
         return ret;
     }
 
