@@ -3,7 +3,7 @@ package br.gov.serpro.tools.junit.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.gov.serpro.tools.junit.GeneratorHelper;
+import br.gov.serpro.tools.junit.util.GeneratorHelper;
 
 
 public class Field implements Comparable<Field>{

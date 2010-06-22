@@ -1,9 +1,11 @@
-package br.gov.serpro.tools.junit;
+package br.gov.serpro.tools.junit.generate;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import br.gov.serpro.tools.junit.model.Type;
+import br.gov.serpro.tools.junit.util.Config;
+import br.gov.serpro.tools.junit.util.GlobalFlags;
 
 /**
  * Generate unique values for same Type.

@@ -1,6 +1,6 @@
-package br.gov.serpro.tools.junit;
+package br.gov.serpro.tools.junit.generate;
 
-import static br.gov.serpro.tools.junit.GeneratorHelper.lowerCaseFirstChar;
+import static br.gov.serpro.tools.junit.util.GeneratorHelper.lowerCaseFirstChar;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +10,7 @@ import br.gov.serpro.tools.junit.model.FieldMethodInvocation;
 import br.gov.serpro.tools.junit.model.Flow;
 import br.gov.serpro.tools.junit.model.Type;
 import br.gov.serpro.tools.junit.model.Variable;
+import br.gov.serpro.tools.junit.util.SourceBuilder;
 
 public class ConfigMocksGenerator {
 	private Flow flow;

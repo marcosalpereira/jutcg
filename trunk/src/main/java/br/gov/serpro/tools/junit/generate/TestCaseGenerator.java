@@ -1,4 +1,4 @@
-package br.gov.serpro.tools.junit;
+package br.gov.serpro.tools.junit.generate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,9 @@ import br.gov.serpro.tools.junit.model.Field;
 import br.gov.serpro.tools.junit.model.JavaClass;
 import br.gov.serpro.tools.junit.model.Method;
 import br.gov.serpro.tools.junit.model.Type;
+import br.gov.serpro.tools.junit.util.GeneratorHelper;
+import br.gov.serpro.tools.junit.util.GlobalFlags;
+import br.gov.serpro.tools.junit.util.SourceBuilder;
 
 public class TestCaseGenerator {
 	private static final String IMPL_DAO_SUFIX = "DaoBean";

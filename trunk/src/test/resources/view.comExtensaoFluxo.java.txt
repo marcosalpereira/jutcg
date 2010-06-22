@@ -81,10 +81,7 @@ public class DigitacaoNotaManualListarBean {
     /**
      * Verifica se pode excluir a versao da nota para a inscricao passada.
      * @param inscricao inscricao
-     * @return <code>true</code> se:
-     * <li> a versão da nota é provisória e seu status seja cadastrado</li>
-     * <li> para prova cuja aplicação de prova não possua relatório de fechamento para
-     * localidade da prova do candidato com situação "Fechada".</li>
+     * @return <code>true</code> se a versão da nota é provisória e seu status seja cadastrado
      */
     private boolean excluivel(Inscricao inscricao) {
         return digitacaoNotaManualFacade.existeNotaProvisoriaStatusCadastrada(inscricao);

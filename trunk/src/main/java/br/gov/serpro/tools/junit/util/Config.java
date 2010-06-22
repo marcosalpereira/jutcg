@@ -1,4 +1,4 @@
-package br.gov.serpro.tools.junit;
+package br.gov.serpro.tools.junit.util;
 
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
