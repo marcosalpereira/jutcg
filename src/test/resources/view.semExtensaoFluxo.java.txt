@@ -1,0 +1,83 @@
+package br.gov.esaf.sgc.view.correcao;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.In;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Observer;
+import org.jboss.seam.annotations.Scope;
+
+import br.gov.esaf.sgc.facade.DigitacaoNotaManualFacade;
+import br.gov.esaf.sgc.model.Inscricao;
+import br.gov.esaf.sgc.model.UsuarioLogado;
+import br.gov.esaf.sgc.model.prova.Prova;
+import br.gov.esaf.sgc.model.resultado.ResultadoProvaManual.VersaoResultadoProvaManual;
+
+/**
+ * Bean para o caso de uso Digitar Resultado Manual.
+ */
+@Name("digitacaoNotaManualListarBean")
+@Scope(ScopeType.CONVERSATION)
+public class DigitacaoNotaManualListarBean {
+
+    /**
+     * Prova selecionada.
+     */
+    private Prova provaSelecionada;
+
+    /**
+     * Versão da nota selecionada.
+     */
+    private VersaoResultadoProvaManual versaoSelecionada;
+
+    /**
+     * Inscrições Pesquisadas.
+     */
+    private List<Inscricao> inscricoes;
+
+    /**
+     * Map indicando se as inscricoes sao excluiveis.
+     */
+    private Map<Inscricao, Boolean> inscricoesExcluiveis;
+
+    /**
+     * Fachada Digitacao Resultado Nota Manual.
+     */
+    @In("digitacaoNotaManualFacade")
+    private transient DigitacaoNotaManualFacade digitacaoNotaManualFacade;
+
+    /**
+     * Usuário logado.
+     */
+    @In
+    private UsuarioLogado usuarioLogado;
+
+    public void setDigitacaoNotaManualFacade(
+        DigitacaoNotaManualFacade digitacaoNotaManualFacade) {
+        this.digitacaoNotaManualFacade = digitacaoNotaManualFacade;
+    }
+
+    public void setUsuarioLogado(UsuarioLogado usuarioLogado) {
+        this.usuarioLogado = usuarioLogado;
+    }
+
+    /**
+     * Pesquisar candidatos habilitados para etapa/fase a qual pertence a prova,
+     * observando todos os parâmetros informados.
+     */
+    public void pesquisar() {
+        inscricoesExcluiveis = new HashMap<Inscricao, Boolean>();
+        if (versaoSelecionada == VersaoResultadoProvaManual.PROVISORIA) {
+            inscricoes = digitacaoNotaManualFacade.consultarInscricoes(usuarioLogado);
+            for (Inscricao inscricao : inscricoes) {
+                final boolean bExcluivel = 
+                	digitacaoNotaManualFacade.existeNotaProvisoriaStatusCadastrada(inscricao);
+                inscricoesExcluiveis.put(inscricao, bExcluivel);
+            }
+        }
+    }
+
+}
