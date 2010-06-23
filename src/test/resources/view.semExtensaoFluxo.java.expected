@@ -134,11 +134,9 @@ assertEquals(getInscricoesExpected, digitacaoNotaManualListarBean.getInscricoes(
 public void testPesquisarPath3() {
 // variaveis usadas
 final VersaoResultadoProvaManual versaoSelecionada = VersaoResultadoProvaManual.PROVISORIA;
-final UsuarioLogado usuarioLogado = new Usuario(1);
 
 // Configurando estado interno da classe sob teste
 digitacaoNotaManualListarBean.setVersaoSelecionada(versaoSelecionada);
-digitacaoNotaManualListarBean.setUsuarioLogado(usuarioLogado);
 
 // invocar metodo sendo testado
 digitacaoNotaManualListarBean.pesquisar();
@@ -161,4 +159,3 @@ private <K, V> Map<K, V> newHashMap(K key, V value) {
     return ret;
 }
 }
-
