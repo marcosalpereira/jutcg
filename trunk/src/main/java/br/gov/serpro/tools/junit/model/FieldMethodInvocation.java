@@ -34,6 +34,11 @@ public class FieldMethodInvocation {
 	 */
 	private Variable assignedVariable;
 
+	/**
+	 * Result of the method invocation (if known).
+	 */
+	private String returnedValue;
+
 	public Field getInvokedAtField() {
 		return invokedAtField;
 	}
@@ -69,6 +74,18 @@ public class FieldMethodInvocation {
 
 	public boolean isAssignedInvocation() {
 		return getAssignedVariable() != null;
+	}
+
+	public String getReturnedValue() {
+		return returnedValue;
+	}
+
+	public void setReturnedValue(String returnedValue) {
+		this.returnedValue = returnedValue;
+	}
+
+	public boolean isReturnedValueKnown() {
+		return returnedValue != null;
 	}
 
 	public String getArgumentsAsString() {

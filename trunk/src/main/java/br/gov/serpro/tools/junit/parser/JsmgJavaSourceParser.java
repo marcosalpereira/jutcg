@@ -5,7 +5,6 @@ package br.gov.serpro.tools.junit.parser;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -339,6 +338,9 @@ public class JsmgJavaSourceParser implements SourceParser {
 		if (methodInvocation.isAssigned()) {
 			fieldMethodInvocation.setAssignedVariable(
 					translateVariable(methodInvocation.getAssignedVariable()));
+		}
+		if (methodInvocation.isReturnedValueKnown()) {
+			fieldMethodInvocation.setReturnedValue(methodInvocation.getReturnedValue());
 		}
 		fieldMethodInvocation.setArguments(translateArgumentList(methodInvocation));
 
