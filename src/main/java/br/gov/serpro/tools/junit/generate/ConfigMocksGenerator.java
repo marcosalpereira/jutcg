@@ -13,8 +13,8 @@ import br.gov.serpro.tools.junit.model.Variable;
 import br.gov.serpro.tools.junit.util.SourceBuilder;
 
 public class ConfigMocksGenerator {
-	private Flow flow;
-	private Set<Field> mocks;
+	private final Flow flow;
+	private final Set<Field> mocks;
 	final SourceBuilder sb = new SourceBuilder();
 	final Set<Variable> variablesDeclared = new HashSet<Variable>();
 	final private NextValueForType nextValueForType;
@@ -26,7 +26,7 @@ public class ConfigMocksGenerator {
     }
 
     public String generate() {
-    	
+
     	if (mocks.size() > 0) {
     		sb.appendln();
     		if (mocks.size() == 1) {
@@ -35,7 +35,7 @@ public class ConfigMocksGenerator {
     			sb.appendln("// Configurando mocks (" + mocks.size() + ")");
     		}
         }
-    	
+
         for(final Field mock : mocks) {
             if (mocks.size() > 1) {
                 sb.appendln("// " + mock.getName());
@@ -49,9 +49,11 @@ public class ConfigMocksGenerator {
                 } else {
                     if (invocation.isReturnInvocation()) {
                         configReturnInvocation(mock, invocation);
-                    } else if(invocation.isAssignedInvocation()) {
-                        configAssignedInvocation(mock, invocation);
-                    } else {
+                    } else if (invocation.isAssignedInvocation()) {
+						configAssignedInvocation(mock, invocation);
+                    } else if (invocation.isReturnedValueKnown()) {
+                    	configKnowReturnedValueInvocation(mock, invocation);
+					} else {
                         configNonVoidInvocation(mock, invocation);
                     }
                 }
@@ -62,7 +64,14 @@ public class ConfigMocksGenerator {
 
 	}
 
-    /**
+    private void configKnowReturnedValueInvocation(Field mock,
+			FieldMethodInvocation invocation) {
+		sb.appendln("expect(%s.%s(%s))\n  .andReturn(%s);", mock.getName(),
+				invocation.getMethod().getName(), invocation
+						.getArgumentsAsString(), invocation.getReturnedValue());
+	}
+
+	/**
      * @param mock
      * @param invocation
      */
