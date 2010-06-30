@@ -99,6 +99,6 @@ public class Field implements Comparable<Field>{
 
     @Override
     public int compareTo(Field o) {
-        return o.getName().compareTo(getName());
+        return getName().compareTo(o.getName());
     }
 }

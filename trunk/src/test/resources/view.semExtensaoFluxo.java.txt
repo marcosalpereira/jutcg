@@ -34,6 +34,16 @@ public class DigitacaoNotaManualListarBean {
     private VersaoResultadoProvaManual versaoSelecionada;
 
     /**
+     * Null Assigned field.
+     */
+    private Inscricao nullAssignedField;
+
+    /**
+     * Not Null Assigned field.
+     */
+    private Inscricao notNullAssignedField;
+
+    /**
      * Inscrições Pesquisadas.
      */
     private List<Inscricao> inscricoes;
@@ -72,6 +82,8 @@ public class DigitacaoNotaManualListarBean {
         inscricoesExcluiveis = new HashMap<Inscricao, Boolean>();
         if (versaoSelecionada == VersaoResultadoProvaManual.PROVISORIA) {
             inscricoes = digitacaoNotaManualFacade.consultarInscricoes(usuarioLogado);
+            this.nullAssignedField = null;
+            this.notNullAssignedField = inscricoes.get(0);
             for (Inscricao inscricao : inscricoes) {
                 final boolean bExcluivel = 
                 	digitacaoNotaManualFacade.existeNotaProvisoriaStatusCadastrada(inscricao);

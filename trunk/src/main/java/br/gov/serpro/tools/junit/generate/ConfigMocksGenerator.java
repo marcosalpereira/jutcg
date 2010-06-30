@@ -52,7 +52,7 @@ public class ConfigMocksGenerator {
                     } else if (invocation.isAssignedInvocation()) {
 						configAssignedInvocation(mock, invocation);
                     } else if (invocation.isReturnedValueKnown()) {
-                    	configKnowReturnedValueInvocation(mock, invocation);
+                    	configKnownReturnedValueInvocation(mock, invocation);
 					} else {
                         configNonVoidInvocation(mock, invocation);
                     }
@@ -64,7 +64,7 @@ public class ConfigMocksGenerator {
 
 	}
 
-    private void configKnowReturnedValueInvocation(Field mock,
+    private void configKnownReturnedValueInvocation(Field mock,
 			FieldMethodInvocation invocation) {
 		sb.appendln("expect(%s.%s(%s))\n  .andReturn(%s);", mock.getName(),
 				invocation.getMethod().getName(), invocation

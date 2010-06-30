@@ -55,10 +55,10 @@ public void setUp() throws Exception {
 @Test
 public void testPesquisarPath1() {
 // variaveis usadas
-final VersaoResultadoProvaManual versaoSelecionada = VersaoResultadoProvaManual.PROVISORIA;
+final List<Inscricao> inscricoes = Arrays.asList(new Inscricao(1));
+final Map<Inscricao, Boolean> inscricoesExcluiveis = newHashMap(new Inscricao(2), Boolean.FALSE);
 final UsuarioLogado usuarioLogado = new Usuario(1);
-final Map<Inscricao, Boolean> inscricoesExcluiveis = newHashMap(new Inscricao(1), Boolean.FALSE);
-final List<Inscricao> inscricoes = Arrays.asList(new Inscricao(2));
+final VersaoResultadoProvaManual versaoSelecionada = VersaoResultadoProvaManual.PROVISORIA;
 
 // Configurando mock
 DigitacaoNotaManualFacade digitacaoNotaManualFacade = criarMockDigitacaoNotaManualFacade();
@@ -70,10 +70,10 @@ expect(digitacaoNotaManualFacade.existeNotaProvisoriaStatusCadastrada(inscricao)
 replay(digitacaoNotaManualFacade);
 
 // Configurando estado interno da classe sob teste
-digitacaoNotaManualListarBean.setVersaoSelecionada(versaoSelecionada);
-digitacaoNotaManualListarBean.setUsuarioLogado(usuarioLogado);
-digitacaoNotaManualListarBean.setInscricoesExcluiveis(inscricoesExcluiveis);
 digitacaoNotaManualListarBean.setInscricoes(inscricoes);
+digitacaoNotaManualListarBean.setInscricoesExcluiveis(inscricoesExcluiveis);
+digitacaoNotaManualListarBean.setUsuarioLogado(usuarioLogado);
+digitacaoNotaManualListarBean.setVersaoSelecionada(versaoSelecionada);
 
 // invocar metodo sendo testado
 digitacaoNotaManualListarBean.pesquisar();
@@ -82,10 +82,12 @@ digitacaoNotaManualListarBean.pesquisar();
 verify(digitacaoNotaManualFacade);
 
 // verificacoes do resultado do metodo sendo testado
-final Map<Inscricao, Boolean> getInscricoesExcluiveisExpected = <IDontKnowButYouDo>;
-assertEquals(getInscricoesExcluiveisExpected, digitacaoNotaManualListarBean.getInscricoesExcluiveis());
 final List<Inscricao> getInscricoesExpected = <IDontKnowButYouDo>;
 assertEquals(getInscricoesExpected, digitacaoNotaManualListarBean.getInscricoes());
+final Map<Inscricao, Boolean> getInscricoesExcluiveisExpected = <IDontKnowButYouDo>;
+assertEquals(getInscricoesExcluiveisExpected, digitacaoNotaManualListarBean.getInscricoesExcluiveis());
+assertNull(digitacaoNotaManualListarBean.getNullAssignedField());
+assertEquals(inscricoes.get(0) , digitacaoNotaManualListarBean.getNotNullAssignedField());
 }
 
 /**
@@ -97,9 +99,9 @@ assertEquals(getInscricoesExpected, digitacaoNotaManualListarBean.getInscricoes(
 @Test
 public void testPesquisarPath2() {
 // variaveis usadas
-final VersaoResultadoProvaManual versaoSelecionada = VersaoResultadoProvaManual.PROVISORIA;
-final UsuarioLogado usuarioLogado = new Usuario(1);
 final List<Inscricao> inscricoes = Arrays.asList(new Inscricao(1));
+final UsuarioLogado usuarioLogado = new Usuario(1);
+final VersaoResultadoProvaManual versaoSelecionada = VersaoResultadoProvaManual.PROVISORIA;
 
 // Configurando mock
 DigitacaoNotaManualFacade digitacaoNotaManualFacade = criarMockDigitacaoNotaManualFacade();
@@ -108,9 +110,9 @@ expect(digitacaoNotaManualFacade.consultarInscricoes(usuarioLogado))
 replay(digitacaoNotaManualFacade);
 
 // Configurando estado interno da classe sob teste
-digitacaoNotaManualListarBean.setVersaoSelecionada(versaoSelecionada);
-digitacaoNotaManualListarBean.setUsuarioLogado(usuarioLogado);
 digitacaoNotaManualListarBean.setInscricoes(inscricoes);
+digitacaoNotaManualListarBean.setUsuarioLogado(usuarioLogado);
+digitacaoNotaManualListarBean.setVersaoSelecionada(versaoSelecionada);
 
 // invocar metodo sendo testado
 digitacaoNotaManualListarBean.pesquisar();
@@ -119,10 +121,12 @@ digitacaoNotaManualListarBean.pesquisar();
 verify(digitacaoNotaManualFacade);
 
 // verificacoes do resultado do metodo sendo testado
-final Map<Inscricao, Boolean> getInscricoesExcluiveisExpected = <IDontKnowButYouDo>;
-assertEquals(getInscricoesExcluiveisExpected, digitacaoNotaManualListarBean.getInscricoesExcluiveis());
 final List<Inscricao> getInscricoesExpected = <IDontKnowButYouDo>;
 assertEquals(getInscricoesExpected, digitacaoNotaManualListarBean.getInscricoes());
+final Map<Inscricao, Boolean> getInscricoesExcluiveisExpected = <IDontKnowButYouDo>;
+assertEquals(getInscricoesExcluiveisExpected, digitacaoNotaManualListarBean.getInscricoesExcluiveis());
+assertNull(digitacaoNotaManualListarBean.getNullAssignedField());
+assertEquals(inscricoes.get(0) , digitacaoNotaManualListarBean.getNotNullAssignedField());
 }
 
 /**
