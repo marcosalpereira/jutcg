@@ -16,75 +16,30 @@ import br.gov.esaf.sgc.model.UsuarioLogado;
 import br.gov.esaf.sgc.model.prova.Prova;
 import br.gov.esaf.sgc.model.resultado.ResultadoProvaManual.VersaoResultadoProvaManual;
 
-/**
- * Bean para o caso de uso Digitar Resultado Manual.
- */
 @Name("digitacaoNotaManualListarBean")
 @Scope(ScopeType.CONVERSATION)
 public class DigitacaoNotaManualListarBean {
 
-    /**
-     * Prova selecionada.
-     */
     private Prova provaSelecionada;
 
-    /**
-     * Versão da nota selecionada.
-     */
-    private VersaoResultadoProvaManual versaoSelecionada;
-
-    /**
-     * Inscrições Pesquisadas.
-     */
     private List<Inscricao> inscricoes;
 
-    /**
-     * Map indicando se as inscricoes sao excluiveis.
-     */
-    private Map<Inscricao, Boolean> inscricoesExcluiveis;
+    private boolean excluivel;
 
-    /**
-     * Fachada Digitacao Resultado Nota Manual.
-     */
     @In("digitacaoNotaManualFacade")
     private transient DigitacaoNotaManualFacade digitacaoNotaManualFacade;
 
-    /**
-     * Usuário logado.
-     */
     @In
     private UsuarioLogado usuarioLogado;
 
-    public void setDigitacaoNotaManualFacade(
-        DigitacaoNotaManualFacade digitacaoNotaManualFacade) {
-        this.digitacaoNotaManualFacade = digitacaoNotaManualFacade;
-    }
-
-    public void setUsuarioLogado(UsuarioLogado usuarioLogado) {
-        this.usuarioLogado = usuarioLogado;
-    }
-
-    /**
-     * Pesquisar candidatos habilitados para etapa/fase a qual pertence a prova,
-     * observando todos os parâmetros informados.
-     */
     public void pesquisar() {
-        inscricoesExcluiveis = new HashMap<Inscricao, Boolean>();
-        if (versaoSelecionada == VersaoResultadoProvaManual.PROVISORIA) {
-            inscricoes = digitacaoNotaManualFacade.consultarInscricoes(usuarioLogado);
-            for (Inscricao inscricao : inscricoes) {
-                inscricoesExcluiveis.put(inscricao, excluivel(inscricao));
-            }
-        }
+        inscricoes = digitacaoNotaManualFacade.consultarInscricoes(usuarioLogado);
+        this.excluivel = isExcluivel(provaSelecionada);
+        //this.excluivel = digitacaoNotaManualFacade.existeNotaProvisoriaStatusCadastrada(provaSelecionada);
     }
 
-    /**
-     * Verifica se pode excluir a versao da nota para a inscricao passada.
-     * @param inscricao inscricao
-     * @return <code>true</code> se a versão da nota é provisória e seu status seja cadastrado
-     */
-    private boolean excluivel(Inscricao inscricao) {
-        return digitacaoNotaManualFacade.existeNotaProvisoriaStatusCadastrada(inscricao);
+    private boolean isExcluivel(Prova prova) {
+        return digitacaoNotaManualFacade.existeNotaProvisoriaStatusCadastrada(prova);
     }
 
 }
