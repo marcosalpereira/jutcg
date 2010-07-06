@@ -32,6 +32,11 @@ public class Field implements Comparable<Field>{
 	 */
 	private Protection protection;
 
+	/**
+	 * Assigned value, if known.
+	 */
+	private String writtenValue;
+
 	public void setProtection(Protection protection) {
 		this.protection = protection;
 	}
@@ -79,6 +84,22 @@ public class Field implements Comparable<Field>{
 
 	public boolean isPrivate() {
 		return protection == Protection.PRIVATE;
+	}
+
+	public String getWrittenValue() {
+		return writtenValue;
+	}
+
+	public void setWrittenValue(String writtenValue) {
+		this.writtenValue = writtenValue;
+	}
+
+	public boolean isWrittenValueKnown() {
+		return writtenValue != null;
+	}
+
+	public boolean isWrittenValueNullLiteral() {
+		return getWrittenValue().equals("null");
 	}
 
 	@Override

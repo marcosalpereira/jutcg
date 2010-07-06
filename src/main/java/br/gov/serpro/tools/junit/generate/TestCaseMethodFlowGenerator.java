@@ -109,11 +109,15 @@ public class TestCaseMethodFlowGenerator {
 		}
 
 		for (final Field f : flow.getWrittenFields()) {
-			sb.appendln("final %s %sExpected = %s;", f.getType(), f.getGetter(), "<IDontKnowButYouDo>");
-			sb.appendln("assertEquals(%sExpected, %s.%s());",
-					f.getGetter(),
-					varNameForClassUnderTest,
-					f.getGetter());
+			if(f.isWrittenValueKnown()) {
+				appendAssertionKnownWrittenValue(sb, f);
+			} else {
+				sb.appendln("final %s %sExpected = %s;", f.getType(), f.getGetter(), "<IDontKnowButYouDo>");
+				sb.appendln("assertEquals(%sExpected, %s.%s());",
+						f.getGetter(),
+						varNameForClassUnderTest,
+						f.getGetter());
+			}
 			infoAppended = true;
 		}
 
@@ -122,6 +126,20 @@ public class TestCaseMethodFlowGenerator {
 		}
 
 		return sb.toString();
+	}
+
+	private void appendAssertionKnownWrittenValue(final SourceBuilder sb,
+			final Field f) {
+		if(f.isWrittenValueNullLiteral()) {
+			sb.appendln("assertNull(%s.%s());",
+					varNameForClassUnderTest,
+					f.getGetter());
+		} else {
+			sb.appendln("assertEquals(%s, %s.%s());",
+					f.getWrittenValue(),
+					varNameForClassUnderTest,
+					f.getGetter());
+		}
 	}
 
 	String generateInvokeMethod() {

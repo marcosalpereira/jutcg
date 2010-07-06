@@ -394,7 +394,22 @@ public class JsmgJavaSourceParser implements SourceParser {
 	private SortedSet<Field> translateWrittenFields(ExecutionPath executionPath,
 			JavaClass javaClass) {
 		final Set<Variable> writtenVariables = executionPath.getVariablesWritten();
-		return getFields(javaClass, writtenVariables);
+		return getWrittenFields(javaClass, writtenVariables);
+	}
+
+	private SortedSet<Field> getWrittenFields(JavaClass javaClass,
+			Set<Variable> writtenVariables) {
+		final SortedSet<Field> fieldsRead = new TreeSet<Field>();
+		for (final Variable variable : writtenVariables) {
+			if (variable.isClassScope()) {
+				final Field writtenField = javaClass.searchField(variable.getVariableId());
+				if (variable.isValueKnown()) {
+					writtenField.setWrittenValue(variable.getValue());
+				}
+				fieldsRead.add(writtenField);
+			}
+		}
+		return fieldsRead;
 	}
 
 	private SortedSet<Field> translateReadFields(ExecutionPath executionPath, JavaClass javaClass) {

@@ -86,8 +86,8 @@ final List<Inscricao> getInscricoesExpected = <IDontKnowButYouDo>;
 assertEquals(getInscricoesExpected, digitacaoNotaManualListarBean.getInscricoes());
 final Map<Inscricao, Boolean> getInscricoesExcluiveisExpected = <IDontKnowButYouDo>;
 assertEquals(getInscricoesExcluiveisExpected, digitacaoNotaManualListarBean.getInscricoesExcluiveis());
-assertNull(digitacaoNotaManualListarBean.getNullAssignedField());
 assertEquals(inscricoes.get(0) , digitacaoNotaManualListarBean.getNotNullAssignedField());
+assertNull(digitacaoNotaManualListarBean.getNullAssignedField());
 }
 
 /**
@@ -125,8 +125,8 @@ final List<Inscricao> getInscricoesExpected = <IDontKnowButYouDo>;
 assertEquals(getInscricoesExpected, digitacaoNotaManualListarBean.getInscricoes());
 final Map<Inscricao, Boolean> getInscricoesExcluiveisExpected = <IDontKnowButYouDo>;
 assertEquals(getInscricoesExcluiveisExpected, digitacaoNotaManualListarBean.getInscricoesExcluiveis());
-assertNull(digitacaoNotaManualListarBean.getNullAssignedField());
 assertEquals(inscricoes.get(0) , digitacaoNotaManualListarBean.getNotNullAssignedField());
+assertNull(digitacaoNotaManualListarBean.getNullAssignedField());
 }
 
 /**
