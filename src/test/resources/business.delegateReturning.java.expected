@@ -59,6 +59,6 @@ final boolean alterarSituacaoDosCamposDeAtuacaoDoCargoReal = campoAtuacaoBusines
 verify(campoAtuacaoDao);
 
 // verificacoes do resultado do metodo sendo testado
-assertEquals(alterarSituacaoDosCamposDeAtuacaoDoCargoEsperado, alterarSituacaoDosCamposDeAtuacaoDoCargoReal);
+assertEquals(alterarSituacaoDosCamposDeAtuacaoDoCargoFromMock, alterarSituacaoDosCamposDeAtuacaoDoCargoReal);
 }
 }
