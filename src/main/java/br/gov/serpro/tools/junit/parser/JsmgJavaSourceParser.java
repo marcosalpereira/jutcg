@@ -176,8 +176,9 @@ public class JsmgJavaSourceParser implements SourceParser {
 		final List<Flow> flows = new ArrayList<Flow>(executionsPath.size());
 		for (final ExecutionPath executionPath : executionsPath) {
 
-			augmentExecutionPathWithOneFlowClassMethodClass(executionPath, jsmgClassModel,
+			augmentExecutionPathClassMethodsOneFlow(executionPath, jsmgClassModel,
 					new HashMap<ExecutionPathNode, List<MethodInvocation>>(0));
+			resetIsReturnedMethodInvocations(executionPath);
 
 			final Flow flow = new Flow();
 			flow.setName(executionPath.getName());
@@ -192,13 +193,27 @@ public class JsmgJavaSourceParser implements SourceParser {
 	}
 
 	/**
+	 * Resets the {@link MethodInvocation#isReturnedInvocation()} property of
+	 * all onvocations in the execution path, except the last one.
+	 * @param executionPath execution path
+	 */
+	private void resetIsReturnedMethodInvocations(
+			final ExecutionPath executionPath) {
+		final List<MethodInvocation> pathMethodInvocations = executionPath
+				.getInternalMethodInvocations();
+		for (int i = 0; i < pathMethodInvocations.size() - 1; i++) {
+			pathMethodInvocations.get(i).setReturnedInvocation(false);
+		}
+	}
+
+	/**
 	 * Verifies if there are invocations to a method of the class being tested.
 	 * If the method called has only one execution path, then the nodes of this path are
 	 * inserted in the enclosing execution path.
 	 * @param executionPath execution path
 	 * @return if the execution path was augmented
 	 */
-	private Map<ExecutionPathNode, List<MethodInvocation>> augmentExecutionPathWithOneFlowClassMethodClass(
+	private Map<ExecutionPathNode, List<MethodInvocation>> augmentExecutionPathClassMethodsOneFlow(
 			ExecutionPath executionPath, JavaSourceClassModel jsmgClassModel,
 			Map<ExecutionPathNode, List<MethodInvocation>> lastIterationResultMap) {
 		final Map<ExecutionPathNode, List<MethodInvocation>> mapNodeWithOwnClassMethodInvocations =
@@ -206,11 +221,11 @@ public class JsmgJavaSourceParser implements SourceParser {
 		final boolean newOwnClassMethodInvocationsFound = mapNodeWithOwnClassMethodInvocations.size()
 			> lastIterationResultMap.size();
 		if (newOwnClassMethodInvocationsFound) {
-			Map<ExecutionPathNode, List<MethodInvocation>> newInvocationsFound =
+			final Map<ExecutionPathNode, List<MethodInvocation>> newInvocationsFound =
 				getMapWithNewInvocations(lastIterationResultMap, mapNodeWithOwnClassMethodInvocations);
 			addNodesFromNewMethodsFound(executionPath, jsmgClassModel, newInvocationsFound);
 			// recursive search
-			return augmentExecutionPathWithOneFlowClassMethodClass(executionPath, jsmgClassModel,
+			return augmentExecutionPathClassMethodsOneFlow(executionPath, jsmgClassModel,
 					mapNodeWithOwnClassMethodInvocations);
 		}
 		// else, end recursion
@@ -220,9 +235,9 @@ public class JsmgJavaSourceParser implements SourceParser {
 	private Map<ExecutionPathNode, List<MethodInvocation>> getMapWithNewInvocations(
 			Map<ExecutionPathNode, List<MethodInvocation>> lastIterationResultMap,
 			final Map<ExecutionPathNode, List<MethodInvocation>> mapNodeWithOwnClassMethodInvocations) {
-		Map<ExecutionPathNode, List<MethodInvocation>> newInvocationsFound =
+		final Map<ExecutionPathNode, List<MethodInvocation>> newInvocationsFound =
 			new HashMap<ExecutionPathNode, List<MethodInvocation>>(mapNodeWithOwnClassMethodInvocations);
-		for (ExecutionPathNode alreadyAugmentedNode : lastIterationResultMap.keySet()) {
+		for (final ExecutionPathNode alreadyAugmentedNode : lastIterationResultMap.keySet()) {
 			newInvocationsFound.remove(alreadyAugmentedNode);
 		}
 		return newInvocationsFound;

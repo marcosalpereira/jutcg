@@ -1,0 +1,44 @@
+package br.gov.esaf.sgc.view.correcao;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.In;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Observer;
+import org.jboss.seam.annotations.Scope;
+
+import br.gov.esaf.sgc.facade.DigitacaoNotaManualFacade;
+import br.gov.esaf.sgc.model.Inscricao;
+import br.gov.esaf.sgc.model.UsuarioLogado;
+import br.gov.esaf.sgc.model.prova.Prova;
+import br.gov.esaf.sgc.model.resultado.ResultadoProvaManual.VersaoResultadoProvaManual;
+
+@Name("digitacaoNotaManualListarBean")
+@Scope(ScopeType.CONVERSATION)
+public class DigitacaoNotaManualListarBean {
+
+    private Prova provaSelecionada;
+
+    private List<Inscricao> inscricoes;
+
+    private boolean excluivel;
+
+    @In("digitacaoNotaManualFacade")
+    private transient DigitacaoNotaManualFacade digitacaoNotaManualFacade;
+
+    @In
+    private UsuarioLogado usuarioLogado;
+
+    public boolean pesquisar() {
+        isExcluivel(provaSelecionada);
+        return digitacaoNotaManualFacade.metodoRetornado();
+    }
+
+    private boolean isExcluivel(Prova prova) {
+        return digitacaoNotaManualFacade.existeNotaProvisoriaStatusCadastrada(prova);
+    }
+
+}

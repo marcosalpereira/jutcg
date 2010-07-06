@@ -27,6 +27,10 @@ public class TestesFuncionais {
     public final void testViewComExtensaoFluxo() throws IOException, ParseException {
         assertContentsEquals("/view.comExtensaoFluxo.java");
     }
+    @Test
+    public final void testViewComExtensaoFluxoInvocacoesRetornadas() throws IOException, ParseException {
+        assertContentsEquals("/view.comExtensaoFluxo.invocacaoRetornada.java");
+    }
 
     @Test
     public final void testBusinessDelegateVoid() throws IOException, ParseException {
@@ -75,14 +79,14 @@ public class TestesFuncionais {
             .getClass()
             .getResourceAsStream(resource);
 
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
         if (is != null) {
             String line;
 
             try {
                 // BufferedReader reader = new BufferedReader(new
                 // InputStreamReader(is, "UTF-8"));
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                final BufferedReader reader = new BufferedReader(new InputStreamReader(is));
                 while ((line = reader
                     .readLine()) != null) {
                     sb

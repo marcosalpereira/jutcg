@@ -100,7 +100,7 @@ public class TestCaseMethodFlowGenerator {
 
 		final Method returnInvocationMethod = flow.getReturnInvocationMethod();
 		if (returnInvocationMethod != null) {
-			sb.appendln("assertEquals(%sEsperado, %sReal);", returnInvocationMethod.getName(),
+			sb.appendln("assertEquals(%sFromMock, %sReal);", returnInvocationMethod.getName(),
 					method.getName());
 			infoAppended = true;
 		} else if (!method.isVoid()) {
@@ -225,7 +225,7 @@ public class TestCaseMethodFlowGenerator {
         }
 
 		if (returnInvocationMethod != null) {
-			String nextValue = nextValueForType.next(returnInvocationMethod.getType());
+			final String nextValue = nextValueForType.next(returnInvocationMethod.getType());
 			sb.appendln("final %s %sFromMock = %s;", returnInvocationMethod.getType(),
 					lowerCaseFirstChar(returnInvocationMethod.getName()),
 					nextValue);
