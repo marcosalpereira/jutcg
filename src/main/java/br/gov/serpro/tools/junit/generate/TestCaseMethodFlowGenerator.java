@@ -134,6 +134,16 @@ public class TestCaseMethodFlowGenerator {
 			sb.appendln("assertNull(%s.%s());",
 					varNameForClassUnderTest,
 					f.getGetter());
+		} else if(f.isWrittenValueBooleanLiteral()){
+			if(f.isWrittenValueTrueLiteral()) {
+				sb.appendln("assertTrue(%s.%s());",
+						varNameForClassUnderTest,
+						f.getGetter());
+			} else {
+				sb.appendln("assertFalse(%s.%s());",
+						varNameForClassUnderTest,
+						f.getGetter());
+			}
 		} else {
 			sb.appendln("assertEquals(%s, %s.%s());",
 					f.getWrittenValue(),

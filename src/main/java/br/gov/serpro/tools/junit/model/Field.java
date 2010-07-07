@@ -102,6 +102,19 @@ public class Field implements Comparable<Field>{
 		return getWrittenValue().equals("null");
 	}
 
+	public boolean isWrittenValueBooleanLiteral() {
+		return isWrittenValueTrueLiteral()
+			|| isWrittenValueFalseLiteral();
+	}
+
+	private boolean isWrittenValueFalseLiteral() {
+		return getWrittenValue().equals("false");
+	}
+
+	public boolean isWrittenValueTrueLiteral() {
+		return getWrittenValue().equals("true");
+	}
+
 	@Override
 	public String toString() {
 		return this.name;
