@@ -57,6 +57,11 @@ public class TestesFuncionais {
         assertContentsEquals("/view.validator.java");
     }
 
+    @Test
+    public final void testAssertBooleanKnownFieldValue() throws IOException, ParseException {
+        assertContentsEquals("/geral.assertKnownBooleanField.java");
+    }
+
     /**
      * @param inputFile input file
      * @throws ParseException em caso de erro

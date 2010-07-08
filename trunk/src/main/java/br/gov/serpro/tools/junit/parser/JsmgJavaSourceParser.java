@@ -417,7 +417,8 @@ public class JsmgJavaSourceParser implements SourceParser {
 		final SortedSet<Field> fieldsRead = new TreeSet<Field>();
 		for (final Variable variable : writtenVariables) {
 			if (variable.isClassScope()) {
-				final Field writtenField = javaClass.searchField(variable.getVariableId());
+				final Field writtenField = createWrittenField(javaClass,
+						variable);
 				if (variable.isValueKnown()) {
 					writtenField.setWrittenValue(variable.getValue());
 				}
@@ -425,6 +426,23 @@ public class JsmgJavaSourceParser implements SourceParser {
 			}
 		}
 		return fieldsRead;
+	}
+
+	/**
+	 * Creates a new instance of a written field based on the field declaration.
+	 * @param javaClass java class
+	 * @param variable variable
+	 * @return new instance of field
+	 */
+	private Field createWrittenField(JavaClass javaClass,
+			final Variable variable) {
+		final Field fieldDeclaration = javaClass.searchField(variable.getVariableId());
+		final Field writtenField = new Field();
+		writtenField.setName(fieldDeclaration.getName());
+		writtenField.setProtection(fieldDeclaration.getProtection());
+		writtenField.setType(fieldDeclaration.getType());
+		writtenField.setStatic(fieldDeclaration.isStatic());
+		return writtenField;
 	}
 
 	private SortedSet<Field> translateReadFields(ExecutionPath executionPath, JavaClass javaClass) {
