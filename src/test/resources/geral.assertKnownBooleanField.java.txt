@@ -1,0 +1,21 @@
+package br.gov.esaf.sgc.business.impl;
+
+public class Bean implements CampoAtuacaoBusiness {
+    private Boolean field;
+
+    public Boolean getField() {
+        return field;
+    }    
+    
+    public void resetField() {
+        field = false;
+    }
+
+    public void activateField() {
+        field = true;
+    }
+    
+    public void nullifyField() {
+        field = null;
+    }
+}
