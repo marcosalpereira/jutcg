@@ -41,7 +41,7 @@ import br.gov.serpro.tools.junit.model.Flow.FlowBranch;
 public class JsmgJavaSourceParser implements SourceParser {
 
 	/** {@inheritDoc} */
-	public JavaClass parse(File file) throws ParseException {
+	public JavaClass parse(final File file) throws ParseException {
 		final JavaSourceClassModel javaSourceClassModel = JsmgParser.parse(file);
 		final JavaClass javaClass = build(javaSourceClassModel);
 		return javaClass;
@@ -52,7 +52,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 	 * @param jsmgModel jsmg java source model
 	 * @return {@link JavaClass} java source model
 	 */
-	private JavaClass build(JavaSourceClassModel jsmgModel) {
+	private JavaClass build(final JavaSourceClassModel jsmgModel) {
 		final JavaClass javaClass = new JavaClass();
 		javaClass.setType(translateType(jsmgModel));
 		javaClass.setImports(translateImports(jsmgModel));
@@ -62,7 +62,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 		return javaClass;
 	}
 
-	private Type translateType(JavaSourceClassModel jsmgModel) {
+	private Type translateType(final JavaSourceClassModel jsmgModel) {
 		final Type type = new Type();
 		type.setName(jsmgModel.getSimpleClassName());
 		type.setFullName(jsmgModel.getClassName());
@@ -70,7 +70,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 		return type;
 	}
 
-	private List<String> translateImports(JavaSourceClassModel jsmgModel) {
+	private List<String> translateImports(final JavaSourceClassModel jsmgModel) {
 		final List<String> imports = new ArrayList<String>(jsmgModel.getClassImports().size());
 		final List<ImportPath> classImports = jsmgModel.getClassImports();
 		for (final ImportPath importPath : classImports) {
@@ -79,7 +79,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 		return imports;
 	}
 
-	private List<Field> translateFields(JavaSourceClassModel jsmgModel) {
+	private List<Field> translateFields(final JavaSourceClassModel jsmgModel) {
 		final List<Field> fields = new ArrayList<Field>(jsmgModel.getFields().size());
 		final List<org.jsmg.model.Field> jsmgFields = jsmgModel.getFields();
 		for (final org.jsmg.model.Field jsmgField : jsmgFields) {
@@ -94,7 +94,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 		return fields;
 	}
 
-	private List<String> translateAnnoatations(org.jsmg.model.Field jsmgField) {
+	private List<String> translateAnnoatations(final org.jsmg.model.Field jsmgField) {
 		final List<Annotation> jsmgAnnotations = jsmgField.getAnnotations();
 		final List<String> annotations = new ArrayList<String>(jsmgAnnotations
 				.size());
@@ -104,7 +104,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 		return annotations;
 	}
 
-	private Protection translateProtection(org.jsmg.model.Field jsmgField) {
+	private Protection translateProtection(final org.jsmg.model.Field jsmgField) {
 		if (jsmgField.isPrivate()) {
 			return Protection.PRIVATE;
 		} else if (jsmgField.isProtected()) {
@@ -116,18 +116,18 @@ public class JsmgJavaSourceParser implements SourceParser {
 		}
 	}
 
-	private Type translateTypeName(String typeName) {
+	private Type translateTypeName(final String typeName) {
 		final Type type = new Type();
 		type.setName(typeName);
 		type.setPrimitive(isPrimitive(typeName));
 		return type;
 	}
 
-	private boolean isPrimitive(String type) {
+	private boolean isPrimitive(final String type) {
 		return "byte,short,int,long,float,double,boolean".indexOf(type) != -1;
 	}
 
-	private List<Method> translateMethods(JavaSourceClassModel jsmgModel, JavaClass javaClass) {
+	private List<Method> translateMethods(final JavaSourceClassModel jsmgModel, final JavaClass javaClass) {
 		final List<org.jsmg.model.Method> jsmgMethods = jsmgModel.getMethods();
 		final List<Method> methods = new ArrayList<Method>(jsmgMethods.size());
 		for (final org.jsmg.model.Method jsmgMethod : jsmgMethods) {
@@ -145,7 +145,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 		return methods;
 	}
 
-	private Protection translateProtection(org.jsmg.model.Method jsmgMethod) {
+	private Protection translateProtection(final org.jsmg.model.Method jsmgMethod) {
 		if (jsmgMethod.isPublic()) {
 			return Protection.PUBLIC;
 		} else if (jsmgMethod.isPrivate()) {
@@ -158,7 +158,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 	}
 
 	private List<FormalParameter> translateParameters(
-			org.jsmg.model.Method jsmgMethod) {
+			final org.jsmg.model.Method jsmgMethod) {
 		final List<Parameter> jsmgParameters = jsmgMethod.getParameters();
 		final List<FormalParameter> parameters = new ArrayList<FormalParameter>(jsmgParameters.size());
 		for (final Parameter parameter : jsmgParameters) {
@@ -170,8 +170,8 @@ public class JsmgJavaSourceParser implements SourceParser {
 		return parameters;
 	}
 
-	private List<Flow> translateFlows(org.jsmg.model.Method jsmgMethod, Method method,
-			JavaSourceClassModel jsmgClassModel) {
+	private List<Flow> translateFlows(final org.jsmg.model.Method jsmgMethod, final Method method,
+			final JavaSourceClassModel jsmgClassModel) {
 		final List<ExecutionPath> executionsPath = jsmgMethod.getExecutionsPath();
 		final List<Flow> flows = new ArrayList<Flow>(executionsPath.size());
 		for (final ExecutionPath executionPath : executionsPath) {
@@ -214,8 +214,8 @@ public class JsmgJavaSourceParser implements SourceParser {
 	 * @return if the execution path was augmented
 	 */
 	private Map<ExecutionPathNode, List<MethodInvocation>> augmentExecutionPathClassMethodsOneFlow(
-			ExecutionPath executionPath, JavaSourceClassModel jsmgClassModel,
-			Map<ExecutionPathNode, List<MethodInvocation>> lastIterationResultMap) {
+			final ExecutionPath executionPath, final JavaSourceClassModel jsmgClassModel,
+			final Map<ExecutionPathNode, List<MethodInvocation>> lastIterationResultMap) {
 		final Map<ExecutionPathNode, List<MethodInvocation>> mapNodeWithOwnClassMethodInvocations =
 			getMapNodeWithOwnClassMethodInvocations(executionPath, jsmgClassModel);
 		final boolean newOwnClassMethodInvocationsFound = mapNodeWithOwnClassMethodInvocations.size()
@@ -233,7 +233,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 	}
 
 	private Map<ExecutionPathNode, List<MethodInvocation>> getMapWithNewInvocations(
-			Map<ExecutionPathNode, List<MethodInvocation>> lastIterationResultMap,
+			final Map<ExecutionPathNode, List<MethodInvocation>> lastIterationResultMap,
 			final Map<ExecutionPathNode, List<MethodInvocation>> mapNodeWithOwnClassMethodInvocations) {
 		final Map<ExecutionPathNode, List<MethodInvocation>> newInvocationsFound =
 			new HashMap<ExecutionPathNode, List<MethodInvocation>>(mapNodeWithOwnClassMethodInvocations);
@@ -244,8 +244,8 @@ public class JsmgJavaSourceParser implements SourceParser {
 	}
 
 	private void addNodesFromNewMethodsFound(
-			ExecutionPath executionPath,
-			JavaSourceClassModel jsmgClassModel,
+			final ExecutionPath executionPath,
+			final JavaSourceClassModel jsmgClassModel,
 			final Map<ExecutionPathNode, List<MethodInvocation>> mapNodeWithOwnClassMethodInvocations) {
 		for (final Entry<ExecutionPathNode, List<MethodInvocation>> nodeWithInvocations : mapNodeWithOwnClassMethodInvocations
 				.entrySet()) {
@@ -256,7 +256,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 		}
 	}
 
-	private void addNodesToPath(ExecutionPath executionPath,
+	private void addNodesToPath(final ExecutionPath executionPath,
 			final Entry<ExecutionPathNode, List<MethodInvocation>> nodeWithInvocations,
 			final List<ExecutionPathNode> nodesToBeInserted) {
 		final ExecutionPathNode pathNode = nodeWithInvocations.getKey();
@@ -270,7 +270,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 	}
 
 	private List<ExecutionPathNode> getNodesToBeInsertedExecutionPath(
-			JavaSourceClassModel jsmgClassModel,
+			final JavaSourceClassModel jsmgClassModel,
 			final Entry<ExecutionPathNode, List<MethodInvocation>> nodeWithInvocations) {
 		final List<MethodInvocation> invocationsUniqueFlow = nodeWithInvocations.getValue();
 		final List<ExecutionPathNode> nodesToBeInserted = new ArrayList<ExecutionPathNode>();
@@ -283,7 +283,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 	}
 
 	private Map<ExecutionPathNode, List<MethodInvocation>> getMapNodeWithOwnClassMethodInvocations(
-			ExecutionPath executionPath, JavaSourceClassModel jsmgClassModel) {
+			final ExecutionPath executionPath, final JavaSourceClassModel jsmgClassModel) {
 		final Map<ExecutionPathNode, List<MethodInvocation>> mapNodeWithOwnClassMethosInvocations =
 			new HashMap<ExecutionPathNode, List<MethodInvocation>>();
 		for (final ExecutionPathNode node : executionPath.getExecutionPathNodes()) {
@@ -297,7 +297,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 	}
 
 	private List<MethodInvocation> getOwnClassMethodInvocationsWithOneExecutionPath(
-			JavaSourceClassModel jsmgClassModel, ExecutionPathNode node) {
+			final JavaSourceClassModel jsmgClassModel, final ExecutionPathNode node) {
 		final List<MethodInvocation> methodsInvocations = new ArrayList<MethodInvocation>();
 		for (final MethodInvocation methodInvocation : node
 				.getInternalMethodInvocations()) {
@@ -308,7 +308,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 		return methodsInvocations;
 	}
 
-	private boolean isOwnClassMethodInvocationWithOneExecutionPath(JavaSourceClassModel jsmgClassModel,
+	private boolean isOwnClassMethodInvocationWithOneExecutionPath(final JavaSourceClassModel jsmgClassModel,
 			final MethodInvocation methodInvocation) {
 		final org.jsmg.model.Method classMethod = jsmgClassModel.getMethod(methodInvocation
 								.getMethodInvoked());
@@ -316,7 +316,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 			&& classMethod.getExecutionsPath().size() == 1;
 	}
 
-	private List<FlowBranch> translateFlowBranches(ExecutionPath executionPath) {
+	private List<FlowBranch> translateFlowBranches(final ExecutionPath executionPath) {
 	    final List<FlowBranch> flowBranches = new ArrayList<FlowBranch>();
 
         for (final ExecutionPathNode pathNode : executionPath.getExecutionPathNodes()) {
@@ -331,7 +331,7 @@ public class JsmgJavaSourceParser implements SourceParser {
     }
 
     private List<FieldMethodInvocation> translateInvocations(
-			ExecutionPath executionPath, Method method) {
+			final ExecutionPath executionPath, final Method method) {
 		final List<FieldMethodInvocation> fieldMethodInvocations = new ArrayList<FieldMethodInvocation>();
 		final List<MethodInvocation> methodInvocations = executionPath.getInternalMethodInvocations();
 		for (final MethodInvocation methodInvocation : methodInvocations) {
@@ -344,7 +344,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 	}
 
 	private FieldMethodInvocation translateFieldMethodInvocation(
-			MethodInvocation methodInvocation, Method method) {
+			final MethodInvocation methodInvocation, final Method method) {
 		final FieldMethodInvocation fieldMethodInvocation = new FieldMethodInvocation();
 		fieldMethodInvocation.setInvokedAtField(method.getJavaClass()
 				.searchField(methodInvocation.getInvokerVariable().getVariableId()));
@@ -363,7 +363,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 	}
 
 	private br.gov.serpro.tools.junit.model.Variable translateVariable(
-			Variable assignedVariable) {
+			final Variable assignedVariable) {
 		final br.gov.serpro.tools.junit.model.Variable variable = new br.gov.serpro.tools.junit.model.Variable();
 		variable.setName(assignedVariable.getVariableId());
 		variable.setScope(translateScope(assignedVariable.getScope()));
@@ -371,7 +371,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 		return variable;
 	}
 
-	private Scope translateScope(org.jsmg.model.Scope scope) {
+	private Scope translateScope(final org.jsmg.model.Scope scope) {
 		if(scope.isLocalScope()) {
 			return Scope.LOCAL_SCOPE;
 		} else if(scope.isMethodScope()) {
@@ -381,7 +381,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 		}
 	}
 
-	private Method translateInvokedMethod(MethodInvocation methodInvocation) {
+	private Method translateInvokedMethod(final MethodInvocation methodInvocation) {
 		final Method method = new Method();
 		method.setName(methodInvocation.getMethodInvoked());
 		if(methodInvocation.getReturnedType() != null) {
@@ -390,14 +390,14 @@ public class JsmgJavaSourceParser implements SourceParser {
 		return method;
 	}
 
-	private Type translateType(String returnedType) {
+	private Type translateType(final String returnedType) {
 		final Type type = new Type();
 		type.setName(returnedType);
 		type.setPrimitive(isPrimitive(returnedType));
 		return type;
 	}
 
-	private List<String> translateArgumentList(MethodInvocation methodInvocation) {
+	private List<String> translateArgumentList(final MethodInvocation methodInvocation) {
 		final List<ValueHolder> jsmgArgs = methodInvocation.getArgumentsList();
 		final List<String> arguments = new ArrayList<String>(jsmgArgs.size());
 		for (final ValueHolder argument : jsmgArgs) {
@@ -406,21 +406,21 @@ public class JsmgJavaSourceParser implements SourceParser {
 		return arguments;
 	}
 
-	private SortedSet<Field> translateWrittenFields(ExecutionPath executionPath,
-			JavaClass javaClass) {
+	private SortedSet<Field> translateWrittenFields(final ExecutionPath executionPath,
+			final JavaClass javaClass) {
 		final Set<Variable> writtenVariables = executionPath.getVariablesWritten();
 		return getWrittenFields(javaClass, writtenVariables);
 	}
 
-	private SortedSet<Field> getWrittenFields(JavaClass javaClass,
-			Set<Variable> writtenVariables) {
+	private SortedSet<Field> getWrittenFields(final JavaClass javaClass,
+			final Set<Variable> writtenVariables) {
 		final SortedSet<Field> fieldsRead = new TreeSet<Field>();
 		for (final Variable variable : writtenVariables) {
 			if (variable.isClassScope()) {
-				final Field writtenField = createWrittenField(javaClass,
+				final Field writtenField = createField(javaClass,
 						variable);
 				if (variable.isValueKnown()) {
-					writtenField.setWrittenValue(variable.getValue());
+					writtenField.setEndFlowValue(variable.getValue());
 				}
 				fieldsRead.add(writtenField);
 			}
@@ -434,7 +434,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 	 * @param variable variable
 	 * @return new instance of field
 	 */
-	private Field createWrittenField(JavaClass javaClass,
+	private Field createField(final JavaClass javaClass,
 			final Variable variable) {
 		final Field fieldDeclaration = javaClass.searchField(variable.getVariableId());
 		final Field writtenField = new Field();
@@ -445,22 +445,23 @@ public class JsmgJavaSourceParser implements SourceParser {
 		return writtenField;
 	}
 
-	private SortedSet<Field> translateReadFields(ExecutionPath executionPath, JavaClass javaClass) {
-		final Set<Variable> readVariables = executionPath.getReadVariables();
-		return getFields(javaClass, readVariables);
+	private SortedSet<Field> translateReadFields(final ExecutionPath executionPath, final JavaClass javaClass) {
+		return getReadFields(javaClass, executionPath);
 	}
 
 	/**
 	 * Returns fields that are present in the variables set.
 	 * @param javaClass java class
-	 * @param variables variables set
+	 * @param executionPath execution path
 	 * @return fields in the set
 	 */
-	private SortedSet<Field> getFields(JavaClass javaClass, final Set<Variable> variables) {
+	private SortedSet<Field> getReadFields(final JavaClass javaClass, final ExecutionPath executionPath) {
 		final SortedSet<Field> fieldsRead = new TreeSet<Field>();
-		for (final Variable variable : variables) {
+		for (final Variable variable : executionPath.getReadVariables()) {
 			if (variable.isClassScope()) {
-				fieldsRead.add(javaClass.searchField(variable.getVariableId()));
+				final Field fieldRead = createField(javaClass, variable);
+				fieldRead.setInitialValueFlow(executionPath.getInitialValue(variable));
+				fieldsRead.add(fieldRead);
 			}
 		}
 		return fieldsRead;

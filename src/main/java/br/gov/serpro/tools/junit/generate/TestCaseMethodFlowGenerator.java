@@ -23,7 +23,7 @@ public class TestCaseMethodFlowGenerator {
 	final private Set<Field> usedDependencies;
 	final private NextValueForType nextValueForType;
 
-	public TestCaseMethodFlowGenerator(Flow flow, List<Field> dependencies) {
+	public TestCaseMethodFlowGenerator(final Flow flow, final List<Field> dependencies) {
 		this.flow = flow;
 		this.method = flow.getMethod();
 		this.classUnderTest = method.getJavaClass();
@@ -32,7 +32,7 @@ public class TestCaseMethodFlowGenerator {
 		this.nextValueForType = new NextValueForType();
 	}
 
-	private Set<Field> selectUsedDependencies(List<Field> dependencies) {
+	private Set<Field> selectUsedDependencies(final List<Field> dependencies) {
 		final Set<Field> ret = new HashSet<Field>();
 		for (final FieldMethodInvocation invocation : flow.getInvocations()) {
 			if (dependencies.contains(invocation.getInvokedAtField())) {
@@ -76,7 +76,7 @@ public class TestCaseMethodFlowGenerator {
 		return sb.toString();
 	}
 
-	private String generateFlowDescription(List<FlowBranch> flowBranches) {
+	private String generateFlowDescription(final List<FlowBranch> flowBranches) {
 	    final StringBuilder sb = new StringBuilder();
         for (final FlowBranch flowBranch : flowBranches) {
             if (flowBranch.isEnter()) {
@@ -109,7 +109,7 @@ public class TestCaseMethodFlowGenerator {
 		}
 
 		for (final Field f : flow.getWrittenFields()) {
-			if(f.isWrittenValueKnown()) {
+			if(f.isEndValueFlowKnown()) {
 				appendAssertionKnownWrittenValue(sb, f);
 			} else {
 				sb.appendln("final %s %sExpected = %s;", f.getType(), f.getGetter(), "<IDontKnowButYouDo>");
@@ -130,12 +130,12 @@ public class TestCaseMethodFlowGenerator {
 
 	private void appendAssertionKnownWrittenValue(final SourceBuilder sb,
 			final Field f) {
-		if(f.isWrittenValueNullLiteral()) {
+		if(f.isEndFlowValueNullLiteral()) {
 			sb.appendln("assertNull(%s.%s());",
 					varNameForClassUnderTest,
 					f.getGetter());
-		} else if(f.isWrittenValueBooleanLiteral()){
-			if(f.isWrittenValueTrueLiteral()) {
+		} else if(f.isEndFlowValueBooleanLiteral()){
+			if(f.isEndFlowValueTrueLiteral()) {
 				sb.appendln("assertTrue(%s.%s());",
 						varNameForClassUnderTest,
 						f.getGetter());
@@ -146,7 +146,7 @@ public class TestCaseMethodFlowGenerator {
 			}
 		} else {
 			sb.appendln("assertEquals(%s, %s.%s());",
-					f.getWrittenValue(),
+					f.getEndFlowValue(),
 					varNameForClassUnderTest,
 					f.getGetter());
 		}
@@ -178,7 +178,7 @@ public class TestCaseMethodFlowGenerator {
 	 * @param params
 	 * @return
 	 */
-	private String concatMethodParams(List<FormalParameter> params) {
+	private String concatMethodParams(final List<FormalParameter> params) {
 		String strParams = "";
 		for (final FormalParameter p : params) {
 			if (!strParams.isEmpty())
@@ -231,7 +231,7 @@ public class TestCaseMethodFlowGenerator {
 		//Declare readFields/written as local vars
 		for (final Field f : readFields){
 			sb.appendln("final %s %s = %s;", f.getType(), f.getName(),
-					nextValueForType.next(f.getType()));
+					getInitialValue(f));
         }
 
 		if (returnInvocationMethod != null) {
@@ -252,6 +252,16 @@ public class TestCaseMethodFlowGenerator {
 			}
 		}
 		return sb.toString();
+	}
+
+	private String getInitialValue(final Field field) {
+		String initialValue = null;
+		if (field.isInitialValueFlowKnown()) {
+			initialValue = field.getInitialValueFlow();
+		} else {
+			initialValue = nextValueForType.next(field.getType());
+		}
+		return initialValue;
 	}
 
 

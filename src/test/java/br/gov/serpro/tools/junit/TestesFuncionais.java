@@ -62,12 +62,17 @@ public class TestesFuncionais {
         assertContentsEquals("/geral.assertKnownBooleanField.java");
     }
 
+    @Test
+    public final void testSetKnownFieldInitialValue() throws IOException, ParseException {
+        assertContentsEquals("/geral.setKnownFieldInitialValue.java");
+    }
+
     /**
      * @param inputFile input file
      * @throws ParseException em caso de erro
      * @throws IOException em caso de erro
      */
-    private void assertContentsEquals(String inputFile) throws ParseException,
+    private void assertContentsEquals(final String inputFile) throws ParseException,
         IOException {
         final SourceParser parser = new JsmgJavaSourceParser();
         final JavaClass javaClass = parser
@@ -79,7 +84,7 @@ public class TestesFuncionais {
             .generate());
     }
 
-    public String getContents(String resource) throws IOException {
+    public String getContents(final String resource) throws IOException {
         final InputStream is = this
             .getClass()
             .getResourceAsStream(resource);
@@ -109,7 +114,7 @@ public class TestesFuncionais {
         }
     }
 
-    private File getFile(String filename) throws IOException {
+    private File getFile(final String filename) throws IOException {
         final String fullname = this
             .getClass()
             .getResource(filename)

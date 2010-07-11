@@ -3,6 +3,9 @@ package br.gov.serpro.tools.junit.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import br.gov.serpro.tools.junit.util.GeneratorHelper;
 
 
@@ -33,11 +36,16 @@ public class Field implements Comparable<Field>{
 	private Protection protection;
 
 	/**
-	 * Assigned value, if known.
+	 * Initial value in the flow, if known.
 	 */
-	private String writtenValue;
+	private String initialValueFlow;
 
-	public void setProtection(Protection protection) {
+	/**
+	 * Value at the end of the flow, if known.
+	 */
+	private String endValueFlow;
+
+	public void setProtection(final Protection protection) {
 		this.protection = protection;
 	}
 
@@ -49,7 +57,7 @@ public class Field implements Comparable<Field>{
 		return annotations;
 	}
 
-	public void setAnnotations(List<String> annotations) {
+	public void setAnnotations(final List<String> annotations) {
 		this.annotations = annotations;
 	}
 
@@ -57,7 +65,7 @@ public class Field implements Comparable<Field>{
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -65,7 +73,7 @@ public class Field implements Comparable<Field>{
 		return type;
 	}
 
-	public void setType(Type type) {
+	public void setType(final Type type) {
 		this.type = type;
 	}
 
@@ -78,7 +86,7 @@ public class Field implements Comparable<Field>{
 		return ztatic;
 	}
 
-	public void setStatic(boolean ztatic) {
+	public void setStatic(final boolean ztatic) {
 		this.ztatic = ztatic;
 	}
 
@@ -86,33 +94,45 @@ public class Field implements Comparable<Field>{
 		return protection == Protection.PRIVATE;
 	}
 
-	public String getWrittenValue() {
-		return writtenValue;
+	public String getInitialValueFlow() {
+		return this.initialValueFlow;
 	}
 
-	public void setWrittenValue(String writtenValue) {
-		this.writtenValue = writtenValue;
+	public void setInitialValueFlow(final String initialValue) {
+		this.initialValueFlow = initialValue;
 	}
 
-	public boolean isWrittenValueKnown() {
-		return writtenValue != null;
+	public String getEndFlowValue() {
+		return endValueFlow;
 	}
 
-	public boolean isWrittenValueNullLiteral() {
-		return getWrittenValue().equals("null");
+	public void setEndFlowValue(final String endFlowValue) {
+		this.endValueFlow = endFlowValue;
 	}
 
-	public boolean isWrittenValueBooleanLiteral() {
-		return isWrittenValueTrueLiteral()
-			|| isWrittenValueFalseLiteral();
+	public boolean isInitialValueFlowKnown() {
+		return this.initialValueFlow != null;
 	}
 
-	private boolean isWrittenValueFalseLiteral() {
-		return getWrittenValue().equals("false");
+	public boolean isEndValueFlowKnown() {
+		return endValueFlow != null;
 	}
 
-	public boolean isWrittenValueTrueLiteral() {
-		return getWrittenValue().equals("true");
+	public boolean isEndFlowValueNullLiteral() {
+		return getEndFlowValue().equals("null");
+	}
+
+	public boolean isEndFlowValueBooleanLiteral() {
+		return isEndFlowValueTrueLiteral()
+			|| isEndFlowValueFalseLiteral();
+	}
+
+	private boolean isEndFlowValueFalseLiteral() {
+		return getEndFlowValue().equals("false");
+	}
+
+	public boolean isEndFlowValueTrueLiteral() {
+		return getEndFlowValue().equals("true");
 	}
 
 	@Override
@@ -132,7 +152,23 @@ public class Field implements Comparable<Field>{
 	}
 
     @Override
-    public int compareTo(Field o) {
+    public int compareTo(final Field o) {
         return getName().compareTo(o.getName());
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+		if (obj == null || !(obj instanceof Field)) {
+			return false;
+		}
+		final Field o = (Field) obj;
+		return new EqualsBuilder().
+			append(getName(), o.getName()).
+			isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+    	return new HashCodeBuilder(321, 543).append(name).toHashCode();
     }
 }
