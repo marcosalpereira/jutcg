@@ -1,0 +1,13 @@
+package br.gov.esaf.sgc.business.impl;
+
+public class Bean implements CampoAtuacaoBusiness {
+	@EJB
+    private Var field;
+
+    public void test() {
+    	Var value = field.someMethod();
+        if(value == null) {
+        	System.out.println("true");
+        }
+    }    
+}
