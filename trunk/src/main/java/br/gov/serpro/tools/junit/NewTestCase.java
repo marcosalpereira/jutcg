@@ -12,7 +12,7 @@ public class NewTestCase {
 
 	public static void main(String[] args) throws ParseException, IOException {
 
-		//args = new String[] {"/CampoAtuacaoBusinessBean.java.txt"};
+		args = new String[] {"/ValidarNotasBean.java.txt"};
 
 		final NewTestCase newTestCase = new NewTestCase();
 
