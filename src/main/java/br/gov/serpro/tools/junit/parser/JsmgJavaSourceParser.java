@@ -368,6 +368,7 @@ public class JsmgJavaSourceParser implements SourceParser {
 		variable.setName(assignedVariable.getVariableId());
 		variable.setScope(translateScope(assignedVariable.getScope()));
 		variable.setType(translateType(assignedVariable.getType()));
+		variable.setValue(assignedVariable.getValue());
 		return variable;
 	}
 

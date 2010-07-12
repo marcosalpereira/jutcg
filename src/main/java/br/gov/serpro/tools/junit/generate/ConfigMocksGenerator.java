@@ -97,7 +97,7 @@ public class ConfigMocksGenerator {
             sb.appendln("%s %s = %s;",
                     assignedVariable.getType().getName(),
                     assignedVariable.getName(),
-                    nextValueForType.next(assignedVariable.getType()));
+                    getAssignedVariableValue(assignedVariable));
             variablesDeclared.add(assignedVariable);
         }
         sb.appendln("expect(%s.%s(%s))\n  .andReturn(%s);", mock.getName(),
@@ -105,6 +105,13 @@ public class ConfigMocksGenerator {
                 invocation.getArgumentsAsString(),
                 assignedVariable.getName());
     }
+
+	private String getAssignedVariableValue(final Variable assignedVariable) {
+		if (assignedVariable.isValueKnown()) {
+			return assignedVariable.getValue();
+		}
+		return nextValueForType.next(assignedVariable.getType());
+	}
 
     /**
      * @param mock
