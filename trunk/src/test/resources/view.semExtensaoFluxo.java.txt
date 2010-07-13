@@ -80,7 +80,7 @@ public class DigitacaoNotaManualListarBean {
      */
     public void pesquisar() {
         inscricoesExcluiveis = new HashMap<Inscricao, Boolean>();
-        if (versaoSelecionada == VersaoResultadoProvaManual.PROVISORIA) {
+        if (versaoSelecionada == VersaoResultadoProvaManual.DEFINITIVA) {
             inscricoes = digitacaoNotaManualFacade.consultarInscricoes(usuarioLogado);
             this.nullAssignedField = null;
             this.notNullAssignedField = inscricoes.get(0);

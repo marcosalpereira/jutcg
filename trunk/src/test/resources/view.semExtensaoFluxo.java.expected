@@ -49,7 +49,7 @@ public void setUp() throws Exception {
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#pesquisar()}.
  * Descricao do Fluxo: 
- *     Entra: if (versaoSelecionada == VersaoResultadoProvaManual.PROVISORIA) {
+ *     Entra: if (versaoSelecionada == VersaoResultadoProvaManual.DEFINITIVA) {
  *     Entra: for (Inscricao inscricao : inscricoes) {.
  */
 @Test
@@ -58,7 +58,7 @@ public void testPesquisarPath1() {
 final List<Inscricao> inscricoes = Arrays.asList(new Inscricao(1));
 final Map<Inscricao, Boolean> inscricoesExcluiveis = newHashMap(new Inscricao(2), Boolean.FALSE);
 final UsuarioLogado usuarioLogado = new Usuario(1);
-final VersaoResultadoProvaManual versaoSelecionada = VersaoResultadoProvaManual.PROVISORIA;
+final VersaoResultadoProvaManual versaoSelecionada = VersaoResultadoProvaManual.DEFINITIVA;
 
 // Configurando mock
 DigitacaoNotaManualFacade digitacaoNotaManualFacade = criarMockDigitacaoNotaManualFacade();
@@ -93,7 +93,7 @@ assertNull(digitacaoNotaManualListarBean.getNullAssignedField());
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#pesquisar()}.
  * Descricao do Fluxo: 
- *     Entra: if (versaoSelecionada == VersaoResultadoProvaManual.PROVISORIA) {
+ *     Entra: if (versaoSelecionada == VersaoResultadoProvaManual.DEFINITIVA) {
  * NAO Entra: for (Inscricao inscricao : inscricoes) {.
  */
 @Test
@@ -101,7 +101,7 @@ public void testPesquisarPath2() {
 // variaveis usadas
 final List<Inscricao> inscricoes = Arrays.asList(new Inscricao(1));
 final UsuarioLogado usuarioLogado = new Usuario(1);
-final VersaoResultadoProvaManual versaoSelecionada = VersaoResultadoProvaManual.PROVISORIA;
+final VersaoResultadoProvaManual versaoSelecionada = VersaoResultadoProvaManual.DEFINITIVA;
 
 // Configurando mock
 DigitacaoNotaManualFacade digitacaoNotaManualFacade = criarMockDigitacaoNotaManualFacade();
@@ -132,7 +132,7 @@ assertNull(digitacaoNotaManualListarBean.getNullAssignedField());
 /**
  * Teste para o metodo {@link DigitacaoNotaManualListarBean#pesquisar()}.
  * Descricao do Fluxo: 
- * NAO Entra: if (versaoSelecionada == VersaoResultadoProvaManual.PROVISORIA) {.
+ * NAO Entra: if (versaoSelecionada == VersaoResultadoProvaManual.DEFINITIVA) {.
  */
 @Test
 public void testPesquisarPath3() {
