@@ -1,0 +1,11 @@
+package br.gov.esaf.sgc.business.impl;
+
+public class Bean implements CampoAtuacaoBusiness {
+    private VersaoResultadoProvaManual field;
+
+    public void test() {
+        if(field == VersaoResultadoProvaManual.DEFINITIVA) {
+        	System.out.println("true");
+        }
+    }    
+}
