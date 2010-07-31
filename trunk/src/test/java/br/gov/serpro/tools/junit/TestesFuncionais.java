@@ -87,6 +87,16 @@ public class TestesFuncionais {
         assertContentsEquals("/geral.setKnownFieldEnumInitialValue.java");
     }
 
+    @Test
+    public final void testSetKnownFieldEnumInitialValueUsingReflection() throws IOException, ParseException {
+        assertContentsEquals("/geral.setKnownFieldEnumInitialValueUsingReflection.java");
+    }
+
+    @Test
+    public final void testSetKnownFieldConstantInitialValueUsingReflection() throws IOException, ParseException {
+        assertContentsEquals("/geral.setKnownFieldConstantInitialValueUsingReflection.java");
+    }
+
     /**
      * @param inputFile input file
      * @throws ParseException em caso de erro
