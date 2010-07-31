@@ -1,0 +1,14 @@
+
+package br.gov.esaf.sgc.business.impl;
+
+import somepackage.EnumInClasspath;
+
+public class Bean implements CampoAtuacaoBusiness {
+    private EnumInClasspath field;
+
+    public void test() {
+        if(field == EnumInClasspath.SOME_VALUE) {
+        	System.out.println("true");
+        }
+    }    
+}

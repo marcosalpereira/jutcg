@@ -1,0 +1,13 @@
+package br.gov.esaf.sgc.business.impl;
+
+import somepackage.SomeClass;
+
+public class Bean implements CampoAtuacaoBusiness {
+    private int field;
+
+    public void test() {
+        if(SomeClass.INT_CONSTANT == field) {
+        	System.out.println("true");
+        }
+    }    
+}

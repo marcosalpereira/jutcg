@@ -1,0 +1,58 @@
+package br.gov.esaf.sgc.business.impl;
+
+import somepackage.SomeClass;
+import static org.easymock.EasyMock.*;
+import org.junit.*;
+import java.util.*;
+import static org.junit.Assert.*;
+
+/**
+ * Testes unitarios para a classe {@link Bean}.
+ */
+public class TestBean  {
+
+/**
+ * Classe sendo testada {@link Bean}.
+ */
+private Bean bean;
+
+/** Configuracoes iniciais. */
+@Before
+public void setUp() {
+  bean = new Bean();
+}
+
+/**
+ * Teste para o metodo {@link Bean#test()}.
+ * Descricao do Fluxo: 
+ *     Entra: if(SomeClass.INT_CONSTANT == field) {.
+ */
+@Test
+public void testTestPath1() {
+// variaveis usadas
+final int field = SomeClass.INT_CONSTANT;
+
+// Configurando estado interno da classe sob teste
+bean.setField(field);
+
+// invocar metodo sendo testado
+bean.test();
+}
+
+/**
+ * Teste para o metodo {@link Bean#test()}.
+ * Descricao do Fluxo: 
+ * NAO Entra: if(SomeClass.INT_CONSTANT == field) {.
+ */
+@Test
+public void testTestPath2() {
+// variaveis usadas
+final int field = SomeClass.INT_CONSTANT + 1;
+
+// Configurando estado interno da classe sob teste
+bean.setField(field);
+
+// invocar metodo sendo testado
+bean.test();
+}
+}
