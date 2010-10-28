@@ -43,25 +43,21 @@ public class VinculoProvaFaseDaoBean extends HibernateDaoGenerico<VinculoProvaFa
         return VinculoProvaFase.class;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void inserir(VinculoProvaFase vinculoProvaFase) {
         inserirEntidade(vinculoProvaFase);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void atualizar(VinculoProvaFase vinculoProvaFase) {
         atualizarEntidade(vinculoProvaFase);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void excluir(VinculoProvaFase vinculoProvaFase) {
         excluirEntidade(vinculoProvaFase);
     }
 
-    /** {@inheritDoc} */
     @Override
     @SuppressWarnings("unchecked")
     public Set<VinculoProvaFase> selecionar(Fase fase) {
@@ -73,7 +69,6 @@ public class VinculoProvaFaseDaoBean extends HibernateDaoGenerico<VinculoProvaFa
     }
 
 
-    /** {@inheritDoc} */
     @Override
     @SuppressWarnings("unchecked")
     public List<VinculoProvaFase> selecionar(OfertaCargoConcurso oferta) {

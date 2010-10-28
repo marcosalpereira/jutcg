@@ -8,184 +8,175 @@ import java.util.List;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-
 public class Method {
-	/**
-	 * Method name.
-	 */
-	private String name;
+    /**
+     * Method name.
+     */
+    private String name;
 
-	/**
-	 * Method return type.
-	 */
-	private Type type;
+    /**
+     * Method return type.
+     */
+    private Type type;
 
-	/**
-	 * Method's parameters.
-	 */
-	private List<FormalParameter> formalParameters = new ArrayList<FormalParameter>();
+    /**
+     * Method's parameters.
+     */
+    private List<FormalParameter> formalParameters = new ArrayList<FormalParameter>();
 
-	/**
-	 * Method protection.
-	 */
-	private Protection protection;
+    /**
+     * Method protection.
+     */
+    private Protection protection;
 
-	private List<Flow> flows = new ArrayList<Flow>();
+    private List<Flow> flows = new ArrayList<Flow>();
 
-	/**
-	 * Parent class.
-	 */
-	private JavaClass javaClass;
+    /**
+     * Parent class.
+     */
+    private JavaClass javaClass;
 
+    public List<Flow> getFlows() {
+        return this.flows;
+    }
 
+    public void setFlows(final List<Flow> flows) {
+        this.flows = flows;
+    }
 
-	public List<Flow> getFlows() {
-		return flows;
-	}
+    public void setJavaClass(final JavaClass javaClass) {
+        this.javaClass = javaClass;
+    }
 
-	public void setFlows(List<Flow> flows) {
-		this.flows = flows;
-	}
+    public JavaClass getJavaClass() {
+        return this.javaClass;
+    }
 
-	public void setJavaClass(JavaClass javaClass) {
-		this.javaClass = javaClass;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public JavaClass getJavaClass() {
-		return javaClass;
-	}
+    public void setName(final String name) {
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public Type getType() {
+        return this.type;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setType(final Type returnType) {
+        this.type = returnType;
+    }
 
-	public Type getType() {
-		return type;
-	}
+    public List<FormalParameter> getFormalParameters() {
+        return this.formalParameters;
+    }
 
-	public void setType(Type returnType) {
-		this.type = returnType;
-	}
+    public void setFormalParameters(final List<FormalParameter> params) {
+        this.formalParameters = params;
+    }
 
-	public List<FormalParameter> getFormalParameters() {
-		return formalParameters;
-	}
+    public Protection getProtection() {
+        return this.protection;
+    }
 
-	public void setFormalParameters(List<FormalParameter> params) {
-		this.formalParameters = params;
-	}
+    public void setProtection(final Protection protection) {
+        this.protection = protection;
+    }
 
-	public Protection getProtection() {
-		return protection;
-	}
+    public boolean isVoid() {
+        return this.type == null;
+    }
 
-	public void setProtection(Protection protection) {
-		this.protection = protection;
-	}
-
-	public boolean isVoid() {
-		return type == null;
-	}
-
-	/**
-	 * <p>
-	 * Returns the abbreviated method signature: The method name, followed by the parameter
-	 * types. This is typically used in logging statements.
-	 * </p>
-	 */
-	public String getLoggingSignature() {
-		StringBuilder result = new StringBuilder(getName());
-		result.append('(');
-		result.append(getFormalParametersAsString(", "));
-		result.append(')');
-		return result.toString();
-	}
+    /**
+     * <p>
+     * Returns the abbreviated method signature: The method name, followed by
+     * the parameter types. This is typically used in logging statements.
+     * </p>
+     */
+    public String getLoggingSignature() {
+        final StringBuilder result = new StringBuilder(getName());
+        result.append('(');
+        result.append(getFormalParametersAsString(", "));
+        result.append(')');
+        return result.toString();
+    }
 
     /**
      * @param result
      */
-    private String getFormalParametersAsString(String separator) {
-        StringBuilder ret = new StringBuilder();
-        List<FormalParameter> params = getFormalParameters();
-		for (int i = 0; i < params.size(); i++) {
-			if (i > 0) {
-				ret.append(separator);
-			}
-			ret.append(params.get(i).getType().getName());
-		}
-		return ret.toString();
+    private String getFormalParametersAsString(final String separator) {
+        final StringBuilder ret = new StringBuilder();
+        final List<FormalParameter> params = getFormalParameters();
+        for (int i = 0; i < params.size(); i++) {
+            if (i > 0) {
+                ret.append(separator);
+            }
+            ret.append(params.get(i).getType().getName());
+        }
+        return ret.toString();
     }
 
-	public boolean isPrivate() {
-		return protection == Protection.PRIVATE;
-	}
+    public boolean isPrivate() {
+        return this.protection == Protection.PRIVATE;
+    }
 
-	public boolean isGetter() {
-		return getName().startsWith("is") || getName().startsWith("get");
-	}
+    public boolean isGetter() {
+        return getName().startsWith("is") || getName().startsWith("get");
+    }
 
-	public boolean isSetter() {
-		return getName().startsWith("set");
-	}
+    public boolean isSetter() {
+        return getName().startsWith("set");
+    }
 
-	public boolean isNotVoid() {
-		return !isVoid();
-	}
+    public boolean isNotVoid() {
+        return !isVoid();
+    }
 
-	/**
-	 * The name for a method that tests this method at flow informed.
-	 * @return the name founded
-	 */
-	public String getNameForTest(Flow flow) {
-	    String ret = "test" + upperCaseFirstChar(getName());
-	    if (isOverload()) {
+    /**
+     * The name for a method that tests this method at flow informed.
+     *
+     * @return the name founded
+     */
+    public String getNameForTest(final Flow flow) {
+        String ret = "test" + upperCaseFirstChar(getName());
+        if (isOverload()) {
             ret += getFormalParametersAsString("");
-	    }
-	    if (getFlows().size() > 1) {
-	        ret += flow.getName();
-	    }
-	    return ret;
-	}
-
-
-	private boolean isOverload() {
-	    return getJavaClass().isAnOverloadedMethod(this);
+        }
+        if (getFlows().size() > 1) {
+            ret += flow.getName();
+        }
+        return ret;
     }
 
-
+    private boolean isOverload() {
+        return getJavaClass().isAnOverloadedMethod(this);
+    }
 
     /** {@inheritDoc} */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
         if (obj instanceof Method) {
-            Method that = (Method) obj;
-            return new EqualsBuilder()
-                .append(this.getLoggingSignature(), that.getLoggingSignature())
-                .isEquals();
+            final Method that = (Method) obj;
+            return new EqualsBuilder().append(this.getLoggingSignature(),
+                    that.getLoggingSignature()).isEquals();
         }
 
         return false;
     }
 
-    /**{@inheritDoc}*/
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(123, 445)
-            .append(this.getLoggingSignature())
-            .toHashCode();
+        return new HashCodeBuilder(123, 445).append(this.getLoggingSignature()).toHashCode();
     }
 
-	@Override
-	public String toString() {
-	    return this.name;
-	}
-
+    @Override
+    public String toString() {
+        return this.name;
+    }
 
 }

@@ -25,7 +25,9 @@ private Var criarMockVar() {
   return mock;
 }
 
-/** Configuracoes iniciais. */
+/**
+ * Configuracoes iniciais.
+ */
 @Before
 public void setUp() {
   bean = new Bean();

@@ -3,137 +3,146 @@ package br.gov.serpro.tools.junit.model;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-
 public class Type {
-	private String name;
+    public static final Type VOID = new Type("void");
 
-	private String variableName;
+    private String name;
 
-	private boolean primitive;
+    private String variableName;
 
-	private String fullName;
+    private boolean primitive;
 
-	private Type[] generic; 
+    private String fullName;
 
-	public Type[] getGeneric() {
-		if (generic != null) return generic;
-		
-		int iniGen = this.name.indexOf('<');
-		int lastIniGen = this.name.lastIndexOf('<');
+    private Type[] generic;
 
-		//if a complex generic, like List<List<?>>
-		//we will ignore
-		if (iniGen != lastIniGen) return null;
+    public Type() {
 
-		if (iniGen > 0) {
-			int endGen = this.name.indexOf('>');
-			String sNomes = this.name.substring(iniGen+1, endGen);
-			String[] aNomes = sNomes.split(",");
-			generic = new Type[aNomes.length];
-			for(int i=0; i<aNomes.length; i++) {
-				final String nome = aNomes[i].trim();
-				generic[i] = new Type();
-				generic[i].setName(nome);
-				generic[i].setFullName(nome);
-				generic[i].setPrimitive(Character.isLowerCase(nome.charAt(0)));
-			}
-		}
+    }
 
-		return generic;
-	}
+    public Type(final String name) {
+        this.name = name;
+        this.fullName = name;
+        this.setPrimitive(Character.isLowerCase(name.charAt(0)));
+    }
 
-	/**
-	 * note: map is considered a collection too.
-	 * @return <code>true</code> if is a List, Set or Map
-	 */
-	public boolean isCollection() {
-		return isList() || isSet() || isMap();
-	}
+    public Type[] getGeneric() {
+        if (this.generic != null) return this.generic;
 
-	public String getDefaultCollectionImpl() {
-		if (isMap()) return "HashMap";
-		if (isSet()) return "HashSet";
-		if (isList()) return "ArrayList";
-		return null;
-	}
+        final int iniGen = this.name.indexOf('<');
+        final int lastIniGen = this.name.lastIndexOf('<');
 
-	public boolean isSet() {
-		return name.startsWith("Set");
-	}
-	
-	public boolean isMap() {
-		return name.startsWith("Map");
-	}
+        // if a complex generic, like List<List<?>>
+        // we will ignore
+        if (iniGen != lastIniGen) return null;
 
-	public boolean isList() {
-		return name.startsWith("List");
-		}
+        if (iniGen > 0) {
+            final int endGen = this.name.indexOf('>');
+            final String sNomes = this.name.substring(iniGen + 1, endGen);
+            final String[] aNomes = sNomes.split(",");
+            this.generic = new Type[aNomes.length];
+            for (int i = 0; i < aNomes.length; i++) {
+                final String nome = aNomes[i].trim();
+                this.generic[i] = new Type(nome);
+            }
+        }
 
-	public String getName() {
-		return name;
-	}
+        return this.generic;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-		this.variableName = defineVariableName();
-	}
+    /**
+     * note: map is considered a collection too.
+     *
+     * @return <code>true</code> if is a List, Set or Map
+     */
+    public boolean isCollection() {
+        return isList() || isSet() || isMap();
+    }
 
-	public void setPrimitive(boolean primitive) {
-		this.primitive = primitive;
-	}
+    public String getDefaultCollectionImpl() {
+        if (isMap()) return "HashMap";
+        if (isSet()) return "HashSet";
+        if (isList()) return "ArrayList";
+        return null;
+    }
 
-	public boolean isPrimitive() {
-		return primitive;
-	}
+    public boolean isSet() {
+        return this.name.startsWith("Set");
+    }
 
-	public String getVariableName() {
-		return variableName;
-	}
+    public boolean isMap() {
+        return this.name.startsWith("Map");
+    }
 
-	private String defineVariableName() {
-		if (name == null) {
-			return null;
-		} else {
-			return name.substring(0, 1).toLowerCase() + name.substring(1);
-		}
-	}
+    public boolean isList() {
+        return this.name.startsWith("List");
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		return name;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
-	}
+    public void setName(final String name) {
+        this.name = name;
+        this.variableName = defineVariableName();
+    }
 
-	public String getFullName() {
-		if (fullName == null) fullName = name;
-		return fullName;
-	}
+    public void setPrimitive(final boolean primitive) {
+        this.primitive = primitive;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj instanceof Type) {
-			Type that = (Type) obj;
-			return new EqualsBuilder()
-				.append(this.getFullName(), that.getFullName())
-				.isEquals();
-		}
+    public boolean isPrimitive() {
+        return this.primitive;
+    }
 
-		return false;
-	}
+    public String getVariableName() {
+        return this.variableName;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder(795681801, 961628501).append(
-				this.getFullName()).toHashCode();
-	}
+    private String defineVariableName() {
+        if (this.name == null) {
+            return null;
+        } else {
+            return this.name.substring(0, 1).toLowerCase()
+                    + this.name.substring(1);
+        }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return this.name;
+    }
+
+    public void setFullName(final String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getFullName() {
+        if (this.fullName == null) this.fullName = this.name;
+        return this.fullName;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof Type) {
+            final Type that = (Type) obj;
+            return new EqualsBuilder().append(this.getFullName(),
+                    that.getFullName()).isEquals();
+        }
+
+        return false;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(795681801, 961628501).append(
+                this.getFullName()).toHashCode();
+    }
 
 }

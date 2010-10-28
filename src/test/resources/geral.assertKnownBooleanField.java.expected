@@ -15,7 +15,9 @@ public class TestBean  {
  */
 private Bean bean;
 
-/** Configuracoes iniciais. */
+/**
+ * Configuracoes iniciais.
+ */
 @Before
 public void setUp() {
   bean = new Bean();

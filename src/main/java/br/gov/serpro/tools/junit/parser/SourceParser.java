@@ -9,10 +9,12 @@ import br.gov.serpro.tools.junit.model.JavaClass;
  */
 public interface SourceParser {
 
-	/**
-	 * @param javaSourceFile java source file. 
-	 * @return {@link JavaClass} built from suplied file
-	 * @throws ParseException in case of some parsing error
-	 */
+    /**
+     * @param javaSourceFile
+     *            java source file.
+     * @return {@link JavaClass} built from suplied file
+     * @throws ParseException
+     *             in case of some parsing error
+     */
 	JavaClass parse(File javaSourceFile) throws ParseException;
 }

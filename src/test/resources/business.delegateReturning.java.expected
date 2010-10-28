@@ -29,7 +29,9 @@ private CampoAtuacaoDao criarMockCampoAtuacaoDao() {
   return mock;
 }
 
-/** Configuracoes iniciais. */
+/**
+ * Configuracoes iniciais.
+ */
 @Before
 public void setUp() {
   campoAtuacaoBusinessBean = new CampoAtuacaoBusinessBean();
@@ -40,6 +42,7 @@ public void setUp() {
  */
 @Test
 public void testAlterarSituacaoDosCamposDeAtuacaoDoCargo() {
+
 // variaveis usadas
 final boolean alterarSituacaoDosCamposDeAtuacaoDoCargoFromMock = false;
 final boolean alterarSituacaoDosCamposDeAtuacaoDoCargoEsperado = false;

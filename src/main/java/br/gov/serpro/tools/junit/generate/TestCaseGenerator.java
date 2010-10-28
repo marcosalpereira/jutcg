@@ -2,248 +2,307 @@ package br.gov.serpro.tools.junit.generate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import br.gov.serpro.tools.junit.model.Field;
+import br.gov.serpro.tools.junit.model.Flow;
 import br.gov.serpro.tools.junit.model.JavaClass;
 import br.gov.serpro.tools.junit.model.Method;
+import br.gov.serpro.tools.junit.model.Protection;
 import br.gov.serpro.tools.junit.model.Type;
 import br.gov.serpro.tools.junit.util.GeneratorHelper;
-import br.gov.serpro.tools.junit.util.GlobalFlags;
-import br.gov.serpro.tools.junit.util.SourceBuilder;
 
+/**
+ * Class for generating test cases.
+ */
 public class TestCaseGenerator {
-	private static final String IMPL_DAO_SUFIX = "DaoBean";
+    /**
+     * Sufix for DAOs layer implementers.
+     */
+    private static final String IMPL_DAO_SUFIX = "DaoBean";
 
-	final private JavaClass classUnderTest;
-	final private List<Field> dependencies;
-	final private List<Method> selectedMethods;
-	final private String varNameForClassUnderTest;
+    /**
+     * Class under test.
+     */
+    private final JavaClass classUnderTest;
+    /**
+     * Dependencies of class under test.
+     */
+    private final List<Field> dependencies;
+    /**
+     * Methods selected for testing.
+     */
+    private final List<Method> selectedMethods;
+    /**
+     * Variable name for class under test.
+     */
+    private final String varNameForClassUnderTest;
 
-	public TestCaseGenerator(JavaClass classUnderTest) {
-		GlobalFlags.init(); 
-		this.classUnderTest = classUnderTest;
-		this.dependencies = selectDependencies();
-		this.selectedMethods = selectMethods();
-		this.varNameForClassUnderTest = classUnderTest.variableNameForType();
-	}
+    /**
+     * Test case being generated.
+     */
+    private final JunitTestCase testCase;
 
-	public String generate() {
-		final SourceBuilder sb = new SourceBuilder();
-		sb.append(generatePackageName());
-		sb.append(generateImports());
-		sb.append(generateClassStart());
-		sb.append(generateFields());
-		sb.append(generateCreateMockMethods());
-		sb.append(generateAbstractImpls());
-		sb.append(generateSetup());
-		sb.append(generateMethods());
-		sb.append(generateClassEnd());
-		return sb.toString();
-	}
+    /**
+     * Constructor.
+     * @param classUnderTest class under test
+     */
+    public TestCaseGenerator(final JavaClass classUnderTest) {
+        this.testCase = new JunitTestCase();
+        this.classUnderTest = classUnderTest;
+        this.dependencies = selectDependencies();
+        this.selectedMethods = selectMethods();
+        this.varNameForClassUnderTest = classUnderTest.variableNameForType();
+    }
 
-	String generateCreateMockMethods() {
-		final SourceBuilder sb = new SourceBuilder();
-		for (final Field dependency : dependencies) {
-		    if (classUnderTest.existsAnyInvocation(dependency)) {
-		        sb.append(generateCreateMockMethod(dependency));
-		    }
-		}
-		return sb.toString();
-	}
+    /**
+     * Start test case generator.
+     * @return test case generated.
+     */
+    public JunitTestCase generate() {
+        generatePackageName();
+        generateImports();
+        generateJavadoc();
+        generateName();
+        generateParent();
+        generateFields();
+        generateCreateMockMethods();
+        generateAbstractImpls();
+        generateSetup();
+        generateMethods();
+        return this.testCase;
+    }
 
-	String generateCreateMockMethod(Field dependency) {
-		final SourceBuilder sb = new SourceBuilder();
-		sb.appendln();
-		sb.appendJavaDoc("Cria o mock {@link %s} e seta na classe sendo testada.\n" +
-				"@return o mock criado", dependency.getType());
-		sb.appendln("private %1$s criarMock%1$s() {", dependency.getType());
-		sb.appendln("  %1$s mock = createStrictMock(%1$s.class);", dependency.getType());
-		sb.appendln("  %s.set%s(mock);", varNameForClassUnderTest,
-		    GeneratorHelper.upperCaseFirstChar(dependency.getName()));
-		sb.appendln("  return mock;");
-		sb.appendln("}");
-		return sb.toString();
-	}
+    /**
+     * Create mock methods for each dependency of class under test.
+     */
+    private void generateCreateMockMethods() {
+        final Set<TestMethod> methods = this.testCase.getTestMethods();
+        for (final Field dependency : this.dependencies) {
+            if (this.classUnderTest.existsAnyInvocation(dependency)) {
+                methods.add(generateCreateMockMethod(dependency));
+            }
+        }
+    }
 
-	private List<Method> selectMethods() {
-		final List<Method> Methods = classUnderTest.getMethods();
-		final List<Method> ret = new ArrayList<Method>();
-		for (final Method Method : Methods) {
-			if (!ignoreMethod(Method)) {
-				ret.add(Method);
-			}
-		}
-		return ret;
-	}
+    /**
+     * Create an method that create an mock for dependency informed.
+     * @param dependency dependency
+     * @return the method created
+     */
+    private TestMethod generateCreateMockMethod(final Field dependency) {
+        final TestMethod method = new TestMethod();
+        method.setName("criarMock" + dependency.getType());
+        method.setJavaDoc("Cria o mock {@link %s} e seta na classe sendo testada.\n"
+                + "@return o mock criado", dependency.getType());
+        method.setProtection(Protection.PRIVATE);
+        method.setType(dependency.getType());
 
-	private List<Field> selectDependencies() {
-		final List<Field> fields = classUnderTest.getFields();
-		final List<Field> ret = new ArrayList<Field>();
-		for (final Field field : fields) {
-			if (!ignoreField(field)) {
-				ret.add(field);
-			}
-		}
-		return ret;
-	}
+        method.getGeneralCode().addCode("  %1$s mock = createStrictMock(%1$s.class);",
+                dependency.getType());
+        method.getGeneralCode().addCode("  %s.set%s(mock);", this.varNameForClassUnderTest,
+                GeneratorHelper.upperCaseFirstChar(dependency.getName()));
+        method.getGeneralCode().addCode("  return mock;");
 
-	String generateMethods() {
-		final SourceBuilder sb = new SourceBuilder();
-		for (final Method method : selectedMethods) {
-			sb.append(
-			    new TestCaseMethodGenerator(method, dependencies)
-					.generate());
-		}
-		return sb.toString();
-	}
+        return method;
+    }
 
-	private boolean ignoreMethod(Method method) {
-		if (method.isPrivate() || method.isGetter() || method.isSetter()) {
-			return true;
-		}
-		return false;
-	}
+    /**
+     * Select the apropriated methods that needs to be tested.
+     * @return the methods
+     */
+    private List<Method> selectMethods() {
+        final List<Method> methods = this.classUnderTest.getMethods();
+        final List<Method> ret = new ArrayList<Method>();
+        for (final Method method : methods) {
+            if (!isToIgnoreMethod(method)) {
+                ret.add(method);
+            }
+        }
+        return ret;
+    }
 
-	/**
-	 * Gerar metodos que a classe de teste precisa implementar.
-	 * @return o codigo gerado
-	 */
-	String generateAbstractImpls() {
-		if (!classUnderTest.isAtDao()) {
-			return "";
-		}
-		final SourceBuilder sb = new SourceBuilder();
-		final String dsxml = varNameForClassUnderTest.replace(IMPL_DAO_SUFIX, "") + "DS.xml";
-		sb.appendln()
-			.appendln("/** {@inheritDoc} */")
-    		.appendln("@Override")
-    		.appendln("protected IDataSet getDataSet() {")
-    		.appendln("  return recuperarDataSet(\"%s\");", dsxml)
-    		.appendln("}");
-		return sb.toString();
+    /**
+     * Select the fields that are class dependencies. Normally injected fields.
+     * @return the dependecies.
+     */
+    private List<Field> selectDependencies() {
+        final List<Field> fields = this.classUnderTest.getFields();
+        final List<Field> ret = new ArrayList<Field>();
+        for (final Field field : fields) {
+            if (!ignoreField(field)) {
+                ret.add(field);
+            }
+        }
+        return ret;
+    }
 
-	}
+    /**
+     * Generate the testing methods.
+     */
+    private void generateMethods() {
+        final Set<TestMethod> methods = this.testCase.getTestMethods();
+        for (final Method method : this.selectedMethods) {
+            for (final Flow flow : method.getFlows()) {
+                methods.add(new TestCaseMethodFlowGenerator(this.testCase, flow,
+                        this.dependencies).generate());
+            }
+        }
+    }
 
-	String generateSetup() {
-		final SourceBuilder sb = new SourceBuilder();
-		sb.appendln();
-		if (classUnderTest.isAtView()) {
-			sb.appendln("/** {@inheritDoc} */");
-			sb.appendln("@Override");
-			sb.appendln("public void setUp() throws Exception {");
-			sb.appendln("  super.setUp();");
-		} else {
-			sb.appendln("/** Configuracoes iniciais. */");
-			sb.appendln("@Before");
-			sb.appendln("public void setUp() {");
-		}
-		sb.appendln("  %s = new %s();", varNameForClassUnderTest, classUnderTest.getType());
+    /**
+     * Verify if method is not bo tested.
+     * @param method method
+     * @return <code>true</code> if is a private, getter or setter method
+     */
+    private boolean isToIgnoreMethod(final Method method) {
+        if (method.isPrivate() || method.isGetter() || method.isSetter()) {
+            return true;
+        }
+        return false;
+    }
 
-		if (classUnderTest.isAtDao()) {
-			sb.appendln("%s.setEntityManager(getEntityManager());", varNameForClassUnderTest);
-		}
+    /**
+     * Gerar metodos que a classe de teste precisa implementar.
+     * @return o codigo gerado
+     */
+    private void generateAbstractImpls() {
+        if (!this.classUnderTest.isAtDao()) {
+            return;
+        }
+        final TestMethod method = new TestMethod();
+        this.testCase.getTestMethods().add(method);
 
-		sb.appendln("}");
-		return sb.toString();
-	}
+        final String dsxml = this.varNameForClassUnderTest.replace(IMPL_DAO_SUFIX, "")
+                + "DS.xml";
+        method.getAnnotations().add("Override");
+        method.setProtection(Protection.PROTECTED);
+        method.setType(new Type("IDataSet"));
+        method.setName("getDataSet");
+        method.getGeneralCode().addCode("  return recuperarDataSet(\"%s\");", dsxml);
+    }
 
-	String generateFields() {
-		final SourceBuilder sb = new SourceBuilder();
-		final Type type = classUnderTest.getType();
-		sb.appendln();
-		sb.appendJavaDoc("Classe sendo testada {@link %s}.", type);
-		sb.appendln("private %s %s;", type, type.getVariableName());
-		return sb.toString();
-	}
+    private void generateSetup() {
+        final TestMethod method = new TestMethod();
+        this.testCase.getTestMethods().add(method);
 
-	private boolean ignoreField(Field field) {
-		if (field.isStatic())
-			return true;
+        if (this.classUnderTest.isAtView()) {
+            method.getAnnotations().add("Override");
+            method.setProtection(Protection.PUBLIC);
+            method.setName("setUp");
+            method.getExceptions().add("Exception");
+            method.getGeneralCode().addCode("  super.setUp();");
+        } else {
+            method.setJavaDoc("Configuracoes iniciais.");
+            method.getAnnotations().add("Before");
+            method.setProtection(Protection.PUBLIC);
+            method.setName("setUp");
+        }
+        method.getGeneralCode().addCode("  %s = new %s();", this.varNameForClassUnderTest,
+                this.classUnderTest.getType());
 
-		if (!field.isPrivate())
-			return true;
+        if (this.classUnderTest.isAtDao()) {
+            method.getGeneralCode().addCode("%s.setEntityManager(getEntityManager());",
+                    this.varNameForClassUnderTest);
+        }
+    }
 
-		for (final String annotation : field.getAnnotations()) {
-			if (annotation.equals("In") || annotation.equals("EJB")) {
-				return false;
-			}
-		}
+    private void generateFields() {
+        final Type type = this.classUnderTest.getType();
+        final TestField field = new TestField();
+        this.testCase.getFields().add(field);
+        field.setJavaDoc("Classe sendo testada {@link %s}.", type);
+        field.setProtection(Protection.PRIVATE);
+        field.setType(type);
+        field.setName(type.getVariableName());
+    }
 
-		return true;
-	}
+    private boolean ignoreField(final Field field) {
+        if (field.isStatic()) return true;
 
-	String generateImports() {
-		final SourceBuilder sb = new SourceBuilder();
+        if (!field.isPrivate()) return true;
 
-		sb.appendln();
-		//include all imports of class under test
-		for (final String imp : classUnderTest.getImports()) {
-			sb.appendln("import %s;", imp);
-		}
+        for (final String annotation : field.getAnnotations()) {
+            if (annotation.equals("In") || annotation.equals("EJB")) {
+                return false;
+            }
+        }
 
-		sb.appendln("import static org.easymock.EasyMock.*;");
-		sb.appendln("import org.junit.*;");
-		sb.appendln("import java.util.*;");
-		sb.appendln("import static org.junit.Assert.*;");
-		if (classUnderTest.isAtView()) {
-			sb.appendln("import br.gov.esaf.sgc.view.JsfTestCase;");
-		}
-		if (classUnderTest.isAtDao()) {
-			sb.appendln("import br.gov.esaf.sgc.dao.impl.HibernateTestCase;");
-		}
-		return sb.toString();
-	}
+        return true;
+    }
 
-	String generateClassEnd() {
-	    SourceBuilder sb = new SourceBuilder();
-	    if (GlobalFlags.isNewHashMapUsed()) {
-            sb.appendJavaDoc("Criar um HashMap e colocar a chave/valor passados nele."
-                    + "\n @param <K> tipo base da chave"
-                    + "\n @param <V> tipo base do valor"
-                    + "\n @param key chave"
-                    + "\n @param value valor"
-                    + "\n @return o HashMap criado. ");
-            sb.appendln("private <K, V> Map<K, V> newHashMap(K key, V value) {");
-            sb.appendln("    Map<K, V> ret = new HashMap<K, V>();");
-            sb.appendln("    ret.put(key, value);");
-            sb.appendln("    return ret;");
-            sb.appendln("}");
-	    }
+    private void generateImports() {
+        final Set<String> imports = this.testCase.getImports();
 
-	    if (GlobalFlags.isNewHashSet()) {
-	        sb.appendJavaDoc("Criar um HashSet e colocar o valor passado nele."
-	            + "\n @param <T> tipo base do valor"
-	            + "\n @param value valor"
-	            + "\n @return o HashSet criado. ");
-	        sb.appendln("private <V> Set<V> newHashSet(V value) {");
-	        sb.appendln("    Set<V> ret = new HashSet<V>();");
-	        sb.appendln("    ret.add(value);");
-	        sb.appendln("    return ret;");
-	        sb.appendln("}");
-	    }
-	    sb.appendln("}");
-		return sb.toString();
-	}
+        // include all imports of class under test
+        imports.addAll(this.classUnderTest.getImports());
 
-	String generateClassStart() {
-		final SourceBuilder sb = new SourceBuilder();
-		sb.appendln();
-		String extendz = "";
-		if (classUnderTest.isAtView()) {
-			extendz = "extends JsfTestCase";
-		} else if (classUnderTest.isAtDao()) {
-			extendz = "extends HibernateTestCase";
-		}
+        imports.add("static org.easymock.EasyMock.*");
+        imports.add("org.junit.*");
+        imports.add("java.util.*");
+        imports.add("static org.junit.Assert.*");
+        if (this.classUnderTest.isAtView()) {
+            imports.add("br.gov.esaf.sgc.view.JsfTestCase");
+        }
+        if (this.classUnderTest.isAtDao()) {
+            imports.add("br.gov.esaf.sgc.dao.impl.HibernateTestCase");
+        }
+    }
 
-		sb.appendJavaDoc("Testes unitarios para a classe {@link %s}.", classUnderTest
-				.getType());
-		sb.appendln("public class Test%s %s {", classUnderTest.getType(), extendz);
+    // @Deprecated
+    // private String generateClassEnd() {
+    // final SourceBuilder sb = new SourceBuilder();
+    // if (GlobalFlags.isNewHashMapUsed()) {
+    // sb
+    // .appendJavaDoc("Criar um HashMap e colocar a chave/valor passados nele."
+    // + "\n @param <K> tipo base da chave"
+    // + "\n @param <V> tipo base do valor"
+    // + "\n @param key chave"
+    // + "\n @param value valor"
+    // + "\n @return o HashMap criado. ");
+    // sb
+    // .appendln("private <K, V> Map<K, V> newHashMap(K key, V value) {");
+    // sb.appendln("    Map<K, V> ret = new HashMap<K, V>();");
+    // sb.appendln("    ret.put(key, value);");
+    // sb.appendln("    return ret;");
+    // sb.appendln("}");
+    // }
+    //
+    // if (GlobalFlags.isNewHashSet()) {
+    // sb
+    // .appendJavaDoc("Criar um HashSet e colocar o valor passado nele."
+    // + "\n @param <T> tipo base do valor"
+    // + "\n @param value valor"
+    // + "\n @return o HashSet criado. ");
+    // sb.appendln("private <V> Set<V> newHashSet(V value) {");
+    // sb.appendln("    Set<V> ret = new HashSet<V>();");
+    // sb.appendln("    ret.add(value);");
+    // sb.appendln("    return ret;");
+    // sb.appendln("}");
+    // }
+    // sb.appendln("}");
+    // return sb.toString();
+    // }
 
-		return sb.toString();
-	}
+    private void generateName() {
+        this.testCase.setName(String.format("Test%s", this.classUnderTest.getType()));
+    }
 
-	String generatePackageName() {
-		return "package " + classUnderTest.getPackageName() + ";\n";
-	}
+    private void generateJavadoc() {
+        this.testCase.setJavaDoc("Testes unitarios para a classe {@link %s}.",
+                this.classUnderTest.getType());
+    }
+
+    private void generateParent() {
+        if (this.classUnderTest.isAtView()) {
+            this.testCase.setParent("JsfTestCase");
+        } else if (this.classUnderTest.isAtDao()) {
+            this.testCase.setParent("HibernateTestCase");
+        }
+    }
+
+    void generatePackageName() {
+        this.testCase.setPackage(this.classUnderTest.getPackageName());
+    }
 
 }

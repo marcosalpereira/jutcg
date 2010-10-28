@@ -13,71 +13,88 @@ import br.gov.serpro.tools.junit.model.FormalParameter;
 import br.gov.serpro.tools.junit.model.JavaClass;
 import br.gov.serpro.tools.junit.model.Method;
 import br.gov.serpro.tools.junit.model.Flow.FlowBranch;
-import br.gov.serpro.tools.junit.util.SourceBuilder;
 
 public class TestCaseMethodFlowGenerator {
-	final private Method method;
-	final private Flow flow;
-	final private JavaClass classUnderTest;
-	final private String varNameForClassUnderTest;
-	final private Set<Field> usedDependencies;
-	final private NextValueForType nextValueForType;
+    private final Method method;
+    private final Flow flow;
+    private final JavaClass classUnderTest;
+    private final String varNameForClassUnderTest;
+    private final Set<Field> usedDependencies;
+    private final NextValueForType nextValueForType;
+    private final TestMethod testMethod;
 
-	public TestCaseMethodFlowGenerator(final Flow flow, final List<Field> dependencies) {
-		this.flow = flow;
-		this.method = flow.getMethod();
-		this.classUnderTest = method.getJavaClass();
-		this.varNameForClassUnderTest = classUnderTest.variableNameForType();
-		this.usedDependencies = selectUsedDependencies(dependencies);
-		this.nextValueForType = new NextValueForType();
-	}
+    public TestCaseMethodFlowGenerator(final JunitTestCase testCase,
+            final Flow flow, final List<Field> dependencies) {
+        this.flow = flow;
+        this.method = flow.getMethod();
+        this.classUnderTest = this.method.getJavaClass();
+        this.varNameForClassUnderTest = this.classUnderTest
+                .variableNameForType();
+        this.usedDependencies = selectUsedDependencies(dependencies);
+        this.nextValueForType = new NextValueForType();
+        this.testMethod = new TestMethod();
+    }
 
-	private Set<Field> selectUsedDependencies(final List<Field> dependencies) {
-		final Set<Field> ret = new HashSet<Field>();
-		for (final FieldMethodInvocation invocation : flow.getInvocations()) {
-			if (dependencies.contains(invocation.getInvokedAtField())) {
-				ret.add(invocation.getInvokedAtField());
-			}
-		}
-		return ret;
-	}
+    public TestMethod generate() {
+        generateJavadoc();
+        generateName();
+        generateAnnotations();
+        generateUsedVars();
+        generateConfigMocks();
+        generateConfigInternalState();
+        generateInvokeMethod();
+        generateCheckMocks();
+        generateVerifys();
+        return this.testMethod;
+    }
 
-	public String generate() {
-		final SourceBuilder sb = new SourceBuilder();
-		sb.appendln();
+    private void generateJavadoc() {
+        if (!this.flow.getFlowBranches().isEmpty()) {
+            this.testMethod.setJavaDoc("Teste para o metodo {@link %s#%s}."
+                    + "\nDescricao do Fluxo: %s.", this.method.getJavaClass()
+                    .getType(), this.method.getLoggingSignature(),
+                    generateFlowDescription(this.flow.getFlowBranches()));
+        } else {
+            this.testMethod.setJavaDoc("Teste para o metodo {@link %s#%s}.",
+                    this.method.getJavaClass().getType(), this.method
+                            .getLoggingSignature());
+        }
+    }
 
-		if (!flow.getFlowBranches().isEmpty()) {
-			sb.appendJavaDoc("Teste para o metodo {@link %s#%s}."
-			    + "\nDescricao do Fluxo: %s.",
-				method.getJavaClass().getType(),
-				method.getLoggingSignature(),
-				generateFlowDescription(flow.getFlowBranches()));
-		} else {
-			sb.appendJavaDoc("Teste para o metodo {@link %s#%s}.",
-					method.getJavaClass().getType(), method.getLoggingSignature());
-		}
+    private void appendAssertionKnownWrittenValue(final Field f) {
+        if (f.isEndFlowValueNullLiteral()) {
+            this.testMethod.getAsserts().addCode("assertNull(%s.%s());",
+                    this.varNameForClassUnderTest, f.getGetter());
+        } else if (f.isEndFlowValueBooleanLiteral()) {
+            if (f.isEndFlowValueTrueLiteral()) {
+                this.testMethod.getAsserts().addCode("assertTrue(%s.%s());",
+                        this.varNameForClassUnderTest, f.getGetter());
+            } else {
+                this.testMethod.getAsserts().addCode("assertFalse(%s.%s());",
+                        this.varNameForClassUnderTest, f.getGetter());
+            }
+        } else {
+            this.testMethod.getAsserts().addCode("assertEquals(%s, %s.%s());",
+                    f.getEndFlowValue(), this.varNameForClassUnderTest,
+                    f.getGetter());
+        }
+    }
 
-		final String usedVars = generateUsedVars();
-		final String configMocks = generateConfigMocks();
-		final String configInternalState = generateConfigInternalState();
-		final String invokeMethod = generateInvokeMethod();
-		final String checkMocks = generateCheckMocks();
-		final String verifys = generateVerifys();
+    /**
+     * @param params
+     * @return
+     */
+    private String concatMethodParams(final List<FormalParameter> params) {
+        String strParams = "";
+        for (final FormalParameter p : params) {
+            if (!strParams.isEmpty()) strParams += ",";
+            strParams += p.getVariableId();
+        }
+        return strParams;
+    }
 
-		sb.append(generateStartMethod());
-		sb.append(usedVars);
-		sb.append(configMocks);
-		sb.append(configInternalState);
-		sb.append(invokeMethod);
-		sb.append(checkMocks);
-		sb.append(verifys);
-		sb.append(generateEndMethod());
-
-		return sb.toString();
-	}
-
-	private String generateFlowDescription(final List<FlowBranch> flowBranches) {
-	    final StringBuilder sb = new StringBuilder();
+    private String generateFlowDescription(final List<FlowBranch> flowBranches) {
+        final StringBuilder sb = new StringBuilder();
         for (final FlowBranch flowBranch : flowBranches) {
             if (flowBranch.isEnter()) {
                 sb.append("\n    Entra: ");
@@ -90,197 +107,144 @@ public class TestCaseMethodFlowGenerator {
         return sb.toString();
     }
 
-    String generateEndMethod() {
-		return "}\n";
-	}
+    private String getInitialValue(final Field field) {
+        String initialValue = null;
+        if (field.isInitialValueFlowKnown()) {
+            initialValue = field.getInitialValueFlow();
+        } else {
+            initialValue = this.nextValueForType.next(field.getType());
+        }
+        return initialValue;
+    }
 
-	String generateVerifys() {
-		final SourceBuilder sb = new SourceBuilder();
-		boolean infoAppended = false;
+    private Set<Field> selectUsedDependencies(final List<Field> dependencies) {
+        final Set<Field> ret = new HashSet<Field>();
+        for (final FieldMethodInvocation invocation : this.flow
+                .getInvocations()) {
+            if (dependencies.contains(invocation.getInvokedAtField())) {
+                ret.add(invocation.getInvokedAtField());
+            }
+        }
+        return ret;
+    }
 
-		final Method returnInvocationMethod = flow.getReturnInvocationMethod();
-		if (returnInvocationMethod != null) {
-			sb.appendln("assertEquals(%sFromMock, %sReal);", returnInvocationMethod.getName(),
-					method.getName());
-			infoAppended = true;
-		} else if (!method.isVoid()) {
-			sb.appendln("assertEquals(esperado, %sReal);", method.getName());
-			infoAppended = true;
-		}
-
-		for (final Field f : flow.getWrittenFields()) {
-			if(f.isEndValueFlowKnown()) {
-				appendAssertionKnownWrittenValue(sb, f);
-			} else {
-				sb.appendln("final %s %sExpected = %s;", f.getType(), f.getGetter(), "<IDontKnowButYouDo>");
-				sb.appendln("assertEquals(%sExpected, %s.%s());",
-						f.getGetter(),
-						varNameForClassUnderTest,
-						f.getGetter());
-			}
-			infoAppended = true;
-		}
-
-		if (infoAppended) {
-		    sb.insertln(0, "\n// verificacoes do resultado do metodo sendo testado");
-		}
-
-		return sb.toString();
-	}
-
-	private void appendAssertionKnownWrittenValue(final SourceBuilder sb,
-			final Field f) {
-		if(f.isEndFlowValueNullLiteral()) {
-			sb.appendln("assertNull(%s.%s());",
-					varNameForClassUnderTest,
-					f.getGetter());
-		} else if(f.isEndFlowValueBooleanLiteral()){
-			if(f.isEndFlowValueTrueLiteral()) {
-				sb.appendln("assertTrue(%s.%s());",
-						varNameForClassUnderTest,
-						f.getGetter());
-			} else {
-				sb.appendln("assertFalse(%s.%s());",
-						varNameForClassUnderTest,
-						f.getGetter());
-			}
-		} else {
-			sb.appendln("assertEquals(%s, %s.%s());",
-					f.getEndFlowValue(),
-					varNameForClassUnderTest,
-					f.getGetter());
-		}
-	}
-
-	String generateInvokeMethod() {
-		final SourceBuilder sb = new SourceBuilder();
-		sb.appendln();
-		sb.appendln("// invocar metodo sendo testado");
-		final String strParams = concatMethodParams(method.getFormalParameters());
-		if (method.isVoid()) {
-			sb.appendln("%s.%s(%s);",
-					varNameForClassUnderTest,
-					method.getName(),
-					strParams);
-		} else {
-			sb.appendln("final %s %sReal = %s.%s(%s);",
-					method.getType().getName(),
-					method.getName(),
-					varNameForClassUnderTest,
-					method.getName(),
-					strParams);
-
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * @param params
-	 * @return
-	 */
-	private String concatMethodParams(final List<FormalParameter> params) {
-		String strParams = "";
-		for (final FormalParameter p : params) {
-			if (!strParams.isEmpty())
-				strParams += ",";
-			strParams += p.getVariableId();
-		}
-		return strParams;
-	}
-
-	String generateConfigInternalState() {
-
-		final List<Field> fields = flow.selectNonStaticReadFields();
-		fields.removeAll(usedDependencies);
-
-		if (fields.isEmpty()) return "";
-
-		final SourceBuilder sb = new SourceBuilder();
-		sb.appendln("\n// Configurando estado interno da classe sob teste");
-
-		for (final Field f : fields){
-			sb.appendln("%s.%s(%s);", varNameForClassUnderTest, f.getSetter(), f.getName());
-		}
-
-		return sb.toString();
-	}
-
-	String generateStartMethod() {
-		final SourceBuilder sb = new SourceBuilder();
-		sb.appendln("@Test");
-		sb.appendln("public void %s() {", method.getNameForTest(flow));
-		return sb.toString();
-	}
-
-	String generateConfigMocks() {
-	    return new ConfigMocksGenerator(flow, usedDependencies, nextValueForType)
-	       .generate();
-	}
-
-	String generateUsedVars() {
-		final SourceBuilder sb = new SourceBuilder();
-		final List<FormalParameter> params = method.getFormalParameters();
-		final Method returnInvocationMethod = flow.getReturnInvocationMethod();
-		final List<Field> readFields = flow.selectNonStaticReadFields();
-		readFields.removeAll(usedDependencies);
-
-		if (returnInvocationMethod != null || !params.isEmpty() || !readFields.isEmpty()) {
-			sb.appendln("// variaveis usadas");
-		}
-
-		//Declare readFields/written as local vars
-		for (final Field f : readFields){
-			sb.appendln("final %s %s = %s;", f.getType(), f.getName(),
-					getInitialValue(f));
+    private void generateCheckMocks() {
+        if (this.usedDependencies.isEmpty()) {
+            return;
         }
 
-		if (returnInvocationMethod != null) {
-			final String nextValue = nextValueForType.next(returnInvocationMethod.getType());
-			sb.appendln("final %s %sFromMock = %s;", returnInvocationMethod.getType(),
-					lowerCaseFirstChar(returnInvocationMethod.getName()),
-					nextValue);
-			sb.appendln("final %s %sEsperado = %s;", returnInvocationMethod.getType(),
-					lowerCaseFirstChar(returnInvocationMethod.getName()),
-					nextValue);
-		}
+        String mocks = "";
+        for (final Field dep : this.usedDependencies) {
+            mocks += dep.getName() + ",";
+        }
 
-		if (!params.isEmpty()) {
+        this.testMethod.getVerifys().addCode(
+                "verify(" + mocks.substring(0, mocks.length() - 1) + ");");
+    }
 
-			for (final FormalParameter fp : params) {
-				sb.appendln("final %s %s = %s;", fp.getType().getName(), fp
-						.getVariableId(), nextValueForType.next(fp.getType()));
-			}
-		}
-		return sb.toString();
-	}
+    private void generateConfigInternalState() {
 
-	private String getInitialValue(final Field field) {
-		String initialValue = null;
-		if (field.isInitialValueFlowKnown()) {
-			initialValue = field.getInitialValueFlow();
-		} else {
-			initialValue = nextValueForType.next(field.getType());
-		}
-		return initialValue;
-	}
+        final List<Field> fields = this.flow.selectNonStaticReadFields();
+        fields.removeAll(this.usedDependencies);
 
+        if (fields.isEmpty()) return;
 
-	String generateCheckMocks() {
-		if (usedDependencies.isEmpty()) {
-			return "";
-		}
+        for (final Field f : fields) {
+            this.testMethod.getConfigInternalState().addCode("%s.%s(%s);",
+                    this.varNameForClassUnderTest, f.getSetter(), f.getName());
+        }
+    }
 
-		final SourceBuilder sb = new SourceBuilder();
+    private void generateConfigMocks() {
+        new ConfigMocksGenerator(this.testMethod, this.flow,
+                this.usedDependencies, this.nextValueForType).generate();
+    }
 
-		String mocks = "";
-		for (final Field dep : usedDependencies) {
-			mocks += dep.getName() + ",";
-		}
+    private void generateInvokeMethod() {
+        final String strParams = concatMethodParams(this.method
+                .getFormalParameters());
+        if (this.method.isVoid()) {
+            this.testMethod.getInvokeMethod().addCode("%s.%s(%s);",
+                    this.varNameForClassUnderTest, this.method.getName(),
+                    strParams);
+        } else {
+            this.testMethod.getInvokeMethod().addCode(
+                    "final %s %sReal = %s.%s(%s);",
+                    this.method.getType().getName(), this.method.getName(),
+                    this.varNameForClassUnderTest, this.method.getName(),
+                    strParams);
 
-		sb.appendln();
-		sb.appendln("// checar estados dos mocks");
-		sb.appendln("verify(" + mocks.substring(0, mocks.length() - 1) + ");");
-		return sb.toString();
-	}
+        }
+    }
+
+    private void generateName() {
+        this.testMethod.setName(this.method.getNameForTest(this.flow));
+    }
+
+    private void generateAnnotations() {
+        this.testMethod.getAnnotations().add("Test");
+    }
+
+    private void generateUsedVars() {
+        final List<FormalParameter> params = this.method.getFormalParameters();
+        final Method returnInvocationMethod = this.flow
+                .getReturnInvocationMethod();
+        final List<Field> readFields = this.flow.selectNonStaticReadFields();
+        readFields.removeAll(this.usedDependencies);
+
+        // Declare readFields/written as local vars
+        for (final Field f : readFields) {
+            this.testMethod.getUsedVars().addCode("final %s %s = %s;",
+                    f.getType(), f.getName(), getInitialValue(f));
+        }
+
+        if (returnInvocationMethod != null) {
+            final String nextValue = this.nextValueForType
+                    .next(returnInvocationMethod.getType());
+            this.testMethod.getUsedVars().addCode("final %s %sFromMock = %s;",
+                    returnInvocationMethod.getType(),
+                    lowerCaseFirstChar(returnInvocationMethod.getName()),
+                    nextValue);
+            this.testMethod.getUsedVars().addCode("final %s %sEsperado = %s;",
+                    returnInvocationMethod.getType(),
+                    lowerCaseFirstChar(returnInvocationMethod.getName()),
+                    nextValue);
+        }
+
+        if (!params.isEmpty()) {
+            for (final FormalParameter fp : params) {
+                this.testMethod.getUsedVars().addCode("final %s %s = %s;",
+                        fp.getType().getName(), fp.getVariableId(),
+                        this.nextValueForType.next(fp.getType()));
+            }
+        }
+    }
+
+    private void generateVerifys() {
+        final Method returnInvocationMethod = this.flow
+                .getReturnInvocationMethod();
+        if (returnInvocationMethod != null) {
+            this.testMethod.getAsserts().addCode(
+                    "assertEquals(%sFromMock, %sReal);",
+                    returnInvocationMethod.getName(), this.method.getName());
+        } else if (!this.method.isVoid()) {
+            this.testMethod.getAsserts().addCode(
+                    "assertEquals(esperado, %sReal);", this.method.getName());
+        }
+
+        for (final Field f : this.flow.getWrittenFields()) {
+            if (f.isEndValueFlowKnown()) {
+                appendAssertionKnownWrittenValue(f);
+            } else {
+                this.testMethod.getAsserts().addCode(
+                        "final %s %sExpected = %s;", f.getType(),
+                        f.getGetter(), "<IDontKnowButYouDo>");
+                this.testMethod.getAsserts().addCode(
+                        "assertEquals(%sExpected, %s.%s());", f.getGetter(),
+                        this.varNameForClassUnderTest, f.getGetter());
+            }
+        }
+
+    }
 
 }
