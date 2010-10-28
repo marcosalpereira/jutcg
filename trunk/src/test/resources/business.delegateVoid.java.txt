@@ -22,8 +22,6 @@ public class CampoAtuacaoBusinessBean implements CampoAtuacaoBusiness {
         this.campoAtuacaoDao = campoAtuacaoDao;
     }
 
-
-    /** {@inheritDoc} */
     @Override
     public void alterarSituacaoDosCamposDeAtuacaoDoCargo(Cargo cargo, boolean novaSituacao) {
         campoAtuacaoDao.alterarSituacaoDosCamposDeAtuacaoDoCargo(cargo, novaSituacao);

@@ -29,7 +29,9 @@ private CampoAtuacaoDao criarMockCampoAtuacaoDao() {
   return mock;
 }
 
-/** Configuracoes iniciais. */
+/**
+ * Configuracoes iniciais.
+ */
 @Before
 public void setUp() {
   campoAtuacaoBusinessBean = new CampoAtuacaoBusinessBean();
@@ -42,6 +44,7 @@ public void setUp() {
  */
 @Test
 public void testAlterarSituacaoDosCamposDeAtuacaoDoCargoPath1() {
+
 // variaveis usadas
 final Cargo cargo = new Cargo(1);
 
@@ -66,6 +69,7 @@ verify(campoAtuacaoDao);
  */
 @Test
 public void testAlterarSituacaoDosCamposDeAtuacaoDoCargoPath2() {
+
 // variaveis usadas
 final Cargo cargo = new Cargo(1);
 

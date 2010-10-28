@@ -1,8 +1,10 @@
 package br.gov.serpro.tools.junit.model;
 
 public enum Protection {
-	DEFAULT,
-	PRIVATE,
-	PROTECTED,
-	PUBLIC;
+    DEFAULT, PRIVATE, PROTECTED, PUBLIC;
+
+    @Override
+    public String toString() {
+        return this.name().toLowerCase();
+    }
 }

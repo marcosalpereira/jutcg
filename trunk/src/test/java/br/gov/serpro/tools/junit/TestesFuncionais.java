@@ -27,8 +27,10 @@ public class TestesFuncionais {
     public final void testViewComExtensaoFluxo() throws IOException, ParseException {
         assertContentsEquals("/view.comExtensaoFluxo.java");
     }
+
     @Test
-    public final void testViewComExtensaoFluxoInvocacoesRetornadas() throws IOException, ParseException {
+    public final void testViewComExtensaoFluxoInvocacoesRetornadas() throws IOException,
+            ParseException {
         assertContentsEquals("/view.comExtensaoFluxo.invocacaoRetornada.java");
     }
 
@@ -73,7 +75,8 @@ public class TestesFuncionais {
     }
 
     @Test
-    public final void testSetKnownFieldInitialValueNotNull() throws IOException, ParseException {
+    public final void testSetKnownFieldInitialValueNotNull() throws IOException,
+            ParseException {
         assertContentsEquals("/geral.setKnownFieldInitialValueNotNull.java");
     }
 
@@ -88,36 +91,36 @@ public class TestesFuncionais {
     }
 
     @Test
-    public final void testSetKnownFieldEnumInitialValueUsingReflection() throws IOException, ParseException {
+    public final void testSetKnownFieldEnumInitialValueUsingReflection() throws IOException,
+            ParseException {
         assertContentsEquals("/geral.setKnownFieldEnumInitialValueUsingReflection.java");
     }
 
     @Test
-    public final void testSetKnownFieldConstantInitialValueUsingReflection() throws IOException, ParseException {
+    public final void testSetKnownFieldConstantInitialValueUsingReflection()
+            throws IOException, ParseException {
         assertContentsEquals("/geral.setKnownFieldConstantInitialValueUsingReflection.java");
     }
 
     /**
-     * @param inputFile input file
-     * @throws ParseException em caso de erro
-     * @throws IOException em caso de erro
+     * @param inputFile
+     *            input file
+     * @throws ParseException
+     *             em caso de erro
+     * @throws IOException
+     *             em caso de erro
      */
     private void assertContentsEquals(final String inputFile) throws ParseException,
-        IOException {
+            IOException {
         final SourceParser parser = new JsmgJavaSourceParser();
-        final JavaClass javaClass = parser
-            .parse(getFile(inputFile
-                + ".txt"));
+        final JavaClass javaClass = parser.parse(getFile(inputFile + ".txt"));
         final TestCaseGenerator testCaseGenerator = new TestCaseGenerator(javaClass);
-        assertEquals(getContents(inputFile
-            + ".expected"), testCaseGenerator
-            .generate());
+        assertEquals(getContents(inputFile + ".expected"), testCaseGenerator.generate()
+                .asCode());
     }
 
     public String getContents(final String resource) throws IOException {
-        final InputStream is = this
-            .getClass()
-            .getResourceAsStream(resource);
+        final InputStream is = this.getClass().getResourceAsStream(resource);
 
         final StringBuilder sb = new StringBuilder();
         if (is != null) {
@@ -127,28 +130,20 @@ public class TestesFuncionais {
                 // BufferedReader reader = new BufferedReader(new
                 // InputStreamReader(is, "UTF-8"));
                 final BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                while ((line = reader
-                    .readLine()) != null) {
-                    sb
-                        .append(line)
-                        .append("\n");
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line).append("\n");
                 }
             } finally {
-                is
-                    .close();
+                is.close();
             }
-            return sb
-                .toString();
+            return sb.toString();
         } else {
             return "";
         }
     }
 
     private File getFile(final String filename) throws IOException {
-        final String fullname = this
-            .getClass()
-            .getResource(filename)
-            .getFile();
+        final String fullname = this.getClass().getResource(filename).getFile();
         final File file = new File(fullname);
         return file;
     }

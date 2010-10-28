@@ -10,38 +10,68 @@ import br.gov.serpro.tools.junit.model.FieldMethodInvocation;
 import br.gov.serpro.tools.junit.model.Flow;
 import br.gov.serpro.tools.junit.model.Type;
 import br.gov.serpro.tools.junit.model.Variable;
-import br.gov.serpro.tools.junit.util.SourceBuilder;
 
+/**
+ * Config mocks of flow.
+ */
 public class ConfigMocksGenerator {
-	private final Flow flow;
-	private final Set<Field> mocks;
-	final SourceBuilder sb = new SourceBuilder();
-	final Set<Variable> variablesDeclared = new HashSet<Variable>();
-	final private NextValueForType nextValueForType;
+    /**
+     * Flow.
+     */
+    private final Flow flow;
+    /**
+     * Mocks.
+     */
+    private final Set<Field> mocks;
+    /**
+     * Control variable declarations.
+     */
+    private final Set<Variable> variablesDeclared = new HashSet<Variable>();
+    /**
+     * Control values for types.
+     */
+    private final NextValueForType nextValueForType;
+    /**
+     * Config mock section.
+     */
+    private final ConfigMocks configMocks;
 
-	public ConfigMocksGenerator(Flow flow, Set<Field> mocks, NextValueForType nextValueForType) {
+    /**
+     * Constructor.
+     * @param testMethod test method
+     * @param flow flow
+     * @param mocks mocks
+     * @param nextValueForType instance of control values for types
+     */
+    public ConfigMocksGenerator(final TestMethod testMethod, final Flow flow,
+            final Set<Field> mocks, final NextValueForType nextValueForType) {
         this.flow = flow;
         this.mocks = mocks;
         this.nextValueForType = nextValueForType;
+        this.configMocks = testMethod.getConfigMocks();
     }
 
-    public String generate() {
-
-    	if (mocks.size() > 0) {
-    		sb.appendln();
-    		if (mocks.size() == 1) {
-    			sb.appendln("// Configurando mock");
-    		} else  {
-    			sb.appendln("// Configurando mocks (" + mocks.size() + ")");
-    		}
+    /**
+     * Generate.
+     */
+    public final void generate() {
+        if (this.mocks.size() > 0) {
+            if (this.mocks.size() == 1) {
+                this.configMocks.setDescription("Configurando mock");
+            } else {
+                this.configMocks.setDescription("Configurando mocks ("
+                        + this.mocks.size() + ")");
+            }
         }
 
-        for(final Field mock : mocks) {
-            if (mocks.size() > 1) {
-                sb.appendln("// " + mock.getName());
+        for (final Field mock : this.mocks) {
+            if (this.mocks.size() > 1) {
+                this.configMocks.addCode("// " + mock.getName());
             }
-            sb.appendln("%s %s = criarMock%s();", mock.getType(), mock.getName(), mock.getType());
-            for (final FieldMethodInvocation invocation : flow.getInvocations()) {
+            this.configMocks.addCode("%s %s = criarMock%s();", mock.getType(),
+                    mock.getName(), mock.getType());
+            for (final FieldMethodInvocation invocation : this.flow
+                    .getInvocations()) {
                 if (!mock.equals(invocation.getInvokedAtField())) continue;
 
                 if (invocation.isVoidInvocation()) {
@@ -50,38 +80,43 @@ public class ConfigMocksGenerator {
                     if (invocation.isReturnInvocation()) {
                         configReturnInvocation(mock, invocation);
                     } else if (invocation.isAssignedInvocation()) {
-						configAssignedInvocation(mock, invocation);
+                        configAssignedInvocation(mock, invocation);
                     } else if (invocation.isReturnedValueKnown()) {
-                    	configKnownReturnedValueInvocation(mock, invocation);
-					} else {
+                        configKnownReturnedValueInvocation(mock, invocation);
+                    } else {
                         configNonVoidInvocation(mock, invocation);
                     }
                 }
             }
-            sb.appendln("replay(%s);", mock.getName());
+            this.configMocks.addCode("replay(%s);", mock.getName());
         }
-        return sb.toString();
 
-	}
+    }
 
-    private void configKnownReturnedValueInvocation(Field mock,
-			FieldMethodInvocation invocation) {
-		sb.appendln("expect(%s.%s(%s))\n  .andReturn(%s);", mock.getName(),
-				invocation.getMethod().getName(), invocation
-						.getArgumentsAsString(), invocation.getReturnedValue());
-	}
+    /**
+     * Config known returned value invocation.
+     * @param mock mock
+     * @param invocation invocation
+     */
+    private void configKnownReturnedValueInvocation(final Field mock,
+            final FieldMethodInvocation invocation) {
+        this.configMocks.addCode("expect(%s.%s(%s))\n  .andReturn(%s);", mock
+                .getName(), invocation.getMethod().getName(), invocation
+                .getArgumentsAsString(), invocation.getReturnedValue());
+    }
 
-	/**
+    /**
      * @param mock
      * @param invocation
      */
     private void configNonVoidInvocation(final Field mock,
-        final FieldMethodInvocation invocation) {
+            final FieldMethodInvocation invocation) {
         final Type methodType = invocation.getMethod().getType();
-        sb.appendln("expect(%s.%s(%s))\n  .andReturn(%s);", mock.getName(),
-                invocation.getMethod().getName(),
-                invocation.getArgumentsAsString(),
-                nextValueForType.next(methodType));
+        this.configMocks
+                .addCode("expect(%s.%s(%s))\n  .andReturn(%s);",
+                        mock.getName(), invocation.getMethod().getName(),
+                        invocation.getArgumentsAsString(),
+                        this.nextValueForType.next(methodType));
     }
 
     /**
@@ -89,40 +124,38 @@ public class ConfigMocksGenerator {
      * @param invocation
      */
     private void configAssignedInvocation(final Field mock,
-        final FieldMethodInvocation invocation) {
-        final Variable assignedVariable = invocation
-                .getAssignedVariable();
+            final FieldMethodInvocation invocation) {
+        final Variable assignedVariable = invocation.getAssignedVariable();
         if (assignedVariable.isScopeLocal()
-                && !variablesDeclared.contains(assignedVariable)) {
-            sb.appendln("%s %s = %s;",
-                    assignedVariable.getType().getName(),
-                    assignedVariable.getName(),
+                && !this.variablesDeclared.contains(assignedVariable)) {
+            this.configMocks.addCode("%s %s = %s;", assignedVariable.getType()
+                    .getName(), assignedVariable.getName(),
                     getAssignedVariableValue(assignedVariable));
-            variablesDeclared.add(assignedVariable);
+            this.variablesDeclared.add(assignedVariable);
         }
-        sb.appendln("expect(%s.%s(%s))\n  .andReturn(%s);", mock.getName(),
-                invocation.getMethod().getName(),
-                invocation.getArgumentsAsString(),
-                assignedVariable.getName());
+        this.configMocks.addCode("expect(%s.%s(%s))\n  .andReturn(%s);", mock
+                .getName(), invocation.getMethod().getName(), invocation
+                .getArgumentsAsString(), assignedVariable.getName());
     }
 
-	private String getAssignedVariableValue(final Variable assignedVariable) {
-		if (assignedVariable.isValueKnown()) {
-			return assignedVariable.getValue();
-		}
-		return nextValueForType.next(assignedVariable.getType());
-	}
+    private String getAssignedVariableValue(final Variable assignedVariable) {
+        if (assignedVariable.isValueKnown()) {
+            return assignedVariable.getValue();
+        }
+        return this.nextValueForType.next(assignedVariable.getType());
+    }
 
     /**
      * @param mock
      * @param invocation
      */
     private void configReturnInvocation(final Field mock,
-        final FieldMethodInvocation invocation) {
-        sb.appendln("expect(%s.%s(%s))\n  .andReturn(%sFromMock);", mock.getName(),
-                invocation.getMethod().getName(),
-                invocation.getArgumentsAsString(),
-                lowerCaseFirstChar(invocation.getMethod().getName()));
+            final FieldMethodInvocation invocation) {
+        this.configMocks.addCode(
+                "expect(%s.%s(%s))\n  .andReturn(%sFromMock);", mock.getName(),
+                invocation.getMethod().getName(), invocation
+                        .getArgumentsAsString(), lowerCaseFirstChar(invocation
+                        .getMethod().getName()));
     }
 
     /**
@@ -130,10 +163,9 @@ public class ConfigMocksGenerator {
      * @param invocation
      */
     private void configVoidInvocation(final Field mock,
-        final FieldMethodInvocation invocation) {
-        sb.appendln("%s.%s(%s);", mock.getName(),
-                invocation.getMethod().getName(),
-                invocation.getArgumentsAsString());
+            final FieldMethodInvocation invocation) {
+        this.configMocks.addCode("%s.%s(%s);", mock.getName(), invocation
+                .getMethod().getName(), invocation.getArgumentsAsString());
     }
 
 }

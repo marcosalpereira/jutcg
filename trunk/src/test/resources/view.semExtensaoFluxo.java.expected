@@ -39,7 +39,6 @@ private DigitacaoNotaManualFacade criarMockDigitacaoNotaManualFacade() {
   return mock;
 }
 
-/** {@inheritDoc} */
 @Override
 public void setUp() throws Exception {
   super.setUp();
@@ -54,6 +53,7 @@ public void setUp() throws Exception {
  */
 @Test
 public void testPesquisarPath1() {
+
 // variaveis usadas
 final List<Inscricao> inscricoes = Arrays.asList(new Inscricao(1));
 final Map<Inscricao, Boolean> inscricoesExcluiveis = newHashMap(new Inscricao(2), Boolean.FALSE);
@@ -98,6 +98,7 @@ assertNull(digitacaoNotaManualListarBean.getNullAssignedField());
  */
 @Test
 public void testPesquisarPath2() {
+
 // variaveis usadas
 final List<Inscricao> inscricoes = Arrays.asList(new Inscricao(1));
 final UsuarioLogado usuarioLogado = new Usuario(1);
@@ -136,6 +137,7 @@ assertNull(digitacaoNotaManualListarBean.getNullAssignedField());
  */
 @Test
 public void testPesquisarPath3() {
+
 // variaveis usadas
 final VersaoResultadoProvaManual versaoSelecionada = VersaoResultadoProvaManual.PROVISORIA;
 

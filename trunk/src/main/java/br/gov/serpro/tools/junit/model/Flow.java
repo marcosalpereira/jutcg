@@ -9,140 +9,139 @@ import java.util.TreeSet;
 
 public class Flow {
 
-	/**
-	 * Flow name.
-	 */
-	private String name = "";
+    /**
+     * Flow name.
+     */
+    private String name = "";
 
-	/**
-	 * Invocations for this flow.
-	 */
-	private List<FieldMethodInvocation> invocations = new ArrayList<FieldMethodInvocation>();
+    /**
+     * Invocations for this flow.
+     */
+    private List<FieldMethodInvocation> invocations = new ArrayList<FieldMethodInvocation>();
 
-	/**
-	 * Method that this flow belongs to.
-	 */
-	private Method method;
+    /**
+     * Method that this flow belongs to.
+     */
+    private Method method;
 
-	/**
-	 * Fields read on this flow.
-	 */
-	private SortedSet<Field> readFields = new TreeSet<Field>();
+    /**
+     * Fields read on this flow.
+     */
+    private SortedSet<Field> readFields = new TreeSet<Field>();
 
-	/**
-	 * Fields written on this flow.
-	 */
-	private SortedSet<Field> writtenFields = new TreeSet<Field>();
+    /**
+     * Fields written on this flow.
+     */
+    private SortedSet<Field> writtenFields = new TreeSet<Field>();
 
-	private List<FlowBranch> flowBranches = new ArrayList<FlowBranch>();
+    private List<FlowBranch> flowBranches = new ArrayList<FlowBranch>();
 
-	public void setFlowBranches(List<FlowBranch> flowBranches) {
-		this.flowBranches = flowBranches;
-	}
+    public void setFlowBranches(final List<FlowBranch> flowBranches) {
+        this.flowBranches = flowBranches;
+    }
 
-	public List<FlowBranch> getFlowBranches() {
-		return flowBranches;
-	}
+    public List<FlowBranch> getFlowBranches() {
+        return this.flowBranches;
+    }
 
-	/**
-	 * A branch on a flow.
-	 */
-	public static class FlowBranch {
+    /**
+     * A branch on a flow.
+     */
+    public static class FlowBranch {
 
-		/**
-		 * Branch expression.
-		 */
-		private String expression;
+        /**
+         * Branch expression.
+         */
+        private String expression;
 
-		/**
-		 * If enter or not at branch.
-		 */
-		private boolean enter;
+        /**
+         * If enter or not at branch.
+         */
+        private boolean enter;
 
-		public String getExpression() {
-			return expression;
-		}
+        public String getExpression() {
+            return this.expression;
+        }
 
-		public void setExpression(String expression) {
-			this.expression = expression;
-		}
+        public void setExpression(final String expression) {
+            this.expression = expression;
+        }
 
-		public boolean isEnter() {
-			return enter;
-		}
+        public boolean isEnter() {
+            return this.enter;
+        }
 
-		public void setEnter(boolean enter) {
-			this.enter = enter;
-		}
+        public void setEnter(final boolean enter) {
+            this.enter = enter;
+        }
 
-	}
+    }
 
-	public SortedSet<Field> getWrittenFields() {
-		return writtenFields;
-	}
+    public SortedSet<Field> getWrittenFields() {
+        return this.writtenFields;
+    }
 
-	public void setWrittenFields(SortedSet<Field> writtenFields) {
-		this.writtenFields = writtenFields;
-	}
+    public void setWrittenFields(final SortedSet<Field> writtenFields) {
+        this.writtenFields = writtenFields;
+    }
 
-	public SortedSet<Field> getReadFields() {
-		return readFields;
-	}
+    public SortedSet<Field> getReadFields() {
+        return this.readFields;
+    }
 
-	public List<Field> selectNonStaticReadFields() {
-		final List<Field> ret = new ArrayList<Field>();
-		for (Field field : getReadFields()) {
-			if (!field.isStatic()) {
-				ret.add(field);
-			}
-		}
-		return ret;
-	}
+    public List<Field> selectNonStaticReadFields() {
+        final List<Field> ret = new ArrayList<Field>();
+        for (final Field field : getReadFields()) {
+            if (!field.isStatic()) {
+                ret.add(field);
+            }
+        }
+        return ret;
+    }
 
-	public void setReadFields(SortedSet<Field> usedFields) {
-		this.readFields = usedFields;
-	}
+    public void setReadFields(final SortedSet<Field> usedFields) {
+        this.readFields = usedFields;
+    }
 
-	public List<FieldMethodInvocation> getInvocations() {
-		return invocations;
-	}
+    public List<FieldMethodInvocation> getInvocations() {
+        return this.invocations;
+    }
 
-	public void setInvocations(List<FieldMethodInvocation> invocations) {
-		this.invocations = invocations;
-	}
+    public void setInvocations(final List<FieldMethodInvocation> invocations) {
+        this.invocations = invocations;
+    }
 
-	public Method getMethod() {
-		return this.method;
-	}
+    public Method getMethod() {
+        return this.method;
+    }
 
-	public void setMethod(Method method) {
-		this.method = method;
-	}
+    public void setMethod(final Method method) {
+        this.method = method;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(final String name) {
+        this.name = name;
+    }
 
-	/**
-	 * Retorna o metodo que foi usado num return neste fluxo.
-	 *
-	 * @return o metodo ou <code>null</code> se nao existir
-	 */
-	public Method getReturnInvocationMethod() {
-		for (final FieldMethodInvocation invocation : invocations) {
-			if (invocation.isReturnInvocation())
-				return invocation.getMethod();
-		}
-		return null;
-	}
+    /**
+     * Retorna o metodo que foi usado num return neste fluxo.
+     *
+     * @return o metodo ou <code>null</code> se nao existir
+     */
+    public Method getReturnInvocationMethod() {
+        for (final FieldMethodInvocation invocation : this.invocations) {
+            if (invocation.isReturnInvocation()) return invocation.getMethod();
+        }
+        return null;
+    }
 
     public Set<Field> getReadWrittensFields() {
-        Set<Field> ret = new HashSet<Field>(getReadFields());
-        //ret.addAll(getWrittenFields());
+        final Set<Field> ret = new HashSet<Field>(getReadFields());
+        // ret.addAll(getWrittenFields());
         return ret;
     }
 

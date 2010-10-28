@@ -42,13 +42,14 @@ public class TestVinculoProvaFaseDaoBean extends HibernateTestCase {
  */
 private VinculoProvaFaseDaoBean vinculoProvaFaseDaoBean;
 
-/** {@inheritDoc} */
 @Override
 protected IDataSet getDataSet() {
   return recuperarDataSet("vinculoProvaFaseDS.xml");
 }
 
-/** Configuracoes iniciais. */
+/**
+ * Configuracoes iniciais.
+ */
 @Before
 public void setUp() {
   vinculoProvaFaseDaoBean = new VinculoProvaFaseDaoBean();
@@ -60,6 +61,7 @@ vinculoProvaFaseDaoBean.setEntityManager(getEntityManager());
  */
 @Test
 public void testInserir() {
+
 // variaveis usadas
 final VinculoProvaFase vinculoProvaFase = new VinculoProvaFase(1);
 
@@ -72,6 +74,7 @@ vinculoProvaFaseDaoBean.inserir(vinculoProvaFase);
  */
 @Test
 public void testAtualizar() {
+
 // variaveis usadas
 final VinculoProvaFase vinculoProvaFase = new VinculoProvaFase(1);
 
@@ -84,6 +87,7 @@ vinculoProvaFaseDaoBean.atualizar(vinculoProvaFase);
  */
 @Test
 public void testExcluir() {
+
 // variaveis usadas
 final VinculoProvaFase vinculoProvaFase = new VinculoProvaFase(1);
 
@@ -96,6 +100,7 @@ vinculoProvaFaseDaoBean.excluir(vinculoProvaFase);
  */
 @Test
 public void testSelecionarFase() {
+
 // variaveis usadas
 final Fase fase = new Fase(1);
 
@@ -111,6 +116,7 @@ assertEquals(esperado, selecionarReal);
  */
 @Test
 public void testSelecionarOfertaCargoConcurso() {
+
 // variaveis usadas
 final OfertaCargoConcurso oferta = new OfertaCargoConcurso(1);
 

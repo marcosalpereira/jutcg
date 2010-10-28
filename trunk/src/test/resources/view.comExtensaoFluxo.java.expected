@@ -39,7 +39,6 @@ private DigitacaoNotaManualFacade criarMockDigitacaoNotaManualFacade() {
   return mock;
 }
 
-/** {@inheritDoc} */
 @Override
 public void setUp() throws Exception {
   super.setUp();
@@ -51,6 +50,7 @@ public void setUp() throws Exception {
  */
 @Test
 public void testPesquisar() {
+
 // variaveis usadas
 final Prova provaSelecionada = new Prova(1);
 final UsuarioLogado usuarioLogado = new Usuario(1);

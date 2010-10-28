@@ -16,7 +16,9 @@ public class TestBean  {
  */
 private Bean bean;
 
-/** Configuracoes iniciais. */
+/**
+ * Configuracoes iniciais.
+ */
 @Before
 public void setUp() {
   bean = new Bean();
@@ -29,6 +31,7 @@ public void setUp() {
  */
 @Test
 public void testTestPath1() {
+
 // variaveis usadas
 final EnumInClasspath field = EnumInClasspath.SOME_VALUE;
 
@@ -46,6 +49,7 @@ bean.test();
  */
 @Test
 public void testTestPath2() {
+
 // variaveis usadas
 final EnumInClasspath field = EnumInClasspath.OTHER_VALUE;
 

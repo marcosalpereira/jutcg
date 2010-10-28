@@ -3,20 +3,33 @@ package br.gov.serpro.tools.junit.util;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public class Config {
-	private static final String BUNDLE_NAME = "config"; //$NON-NLS-1$
+/**
+ * Config.
+ */
+public final class Config {
 
-	private static final ResourceBundle RESOURCE_BUNDLE =
-			ResourceBundle.getBundle(BUNDLE_NAME);
+    /**
+     * Resource bundle.
+     */
+    private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
+            .getBundle("config");
 
-	private Config() {
-	}
+    /**
+     * Construtor.
+     */
+    private Config() {
+    }
 
-	public static String getString(String key) {
-		try {
-			return RESOURCE_BUNDLE.getString(key);
-		} catch (final MissingResourceException e) {
-			return null;
-		}
-	}
+    /**
+     * Get an property.
+     * @param key key
+     * @return the value of property
+     */
+    public static String getString(final String key) {
+        try {
+            return RESOURCE_BUNDLE.getString(key);
+        } catch (final MissingResourceException e) {
+            return null;
+        }
+    }
 }

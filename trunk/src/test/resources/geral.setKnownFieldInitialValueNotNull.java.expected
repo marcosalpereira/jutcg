@@ -15,7 +15,9 @@ public class TestBean  {
  */
 private Bean bean;
 
-/** Configuracoes iniciais. */
+/**
+ * Configuracoes iniciais.
+ */
 @Before
 public void setUp() {
   bean = new Bean();
@@ -28,6 +30,7 @@ public void setUp() {
  */
 @Test
 public void testTestPath1() {
+
 // variaveis usadas
 final Var field = new Var(1);
 
@@ -45,6 +48,7 @@ bean.test();
  */
 @Test
 public void testTestPath2() {
+
 // variaveis usadas
 final Var field = null;
 
