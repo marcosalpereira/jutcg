@@ -205,10 +205,6 @@ public class TestCaseMethodFlowGenerator {
                     returnInvocationMethod.getType(),
                     lowerCaseFirstChar(returnInvocationMethod.getName()),
                     nextValue);
-            this.testMethod.getUsedVars().addCode("final %s %sEsperado = %s;",
-                    returnInvocationMethod.getType(),
-                    lowerCaseFirstChar(returnInvocationMethod.getName()),
-                    nextValue);
         }
 
         if (!params.isEmpty()) {
