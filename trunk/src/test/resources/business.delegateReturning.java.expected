@@ -45,7 +45,6 @@ public void testAlterarSituacaoDosCamposDeAtuacaoDoCargo() {
 
 // variaveis usadas
 final boolean alterarSituacaoDosCamposDeAtuacaoDoCargoFromMock = false;
-final boolean alterarSituacaoDosCamposDeAtuacaoDoCargoEsperado = false;
 final Cargo cargo = new Cargo(1);
 final boolean novaSituacao = false;
 

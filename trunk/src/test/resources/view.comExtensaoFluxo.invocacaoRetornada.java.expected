@@ -54,7 +54,6 @@ public void testPesquisar() {
 // variaveis usadas
 final Prova provaSelecionada = new Prova(1);
 final boolean metodoRetornadoFromMock = false;
-final boolean metodoRetornadoEsperado = false;
 
 // Configurando mock
 DigitacaoNotaManualFacade digitacaoNotaManualFacade = criarMockDigitacaoNotaManualFacade();
