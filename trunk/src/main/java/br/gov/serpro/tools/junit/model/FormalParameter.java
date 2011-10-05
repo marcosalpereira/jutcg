@@ -2,6 +2,9 @@ package br.gov.serpro.tools.junit.model;
 
 import java.util.List;
 
+/**
+ * Formal parameters of a method.
+ */
 public class FormalParameter {
     /**
      * Formal parameter name.

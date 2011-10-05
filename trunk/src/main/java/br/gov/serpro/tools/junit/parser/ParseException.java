@@ -1,5 +1,8 @@
 package br.gov.serpro.tools.junit.parser;
 
+/**
+ * A parsing exception.
+ */
 public class ParseException extends Exception {
 
     /**

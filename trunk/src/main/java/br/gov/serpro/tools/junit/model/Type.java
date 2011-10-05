@@ -3,6 +3,9 @@ package br.gov.serpro.tools.junit.model;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+/**
+ * Represents a java type.
+ */
 public class Type {
     public static final Type VOID = new Type("void");
 
@@ -27,14 +30,18 @@ public class Type {
     }
 
     public Type[] getGeneric() {
-        if (this.generic != null) return this.generic;
+        if (this.generic != null) {
+	        return this.generic;
+        }
 
         final int iniGen = this.name.indexOf('<');
         final int lastIniGen = this.name.lastIndexOf('<');
 
         // if a complex generic, like List<List<?>>
         // we will ignore
-        if (iniGen != lastIniGen) return null;
+        if (iniGen != lastIniGen) {
+	        return null;
+        }
 
         if (iniGen > 0) {
             final int endGen = this.name.indexOf('>');
@@ -60,9 +67,15 @@ public class Type {
     }
 
     public String getDefaultCollectionImpl() {
-        if (isMap()) return "HashMap";
-        if (isSet()) return "HashSet";
-        if (isList()) return "ArrayList";
+        if (isMap()) {
+	        return "HashMap";
+        }
+        if (isSet()) {
+	        return "HashSet";
+        }
+        if (isList()) {
+	        return "ArrayList";
+        }
         return null;
     }
 
@@ -108,7 +121,6 @@ public class Type {
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return this.name;
@@ -119,11 +131,12 @@ public class Type {
     }
 
     public String getFullName() {
-        if (this.fullName == null) this.fullName = this.name;
+        if (this.fullName == null) {
+	        return this.name;
+        }
         return this.fullName;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {
@@ -138,7 +151,6 @@ public class Type {
         return false;
     }
 
-    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return new HashCodeBuilder(795681801, 961628501).append(

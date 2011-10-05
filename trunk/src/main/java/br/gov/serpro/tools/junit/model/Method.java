@@ -8,6 +8,9 @@ import java.util.List;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+/**
+ * Reprsents a method in java class.
+ */
 public class Method {
     /**
      * Method name.

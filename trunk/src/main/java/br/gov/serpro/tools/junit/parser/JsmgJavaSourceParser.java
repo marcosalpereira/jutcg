@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.Map.Entry;
 
 import org.jsmg.JsmgParser;
 import org.jsmg.model.Annotation;
@@ -27,13 +27,13 @@ import org.jsmg.model.Variable;
 import br.gov.serpro.tools.junit.model.Field;
 import br.gov.serpro.tools.junit.model.FieldMethodInvocation;
 import br.gov.serpro.tools.junit.model.Flow;
+import br.gov.serpro.tools.junit.model.Flow.FlowBranch;
 import br.gov.serpro.tools.junit.model.FormalParameter;
 import br.gov.serpro.tools.junit.model.JavaClass;
 import br.gov.serpro.tools.junit.model.Method;
 import br.gov.serpro.tools.junit.model.Protection;
 import br.gov.serpro.tools.junit.model.Scope;
 import br.gov.serpro.tools.junit.model.Type;
-import br.gov.serpro.tools.junit.model.Flow.FlowBranch;
 
 /**
  * Build java model class using the jsmg project's java source parser.
@@ -41,6 +41,7 @@ import br.gov.serpro.tools.junit.model.Flow.FlowBranch;
 public class JsmgJavaSourceParser implements SourceParser {
 
     /** {@inheritDoc} */
+    @Override
     public JavaClass parse(final File file) throws ParseException {
         final JavaSourceClassModel javaSourceClassModel = JsmgParser.parse(file);
         final JavaClass javaClass = build(javaSourceClassModel);
@@ -220,16 +221,20 @@ public class JsmgJavaSourceParser implements SourceParser {
      *            execution path
      * @return if the execution path was augmented
      */
-    private Map<ExecutionPathNode, List<MethodInvocation>> augmentExecutionPathClassMethodsOneFlow(
-            final ExecutionPath executionPath, final JavaSourceClassModel jsmgClassModel,
-            final Map<ExecutionPathNode, List<MethodInvocation>> lastIterationResultMap) {
-        final Map<ExecutionPathNode, List<MethodInvocation>> mapNodeWithOwnClassMethodInvocations = getMapNodeWithOwnClassMethodInvocations(
-                executionPath, jsmgClassModel);
+	private
+	Map<ExecutionPathNode, List<MethodInvocation>> augmentExecutionPathClassMethodsOneFlow(
+	        final ExecutionPath executionPath, final JavaSourceClassModel jsmgClassModel,
+	        final Map<ExecutionPathNode, List<MethodInvocation>> lastIterationResultMap) {
+        final Map<ExecutionPathNode, List<MethodInvocation>>
+        mapNodeWithOwnClassMethodInvocations =
+        	getMapNodeWithOwnClassMethodInvocations(executionPath, jsmgClassModel);
+
         final boolean newOwnClassMethodInvocationsFound = mapNodeWithOwnClassMethodInvocations
                 .size() > lastIterationResultMap.size();
         if (newOwnClassMethodInvocationsFound) {
-            final Map<ExecutionPathNode, List<MethodInvocation>> newInvocationsFound = getMapWithNewInvocations(
-                    lastIterationResultMap, mapNodeWithOwnClassMethodInvocations);
+            final Map<ExecutionPathNode, List<MethodInvocation>> newInvocationsFound =
+            		getMapWithNewInvocations(
+            				lastIterationResultMap, mapNodeWithOwnClassMethodInvocations);
             addNodesFromNewMethodsFound(executionPath, jsmgClassModel, newInvocationsFound);
             // recursive search
             return augmentExecutionPathClassMethodsOneFlow(executionPath, jsmgClassModel,
@@ -241,8 +246,10 @@ public class JsmgJavaSourceParser implements SourceParser {
 
     private Map<ExecutionPathNode, List<MethodInvocation>> getMapWithNewInvocations(
             final Map<ExecutionPathNode, List<MethodInvocation>> lastIterationResultMap,
-            final Map<ExecutionPathNode, List<MethodInvocation>> mapNodeWithOwnClassMethodInvocations) {
-        final Map<ExecutionPathNode, List<MethodInvocation>> newInvocationsFound = new HashMap<ExecutionPathNode, List<MethodInvocation>>(
+            final Map<ExecutionPathNode, List<MethodInvocation>>
+            mapNodeWithOwnClassMethodInvocations) {
+        final Map<ExecutionPathNode, List<MethodInvocation>> newInvocationsFound =
+        		new HashMap<ExecutionPathNode, List<MethodInvocation>>(
                 mapNodeWithOwnClassMethodInvocations);
         for (final ExecutionPathNode alreadyAugmentedNode : lastIterationResultMap.keySet()) {
             newInvocationsFound.remove(alreadyAugmentedNode);
@@ -253,11 +260,12 @@ public class JsmgJavaSourceParser implements SourceParser {
     private void addNodesFromNewMethodsFound(
             final ExecutionPath executionPath,
             final JavaSourceClassModel jsmgClassModel,
-            final Map<ExecutionPathNode, List<MethodInvocation>> mapNodeWithOwnClassMethodInvocations) {
-        for (final Entry<ExecutionPathNode, List<MethodInvocation>> nodeWithInvocations : mapNodeWithOwnClassMethodInvocations
-                .entrySet()) {
-            final List<ExecutionPathNode> nodesToBeInserted = getNodesToBeInsertedExecutionPath(
-                    jsmgClassModel, nodeWithInvocations);
+            final Map<ExecutionPathNode,
+            List<MethodInvocation>> mapNodeWithOwnClassMethodInvocations) {
+        for (final Entry<ExecutionPathNode, List<MethodInvocation>> nodeWithInvocations
+        		: mapNodeWithOwnClassMethodInvocations.entrySet()) {
+            final List<ExecutionPathNode> nodesToBeInserted =
+            		getNodesToBeInsertedExecutionPath(jsmgClassModel, nodeWithInvocations);
             addNodesToPath(executionPath, nodeWithInvocations, nodesToBeInserted);
         }
     }
@@ -291,11 +299,14 @@ public class JsmgJavaSourceParser implements SourceParser {
         return nodesToBeInserted;
     }
 
-    private Map<ExecutionPathNode, List<MethodInvocation>> getMapNodeWithOwnClassMethodInvocations(
-            final ExecutionPath executionPath, final JavaSourceClassModel jsmgClassModel) {
-        final Map<ExecutionPathNode, List<MethodInvocation>> mapNodeWithOwnClassMethosInvocations = new HashMap<ExecutionPathNode, List<MethodInvocation>>();
+    private Map<ExecutionPathNode, List<MethodInvocation>>
+    getMapNodeWithOwnClassMethodInvocations(
+    		final ExecutionPath executionPath, final JavaSourceClassModel jsmgClassModel) {
+		final Map<ExecutionPathNode, List<MethodInvocation>> mapNodeWithOwnClassMethosInvocations =
+				new HashMap<ExecutionPathNode, List<MethodInvocation>>();
         for (final ExecutionPathNode node : executionPath.getExecutionPathNodes()) {
-            final List<MethodInvocation> ownClassMethodInvocations = getOwnClassMethodInvocationsWithOneExecutionPath(
+            final List<MethodInvocation> ownClassMethodInvocations =
+            		getOwnClassMethodInvocationsWithOneExecutionPath(
                     jsmgClassModel, node);
             if (!ownClassMethodInvocations.isEmpty()) {
                 mapNodeWithOwnClassMethosInvocations.put(node, ownClassMethodInvocations);
@@ -340,7 +351,8 @@ public class JsmgJavaSourceParser implements SourceParser {
 
     private List<FieldMethodInvocation> translateInvocations(
             final ExecutionPath executionPath, final Method method) {
-        final List<FieldMethodInvocation> fieldMethodInvocations = new ArrayList<FieldMethodInvocation>();
+        final List<FieldMethodInvocation> fieldMethodInvocations =
+        		new ArrayList<FieldMethodInvocation>();
         final List<MethodInvocation> methodInvocations = executionPath
                 .getInternalMethodInvocations();
         for (final MethodInvocation methodInvocation : methodInvocations) {
@@ -374,7 +386,8 @@ public class JsmgJavaSourceParser implements SourceParser {
 
     private br.gov.serpro.tools.junit.model.Variable translateVariable(
             final Variable assignedVariable) {
-        final br.gov.serpro.tools.junit.model.Variable variable = new br.gov.serpro.tools.junit.model.Variable();
+        final br.gov.serpro.tools.junit.model.Variable variable =
+        		new br.gov.serpro.tools.junit.model.Variable();
         variable.setName(assignedVariable.getVariableId());
         variable.setScope(translateScope(assignedVariable.getScope()));
         variable.setType(translateType(assignedVariable.getType()));

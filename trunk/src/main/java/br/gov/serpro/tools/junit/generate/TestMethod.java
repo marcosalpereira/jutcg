@@ -11,6 +11,9 @@ import br.gov.serpro.tools.junit.model.Protection;
 import br.gov.serpro.tools.junit.model.Type;
 import br.gov.serpro.tools.junit.util.SourceBuilder;
 
+/**
+ * A method in test case class.
+ */
 public class TestMethod {
 
     /**
@@ -131,12 +134,16 @@ public class TestMethod {
     }
 
     public Type getType() {
-        if (this.type == null) return Type.VOID;
+        if (this.type == null) {
+	        return Type.VOID;
+        }
         return this.type;
     }
 
     public Protection getProtection() {
-        if (this.protection == null) return Protection.PUBLIC;
+        if (this.protection == null) {
+	        return Protection.PUBLIC;
+        }
         return this.protection;
     }
 

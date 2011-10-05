@@ -9,11 +9,14 @@ import java.util.Set;
 import br.gov.serpro.tools.junit.model.Field;
 import br.gov.serpro.tools.junit.model.FieldMethodInvocation;
 import br.gov.serpro.tools.junit.model.Flow;
+import br.gov.serpro.tools.junit.model.Flow.FlowBranch;
 import br.gov.serpro.tools.junit.model.FormalParameter;
 import br.gov.serpro.tools.junit.model.JavaClass;
 import br.gov.serpro.tools.junit.model.Method;
-import br.gov.serpro.tools.junit.model.Flow.FlowBranch;
 
+/**
+ * Generates a flow of a method.
+ */
 public class TestCaseMethodFlowGenerator {
     private final Method method;
     private final Flow flow;
@@ -87,7 +90,9 @@ public class TestCaseMethodFlowGenerator {
     private String concatMethodParams(final List<FormalParameter> params) {
         String strParams = "";
         for (final FormalParameter p : params) {
-            if (!strParams.isEmpty()) strParams += ",";
+            if (!strParams.isEmpty()) {
+	            strParams += ",";
+            }
             strParams += p.getVariableId();
         }
         return strParams;
@@ -147,7 +152,9 @@ public class TestCaseMethodFlowGenerator {
         final List<Field> fields = this.flow.selectNonStaticReadFields();
         fields.removeAll(this.usedDependencies);
 
-        if (fields.isEmpty()) return;
+        if (fields.isEmpty()) {
+	        return;
+        }
 
         for (final Field f : fields) {
             this.testMethod.getConfigInternalState().addCode("%s.%s(%s);",
@@ -233,8 +240,8 @@ public class TestCaseMethodFlowGenerator {
                 appendAssertionKnownWrittenValue(f);
             } else {
                 this.testMethod.getAsserts().addCode(
-                        "final %s %sExpected = %s;", f.getType(),
-                        f.getGetter(), "<IDontKnowButYouDo>");
+                        "final %s %sExpected;", f.getType(),
+                        f.getGetter());
                 this.testMethod.getAsserts().addCode(
                         "assertEquals(%sExpected, %s.%s());", f.getGetter(),
                         this.varNameForClassUnderTest, f.getGetter());

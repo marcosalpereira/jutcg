@@ -83,13 +83,17 @@ public class JavaClass {
     }
 
     public String variableNameForType() {
-        if (getType() == null) return null;
+        if (getType() == null) {
+	        return null;
+        }
         return getType().getVariableName();
     }
 
     public Field searchField(final String fieldName) {
         for (final Field f : getFields()) {
-            if (f.getName().equals(fieldName)) return f;
+            if (f.getName().equals(fieldName)) {
+	            return f;
+            }
         }
         return null;
     }
@@ -97,7 +101,9 @@ public class JavaClass {
     public List<Method> searchMethods(final String methodName) {
         final List<Method> ret = new ArrayList<Method>();
         for (final Method m : getMethods()) {
-            if (m.getName().equals(methodName)) ret.add(m);
+            if (m.getName().equals(methodName)) {
+	            ret.add(m);
+            }
         }
         return ret;
     }

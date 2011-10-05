@@ -72,7 +72,9 @@ public class ConfigMocksGenerator {
                     mock.getName(), mock.getType());
             for (final FieldMethodInvocation invocation : this.flow
                     .getInvocations()) {
-                if (!mock.equals(invocation.getInvokedAtField())) continue;
+                if (!mock.equals(invocation.getInvokedAtField())) {
+	                continue;
+                }
 
                 if (invocation.isVoidInvocation()) {
                     configVoidInvocation(mock, invocation);
