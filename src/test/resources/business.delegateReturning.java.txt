@@ -18,10 +18,6 @@ public class CampoAtuacaoBusinessBean implements CampoAtuacaoBusiness {
     @EJB
     private CampoAtuacaoDao campoAtuacaoDao;
 
-    public void setCampoAtuacaoDao(CampoAtuacaoDao campoAtuacaoDao) {
-        this.campoAtuacaoDao = campoAtuacaoDao;
-    }
-
     @Override
     public boolean alterarSituacaoDosCamposDeAtuacaoDoCargo(Cargo cargo, boolean novaSituacao) {
         return campoAtuacaoDao.alterarSituacaoDosCamposDeAtuacaoDoCargo(cargo, novaSituacao);

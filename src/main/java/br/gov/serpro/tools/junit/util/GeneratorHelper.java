@@ -1,5 +1,8 @@
 package br.gov.serpro.tools.junit.util;
 
+/**
+ * Helpful methods for test method generation.
+ */
 public final class GeneratorHelper {
 
     /**

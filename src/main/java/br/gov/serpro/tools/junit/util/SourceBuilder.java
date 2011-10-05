@@ -1,5 +1,8 @@
 package br.gov.serpro.tools.junit.util;
 
+/**
+ * Helper to build a java source code.
+ */
 //TODO try to extends AbstractStringBuilder
 public class SourceBuilder {
 

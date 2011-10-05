@@ -16,6 +16,9 @@ import br.gov.serpro.tools.junit.parser.JsmgJavaSourceParser;
 import br.gov.serpro.tools.junit.parser.ParseException;
 import br.gov.serpro.tools.junit.parser.SourceParser;
 
+/**
+ * Run all funcional tests of our application.
+ */
 public class TestesFuncionais {
 
     @Test

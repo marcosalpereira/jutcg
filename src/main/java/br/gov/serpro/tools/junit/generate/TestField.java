@@ -7,6 +7,9 @@ import br.gov.serpro.tools.junit.model.Protection;
 import br.gov.serpro.tools.junit.model.Type;
 import br.gov.serpro.tools.junit.util.SourceBuilder;
 
+/**
+ * A filed in a test case class.
+ */
 public class TestField {
     /**
      * Field name.

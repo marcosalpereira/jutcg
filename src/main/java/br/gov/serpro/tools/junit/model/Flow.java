@@ -7,6 +7,9 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+/**
+ * Represents a execution flow of a method.
+ */
 public class Flow {
 
     /**
@@ -134,7 +137,9 @@ public class Flow {
      */
     public Method getReturnInvocationMethod() {
         for (final FieldMethodInvocation invocation : this.invocations) {
-            if (invocation.isReturnInvocation()) return invocation.getMethod();
+            if (invocation.isReturnInvocation()) {
+	            return invocation.getMethod();
+            }
         }
         return null;
     }

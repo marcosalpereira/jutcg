@@ -1,5 +1,8 @@
 package br.gov.serpro.tools.junit.model;
 
+/**
+ * A java member visibility restriction.
+ */
 public enum Protection {
     DEFAULT, PRIVATE, PROTECTED, PUBLIC;
 

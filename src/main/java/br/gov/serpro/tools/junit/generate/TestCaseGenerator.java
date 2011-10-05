@@ -218,9 +218,13 @@ public class TestCaseGenerator {
     }
 
     private boolean ignoreField(final Field field) {
-        if (field.isStatic()) return true;
+        if (field.isStatic()) {
+	        return true;
+        }
 
-        if (!field.isPrivate()) return true;
+        if (!field.isPrivate()) {
+	        return true;
+        }
 
         for (final String annotation : field.getAnnotations()) {
             if (annotation.equals("In") || annotation.equals("EJB")) {

@@ -10,11 +10,14 @@ import br.gov.serpro.tools.junit.parser.JsmgJavaSourceParser;
 import br.gov.serpro.tools.junit.parser.ParseException;
 import br.gov.serpro.tools.junit.parser.SourceParser;
 
+/**
+ * Entry point of junit test case generation.
+ */
 public class NewTestCase {
 
-    public static void main(String[] args) throws ParseException, IOException {
+    public static void main(final String[] args) throws ParseException, IOException {
 
-        args = new String[] {"/ValidarNotasBean.java.txt"};
+        //args = new String[] {"/ValidarNotasBean.java.txt"};
 
         final NewTestCase newTestCase = new NewTestCase();
 

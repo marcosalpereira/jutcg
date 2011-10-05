@@ -1,5 +1,8 @@
 package br.gov.serpro.tools.junit.generate;
 
+/**
+ * Verify section in a test method.
+ */
 public class Verifys extends MethodSection {
 
     @Override

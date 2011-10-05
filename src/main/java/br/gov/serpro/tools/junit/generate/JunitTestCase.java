@@ -5,9 +5,12 @@ import java.util.Set;
 
 import br.gov.serpro.tools.junit.util.SourceBuilder;
 
+/**
+ * Represents a test case written in JUnit.
+ */
 public class JunitTestCase {
     private String name;
-    private String _package;
+    private String packageName;
     private final Set<String> imports = new LinkedHashSet<String>();
     private Set<TestMethod> testMethods = new LinkedHashSet<TestMethod>();
     private Set<TestField> fields = new LinkedHashSet<TestField>();
@@ -35,7 +38,7 @@ public class JunitTestCase {
     }
 
     public String getPackage() {
-        return this._package;
+        return this.packageName;
     }
 
     public void setFields(final Set<TestField> fields) {
@@ -51,7 +54,7 @@ public class JunitTestCase {
     }
 
     public void setPackage(final String packageName) {
-        this._package = packageName;
+        this.packageName = packageName;
     }
 
     public void setParent(final String string) {
@@ -82,7 +85,9 @@ public class JunitTestCase {
     }
 
     private String getExtends() {
-        if (this.parent == null) return "";
+        if (this.parent == null) {
+	        return "";
+        }
         return "extends " + this.parent;
     }
 

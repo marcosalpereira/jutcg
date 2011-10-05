@@ -8,6 +8,9 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import br.gov.serpro.tools.junit.util.GeneratorHelper;
 
+/**
+ * Represents a field in a java class.
+ */
 public class Field implements Comparable<Field> {
     /**
      * Field name.
@@ -160,7 +163,9 @@ public class Field implements Comparable<Field> {
     }
 
     public String variableNameForType() {
-        if (getType() == null) return null;
+        if (getType() == null) {
+	        return null;
+        }
         return getType().getVariableName();
     }
 

@@ -82,9 +82,9 @@ digitacaoNotaManualListarBean.pesquisar();
 verify(digitacaoNotaManualFacade);
 
 // verificacoes do resultado do metodo sendo testado
-final List<Inscricao> getInscricoesExpected = <IDontKnowButYouDo>;
+final List<Inscricao> getInscricoesExpected;
 assertEquals(getInscricoesExpected, digitacaoNotaManualListarBean.getInscricoes());
-final Map<Inscricao, Boolean> getInscricoesExcluiveisExpected = <IDontKnowButYouDo>;
+final Map<Inscricao, Boolean> getInscricoesExcluiveisExpected;
 assertEquals(getInscricoesExcluiveisExpected, digitacaoNotaManualListarBean.getInscricoesExcluiveis());
 assertEquals(inscricoes.get(0) , digitacaoNotaManualListarBean.getNotNullAssignedField());
 assertNull(digitacaoNotaManualListarBean.getNullAssignedField());
@@ -122,9 +122,9 @@ digitacaoNotaManualListarBean.pesquisar();
 verify(digitacaoNotaManualFacade);
 
 // verificacoes do resultado do metodo sendo testado
-final List<Inscricao> getInscricoesExpected = <IDontKnowButYouDo>;
+final List<Inscricao> getInscricoesExpected;
 assertEquals(getInscricoesExpected, digitacaoNotaManualListarBean.getInscricoes());
-final Map<Inscricao, Boolean> getInscricoesExcluiveisExpected = <IDontKnowButYouDo>;
+final Map<Inscricao, Boolean> getInscricoesExcluiveisExpected;
 assertEquals(getInscricoesExcluiveisExpected, digitacaoNotaManualListarBean.getInscricoesExcluiveis());
 assertEquals(inscricoes.get(0) , digitacaoNotaManualListarBean.getNotNullAssignedField());
 assertNull(digitacaoNotaManualListarBean.getNullAssignedField());
@@ -148,20 +148,7 @@ digitacaoNotaManualListarBean.setVersaoSelecionada(versaoSelecionada);
 digitacaoNotaManualListarBean.pesquisar();
 
 // verificacoes do resultado do metodo sendo testado
-final Map<Inscricao, Boolean> getInscricoesExcluiveisExpected = <IDontKnowButYouDo>;
+final Map<Inscricao, Boolean> getInscricoesExcluiveisExpected;
 assertEquals(getInscricoesExcluiveisExpected, digitacaoNotaManualListarBean.getInscricoesExcluiveis());
-}
-/**
- * Criar um HashMap e colocar a chave/valor passados nele.
- *  @param <K> tipo base da chave
- *  @param <V> tipo base do valor
- *  @param key chave
- *  @param value valor
- *  @return o HashMap criado. 
- */
-private <K, V> Map<K, V> newHashMap(K key, V value) {
-    Map<K, V> ret = new HashMap<K, V>();
-    ret.put(key, value);
-    return ret;
 }
 }

@@ -1,5 +1,8 @@
 package br.gov.serpro.tools.junit.generate;
 
+/**
+ * Invoke tested method section.
+ */
 public class InvokeMethod extends MethodSection {
 
     @Override
