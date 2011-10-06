@@ -17,17 +17,22 @@ import static org.easymock.EasyMock.*;
 import org.junit.*;
 import java.util.*;
 import static org.junit.Assert.*;
-import br.gov.esaf.sgc.view.JsfTestCase;
 
 /**
  * Testes unitarios para a classe {@link DigitacaoNotaManualListarBean}.
  */
-public class TestDigitacaoNotaManualListarBean extends JsfTestCase {
+public class TestDigitacaoNotaManualListarBean extends br.gov.esaf.sgc.view.JsfTestCase {
 
 /**
  * Classe sendo testada {@link DigitacaoNotaManualListarBean}.
  */
 private DigitacaoNotaManualListarBean digitacaoNotaManualListarBean;
+
+@Override
+public void setUp() throws Exception {
+  super.setUp();
+  digitacaoNotaManualListarBean = new DigitacaoNotaManualListarBean();
+}
 
 /**
  * Cria o mock {@link DigitacaoNotaManualFacade} e seta na classe sendo testada.
@@ -37,12 +42,6 @@ private DigitacaoNotaManualFacade criarMockDigitacaoNotaManualFacade() {
   DigitacaoNotaManualFacade mock = createStrictMock(DigitacaoNotaManualFacade.class);
   digitacaoNotaManualListarBean.setDigitacaoNotaManualFacade(mock);
   return mock;
-}
-
-@Override
-public void setUp() throws Exception {
-  super.setUp();
-  digitacaoNotaManualListarBean = new DigitacaoNotaManualListarBean();
 }
 
 /**

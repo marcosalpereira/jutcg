@@ -1,4 +1,4 @@
-package br.gov.esaf.sgc.business.impl;
+package br.gov.esaf.sgc.qqpacote;
 
 import somepackage.EnumInClasspath;
 import static org.easymock.EasyMock.*;

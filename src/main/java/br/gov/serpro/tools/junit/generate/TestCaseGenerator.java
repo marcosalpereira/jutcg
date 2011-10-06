@@ -17,11 +17,6 @@ import br.gov.serpro.tools.junit.util.GeneratorHelper;
  */
 public class TestCaseGenerator {
     /**
-     * Sufix for DAOs layer implementers.
-     */
-    private static final String IMPL_DAO_SUFIX = "DaoBean";
-
-    /**
      * Class under test.
      */
     private final JavaClass classUnderTest;
@@ -167,44 +162,29 @@ public class TestCaseGenerator {
      * @return o codigo gerado
      */
     private void generateAbstractImpls() {
-        if (!this.classUnderTest.isAtDao()) {
-            return;
-        }
-        final TestMethod method = new TestMethod();
-        this.testCase.getTestMethods().add(method);
-
-        final String dsxml = this.varNameForClassUnderTest.replace(IMPL_DAO_SUFIX, "")
-                + "DS.xml";
-        method.getAnnotations().add("Override");
-        method.setProtection(Protection.PROTECTED);
-        method.setType(new Type("IDataSet"));
-        method.setName("getDataSet");
-        method.getGeneralCode().addCode("  return recuperarDataSet(\"%s\");", dsxml);
+    	final String abstractImpls = classUnderTest.getAbstractImpls();
+    	if (abstractImpls == null) {
+    		return;
+    	}
+    	final String subsCode = replaceVars(abstractImpls);
+    	this.testCase.addGeneralCode(subsCode);
     }
 
-    private void generateSetup() {
-        final TestMethod method = new TestMethod();
-        this.testCase.getTestMethods().add(method);
+    private String replaceVars(String code) {
+    	final String subsCode = code
+    			.replace("${classUnderTest}", this.classUnderTest.getType().getName())
+    			.replace("${classUnderTestVarName}", this.varNameForClassUnderTest);
 
-        if (this.classUnderTest.isAtView()) {
-            method.getAnnotations().add("Override");
-            method.setProtection(Protection.PUBLIC);
-            method.setName("setUp");
-            method.getExceptions().add("Exception");
-            method.getGeneralCode().addCode("  super.setUp();");
-        } else {
-            method.setJavaDoc("Configuracoes iniciais.");
-            method.getAnnotations().add("Before");
-            method.setProtection(Protection.PUBLIC);
-            method.setName("setUp");
-        }
-        method.getGeneralCode().addCode("  %s = new %s();", this.varNameForClassUnderTest,
-                this.classUnderTest.getType());
+	    return subsCode;
+    }
 
-        if (this.classUnderTest.isAtDao()) {
-            method.getGeneralCode().addCode("%s.setEntityManager(getEntityManager());",
-                    this.varNameForClassUnderTest);
-        }
+	private void generateSetup() {
+    	final String setup = classUnderTest.getSetup();
+    	if (setup == null) {
+    		return;
+    	}
+    	final String subsCode = replaceVars(setup);
+    	this.testCase.addGeneralCode(subsCode);
     }
 
     private void generateFields() {
@@ -245,12 +225,6 @@ public class TestCaseGenerator {
         imports.add("org.junit.*");
         imports.add("java.util.*");
         imports.add("static org.junit.Assert.*");
-        if (this.classUnderTest.isAtView()) {
-            imports.add("br.gov.esaf.sgc.view.JsfTestCase");
-        }
-        if (this.classUnderTest.isAtDao()) {
-            imports.add("br.gov.esaf.sgc.dao.impl.HibernateTestCase");
-        }
     }
 
     // @Deprecated
@@ -298,10 +272,9 @@ public class TestCaseGenerator {
     }
 
     private void generateParent() {
-        if (this.classUnderTest.isAtView()) {
-            this.testCase.setParent("JsfTestCase");
-        } else if (this.classUnderTest.isAtDao()) {
-            this.testCase.setParent("HibernateTestCase");
+    	final String parent = this.classUnderTest.getTestCaseParent();
+    	if (parent != null) {
+            this.testCase.setParent(parent);
         }
     }
 

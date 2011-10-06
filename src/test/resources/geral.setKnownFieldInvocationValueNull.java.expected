@@ -1,4 +1,4 @@
-package br.gov.esaf.sgc.business.impl;
+package br.gov.esaf.sgc.qqpacote;
 
 import static org.easymock.EasyMock.*;
 import org.junit.*;
@@ -16,6 +16,14 @@ public class TestBean  {
 private Bean bean;
 
 /**
+ * Configuracoes iniciais.
+ */
+@Before
+public void setUp() {
+  bean = new Bean();
+}
+
+/**
  * Cria o mock {@link Var} e seta na classe sendo testada.
  * @return o mock criado
  */
@@ -23,14 +31,6 @@ private Var criarMockVar() {
   Var mock = createStrictMock(Var.class);
   bean.setField(mock);
   return mock;
-}
-
-/**
- * Configuracoes iniciais.
- */
-@Before
-public void setUp() {
-  bean = new Bean();
 }
 
 /**

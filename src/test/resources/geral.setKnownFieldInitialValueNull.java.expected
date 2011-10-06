@@ -1,4 +1,4 @@
-package br.gov.esaf.sgc.business.impl;
+package br.gov.esaf.sgc.qqpacote;
 
 import static org.easymock.EasyMock.*;
 import org.junit.*;

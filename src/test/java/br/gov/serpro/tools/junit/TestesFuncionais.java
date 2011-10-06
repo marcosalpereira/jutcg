@@ -4,10 +4,13 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Properties;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import br.gov.serpro.tools.junit.generate.TestCaseGenerator;
@@ -20,6 +23,16 @@ import br.gov.serpro.tools.junit.parser.SourceParser;
  * Run all funcional tests of our application.
  */
 public class TestesFuncionais {
+
+	@BeforeClass
+	public static void configSystemProperties() throws IOException {
+		loadProperties(getFile("/config.properties"));
+	}
+
+	@Test
+	public final void testPreserveImports() throws IOException, ParseException {
+		assertContentsEquals("/preserveImports.java");
+	}
 
     @Test
     public final void testViewSemExtensaoFluxo() throws IOException, ParseException {
@@ -145,8 +158,15 @@ public class TestesFuncionais {
         }
     }
 
-    private File getFile(final String filename) throws IOException {
-        final String fullname = this.getClass().getResource(filename).getFile();
+	private static void loadProperties(File configFile) throws IOException {
+		final FileInputStream propFile = new FileInputStream(configFile);
+		final Properties p = new Properties(System.getProperties());
+		p.load(propFile);
+		System.setProperties(p);
+	}
+
+    private static File getFile(String filename) throws IOException {
+        final String fullname = TestesFuncionais.class.getResource(filename).getFile();
         final File file = new File(fullname);
         return file;
     }

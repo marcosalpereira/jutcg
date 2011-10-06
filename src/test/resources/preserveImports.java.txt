@@ -1,0 +1,7 @@
+package br.gov.qqpacote;
+
+import br.gov.some.Class;
+
+public class Tested {
+    
+}

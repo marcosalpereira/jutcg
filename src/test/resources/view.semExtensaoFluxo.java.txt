@@ -1,20 +1,6 @@
 package br.gov.esaf.sgc.view.correcao;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Observer;
-import org.jboss.seam.annotations.Scope;
-
-import br.gov.esaf.sgc.facade.DigitacaoNotaManualFacade;
-import br.gov.esaf.sgc.model.Inscricao;
-import br.gov.esaf.sgc.model.UsuarioLogado;
 import br.gov.esaf.sgc.model.prova.Prova;
-import br.gov.esaf.sgc.model.resultado.ResultadoProvaManual.VersaoResultadoProvaManual;
 
 /**
  * Bean para o caso de uso Digitar Resultado Manual.
@@ -29,7 +15,7 @@ public class DigitacaoNotaManualListarBean {
     private Prova provaSelecionada;
 
     /**
-     * Versão da nota selecionada.
+     * Versï¿½o da nota selecionada.
      */
     private VersaoResultadoProvaManual versaoSelecionada;
 
@@ -44,7 +30,7 @@ public class DigitacaoNotaManualListarBean {
     private Inscricao notNullAssignedField;
 
     /**
-     * Inscrições Pesquisadas.
+     * Inscriï¿½ï¿½es Pesquisadas.
      */
     private List<Inscricao> inscricoes;
 
@@ -60,7 +46,7 @@ public class DigitacaoNotaManualListarBean {
     private transient DigitacaoNotaManualFacade digitacaoNotaManualFacade;
 
     /**
-     * Usuário logado.
+     * Usuï¿½rio logado.
      */
     @In
     private UsuarioLogado usuarioLogado;
@@ -76,7 +62,7 @@ public class DigitacaoNotaManualListarBean {
 
     /**
      * Pesquisar candidatos habilitados para etapa/fase a qual pertence a prova,
-     * observando todos os parâmetros informados.
+     * observando todos os parï¿½metros informados.
      */
     public void pesquisar() {
         inscricoesExcluiveis = new HashMap<Inscricao, Boolean>();
