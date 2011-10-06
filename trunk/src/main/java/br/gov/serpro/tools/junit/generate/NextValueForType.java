@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import br.gov.serpro.tools.junit.model.Type;
-import br.gov.serpro.tools.junit.util.Config;
 
 /**
  * Generate unique values for same Type.
@@ -43,8 +42,8 @@ public class NextValueForType {
                 return String.format("\"%d\"", nextId(type));
             }
             // Check for a value template for this type
-            final String valueTemplate = Config.getString(String.format("valueTemplateFor.%s",
-                    name));
+            final String valueTemplate = System.getProperty(
+            		String.format("valueTemplateFor.%s", name));
             if (valueTemplate != null) {
                 if (valueTemplate.contains(VALUE_TEMPLATE_ID_VAR)) {
                     return valueTemplate.replaceAll(VALUE_TEMPLATE_ID_VAR, String

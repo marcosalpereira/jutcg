@@ -30,12 +30,11 @@ import static org.easymock.EasyMock.*;
 import org.junit.*;
 import java.util.*;
 import static org.junit.Assert.*;
-import br.gov.esaf.sgc.dao.impl.HibernateTestCase;
 
 /**
  * Testes unitarios para a classe {@link VinculoProvaFaseDaoBean}.
  */
-public class TestVinculoProvaFaseDaoBean extends HibernateTestCase {
+public class TestVinculoProvaFaseDaoBean extends br.gov.esaf.sgc.dao.impl.HibernateTestCase {
 
 /**
  * Classe sendo testada {@link VinculoProvaFaseDaoBean}.
@@ -44,7 +43,7 @@ private VinculoProvaFaseDaoBean vinculoProvaFaseDaoBean;
 
 @Override
 protected IDataSet getDataSet() {
-  return recuperarDataSet("vinculoProvaFaseDS.xml");
+  return recuperarDataSet("vinculoProvaFaseDaoBeanDS.xml");
 }
 
 /**

@@ -3,13 +3,20 @@ package br.gov.serpro.tools.junit.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.gov.serpro.tools.junit.util.Config;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * A class representing a Java source file.
  */
 public class JavaClass {
-    /**
+    private static final String PROPERTY_PREFIX_BASE_CLASS = "baseClass_";
+
+	private static final String PROPERTY_PREFIX_TEST_ABSTRACT_IMPLS = "abstractImpls_";
+
+	private static final String PROPERTY_PREFIX_TEST_SETUP = "setup_";
+
+	/**
      * Package name.
      */
     private String packageName;
@@ -74,12 +81,32 @@ public class JavaClass {
         this.fields = fields;
     }
 
-    public boolean isAtView() {
-        return getPackageName().startsWith(Config.getString("packagePrefix.view"));
+	public String getTestCaseParent() {
+		final String[] packageLevels = getPackageName().split("\\.");
+		return getProperty(packageLevels, PROPERTY_PREFIX_BASE_CLASS);
     }
 
-    public boolean isAtDao() {
-        return getPackageName().startsWith(Config.getString("packagePrefix.dao"));
+	public String getAbstractImpls() {
+		final String[] packageLevels = getPackageName().split("\\.");
+		return getProperty(packageLevels, PROPERTY_PREFIX_TEST_ABSTRACT_IMPLS);
+	}
+
+	public String getSetup() {
+		final String[] packageLevels = getPackageName().split("\\.");
+		return getProperty(packageLevels, PROPERTY_PREFIX_TEST_SETUP);
+    }
+
+	private String getProperty(String[] packageLevels, String propertyPrefix) {
+	    for (int i = packageLevels.length; i > 0; i--) {
+			final String packageNameLevel = StringUtils.join(
+					ArrayUtils.subarray(packageLevels, 0, i)
+					, ".");
+			final String property = System.getProperty(propertyPrefix  + packageNameLevel);
+			if (property != null) {
+				return property;
+			}
+		}
+		return null;
     }
 
     public String variableNameForType() {

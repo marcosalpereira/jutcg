@@ -20,6 +20,14 @@ public class TestCampoAtuacaoBusinessBean  {
 private CampoAtuacaoBusinessBean campoAtuacaoBusinessBean;
 
 /**
+ * Configuracoes iniciais.
+ */
+@Before
+public void setUp() {
+  campoAtuacaoBusinessBean = new CampoAtuacaoBusinessBean();
+}
+
+/**
  * Cria o mock {@link CampoAtuacaoDao} e seta na classe sendo testada.
  * @return o mock criado
  */
@@ -27,14 +35,6 @@ private CampoAtuacaoDao criarMockCampoAtuacaoDao() {
   CampoAtuacaoDao mock = createStrictMock(CampoAtuacaoDao.class);
   campoAtuacaoBusinessBean.setCampoAtuacaoDao(mock);
   return mock;
-}
-
-/**
- * Configuracoes iniciais.
- */
-@Before
-public void setUp() {
-  campoAtuacaoBusinessBean = new CampoAtuacaoBusinessBean();
 }
 
 /**

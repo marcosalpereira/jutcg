@@ -16,6 +16,7 @@ public class JunitTestCase {
     private Set<TestField> fields = new LinkedHashSet<TestField>();
     private String javaDoc;
     private String parent;
+    private final StringBuilder generalCode = new StringBuilder();
 
     public void setJavaDoc(final String format, final Object... args) {
         this.javaDoc = String.format(format, args);
@@ -75,6 +76,10 @@ public class JunitTestCase {
             sb.appendln();
             sb.append(field.asCode());
         }
+
+        sb.append(generalCode.toString());
+
+
         for (final TestMethod method : getTestMethods()) {
             sb.appendln();
             sb.append(method.asCode());
@@ -89,6 +94,10 @@ public class JunitTestCase {
 	        return "";
         }
         return "extends " + this.parent;
+    }
+
+	public void addGeneralCode(String generalCode) {
+		this.generalCode.append(generalCode);
     }
 
 }
