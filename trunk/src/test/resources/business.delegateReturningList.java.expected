@@ -1,0 +1,65 @@
+package br.gov.esaf.sgc.business.impl;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import br.gov.esaf.sgc.dao.CampoAtuacaoDao;
+import br.gov.esaf.sgc.model.Pessoa;
+import static org.easymock.EasyMock.*;
+import org.junit.*;
+import java.util.*;
+import static org.junit.Assert.*;
+
+/**
+ * Testes unitarios para a classe {@link PessoaBusinessBean}.
+ */
+public class TestPessoaBusinessBean  {
+
+/**
+ * Classe sendo testada {@link PessoaBusinessBean}.
+ */
+private PessoaBusinessBean pessoaBusinessBean;
+
+/**
+ * Configuracoes iniciais.
+ */
+@Before
+public void setUp() {
+  pessoaBusinessBean = new PessoaBusinessBean();
+}
+
+/**
+ * Cria o mock {@link PessoaDao} e seta na classe sendo testada.
+ * @return o mock criado
+ */
+private PessoaDao criarMockPessoaDao() {
+  PessoaDao mock = createStrictMock(PessoaDao.class);
+  pessoaBusinessBean.setPessoaDao(mock);
+  return mock;
+}
+
+/**
+ * Teste para o metodo {@link PessoaBusinessBean#consultarPessoas(String)}.
+ */
+@Test
+public void testConsultarPessoas() {
+
+// variaveis usadas
+final List<Pessoa> selecionarPessoasFromMock = Arrays.asList(new Pessoa(1));
+final String parteNome = "1";
+
+// Configurando mock
+PessoaDao pessoaDao = criarMockPessoaDao();
+expect(pessoaDao.selecionarPessoas(parteNome))
+  .andReturn(selecionarPessoasFromMock);
+replay(pessoaDao);
+
+// invocar metodo sendo testado
+final List<Pessoa> consultarPessoasReal = pessoaBusinessBean.consultarPessoas(parteNome);
+
+// checar estados dos mocks
+verify(pessoaDao);
+
+// verificacoes do resultado do metodo sendo testado
+assertEquals(selecionarPessoasFromMock, consultarPessoasReal);
+}
+}

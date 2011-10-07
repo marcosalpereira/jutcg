@@ -30,6 +30,11 @@ public class TestesFuncionais {
 	}
 
 	@Test
+	public final void testDelegateReturningList() throws IOException, ParseException {
+		assertContentsEquals("/business.delegateReturningList.java");
+	}
+
+	@Test
 	public final void testPreserveImports() throws IOException, ParseException {
 		assertContentsEquals("/preserveImports.java");
 	}
