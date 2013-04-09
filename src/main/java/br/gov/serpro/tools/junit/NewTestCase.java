@@ -22,7 +22,7 @@ public final class NewTestCase {
 
 	public static void main(final String[] args) throws ParseException, ArgumentException,
 	        IOException {
-		JutcgArguments arguments = JutcgArguments.parseArguments(NewTestCase.class, args);
+		final JutcgArguments arguments = JutcgArguments.parseArguments(NewTestCase.class, new String[] {"/home/54706424372/cvsviews/36312esaf/01-Sistema/06-Implementacao/01-Aplicacao/SGC-Esaf/SGC-Internet/src/main/java/br/gov/esaf/sgc/view/DigitarRecursoProvaManualBean.java", "/home/54706424372/dev/java/src/jutcg/src/main/resources/config.properties"});
 
 		if (arguments.getConfigFile() != null) {
 			loadProperties(arguments.getConfigFile());
@@ -31,13 +31,13 @@ public final class NewTestCase {
 		final SourceParser parser = new JsmgJavaSourceParser();
 		final JavaClass javaClass = parser.parse(arguments.getJavaSourceFile());
 		final JunitTestCase testCase = new TestCaseGenerator(javaClass).generate();
-		System.out.println(testCase);
+		System.out.println(testCase.asCode());
 
 	}
 
 	private static void loadProperties(File configFile) throws IOException {
-		FileInputStream propFile = new FileInputStream(configFile);
-		Properties p = new Properties(System.getProperties());
+		final FileInputStream propFile = new FileInputStream(configFile);
+		final Properties p = new Properties(System.getProperties());
 		p.load(propFile);
 		System.setProperties(p);
 	}

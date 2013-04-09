@@ -1,7 +1,5 @@
 package br.gov.serpro.tools.junit.generate;
 
-import static br.gov.serpro.tools.junit.util.GeneratorHelper.lowerCaseFirstChar;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -208,9 +206,11 @@ public class TestCaseMethodFlowGenerator {
         if (returnInvocationMethod != null) {
             final String nextValue = this.nextValueForType
                     .next(returnInvocationMethod.getType());
-            this.testMethod.getUsedVars().addCode("final %s %sFromMock = %s;",
+            final String varNameFromMock =
+            		returnInvocationMethod.getVarNameFromReturningMock();
+            this.testMethod.getUsedVars().addCode("final %s %s = %s;",
                     returnInvocationMethod.getType(),
-                    lowerCaseFirstChar(returnInvocationMethod.getName()),
+                    varNameFromMock,
                     nextValue);
         }
 
@@ -223,13 +223,15 @@ public class TestCaseMethodFlowGenerator {
         }
     }
 
-    private void generateVerifys() {
+	private void generateVerifys() {
         final Method returnInvocationMethod = this.flow
                 .getReturnInvocationMethod();
         if (returnInvocationMethod != null) {
+            final String varNameFromMock =
+            		returnInvocationMethod.getVarNameFromReturningMock();
             this.testMethod.getAsserts().addCode(
-                    "assertEquals(%sFromMock, %sReal);",
-                    returnInvocationMethod.getName(), this.method.getName());
+                    "assertEquals(%s, %sReal);",
+                    varNameFromMock, this.method.getName());
         } else if (!this.method.isVoid()) {
             this.testMethod.getAsserts().addCode(
                     "assertEquals(esperado, %sReal);", this.method.getName());

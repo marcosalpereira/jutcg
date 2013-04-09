@@ -1,7 +1,12 @@
 package br.gov.serpro.tools.junit.generate;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import br.gov.serpro.tools.junit.model.Field;
@@ -48,6 +53,8 @@ public class TestCaseGenerator {
         this.dependencies = selectDependencies();
         this.selectedMethods = selectMethods();
         this.varNameForClassUnderTest = classUnderTest.variableNameForType();
+
+        //loadProperties();
     }
 
     /**
@@ -67,6 +74,24 @@ public class TestCaseGenerator {
         generateMethods();
         return this.testCase;
     }
+
+	private void loadProperties() {
+        final String filename = "config.properties";
+        final String fullname = TestCaseGenerator.class.getResource(filename).getFile();
+        final File configFile = new File(fullname);
+
+		FileInputStream propFile;
+        try {
+	        propFile = new FileInputStream(configFile);
+	        final Properties p = new Properties(System.getProperties());
+	        p.load(propFile);
+	        System.setProperties(p);
+        } catch (final FileNotFoundException e) {
+	        e.printStackTrace();
+        } catch (final IOException e) {
+	        e.printStackTrace();
+        }
+	}
 
     /**
      * Create mock methods for each dependency of class under test.

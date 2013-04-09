@@ -1,7 +1,5 @@
 package br.gov.serpro.tools.junit.generate;
 
-import static br.gov.serpro.tools.junit.util.GeneratorHelper.lowerCaseFirstChar;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -153,11 +151,12 @@ public class ConfigMocksGenerator {
      */
     private void configReturnInvocation(final Field mock,
             final FieldMethodInvocation invocation) {
+    	final String varNameFromMock =
+        		invocation.getMethod().getVarNameFromReturningMock();
         this.configMocks.addCode(
-                "expect(%s.%s(%s))\n  .andReturn(%sFromMock);", mock.getName(),
+                "expect(%s.%s(%s))\n  .andReturn(%s);", mock.getName(),
                 invocation.getMethod().getName(), invocation
-                        .getArgumentsAsString(), lowerCaseFirstChar(invocation
-                        .getMethod().getName()));
+                        .getArgumentsAsString(), varNameFromMock);
     }
 
     /**
