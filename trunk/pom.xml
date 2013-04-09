@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>marcosoft</groupId>
   <artifactId>jutcg</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.3-SNAPSHOT</version>
 
   <properties>
     <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
@@ -24,6 +24,7 @@
             <configuration>
                 <useFile>false</useFile>
                 <encoding>ISO-8859-1</encoding>
+                <testFailureIgnore>true</testFailureIgnore>
             </configuration>
         </plugin>
 

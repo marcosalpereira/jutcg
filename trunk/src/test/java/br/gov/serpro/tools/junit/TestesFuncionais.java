@@ -29,6 +29,17 @@ public class TestesFuncionais {
 		loadProperties(getFile("/config.properties"));
 	}
 
+//	@Test
+//	public final void testDelegateReturningListArgumentFunction() throws IOException,
+//	        ParseException {
+//		assertContentsEquals("/business.delegateReturningListArgumentFunction.java");
+//	}
+
+	@Test
+	public final void testDelegateReturningEntity() throws IOException, ParseException {
+		assertContentsEquals("/business.delegateReturningEntity.java");
+	}
+
 	@Test
 	public final void testDelegateReturningList() throws IOException, ParseException {
 		assertContentsEquals("/business.delegateReturningList.java");

@@ -27,4 +27,11 @@ public final class GeneratorHelper {
         }
     }
 
+	public static String plural(String name) {
+		if (name.endsWith("ao")) {
+			return name.substring(0, name.length() - 2) + "oes";
+		}
+	    return name + "s";
+    }
+
 }

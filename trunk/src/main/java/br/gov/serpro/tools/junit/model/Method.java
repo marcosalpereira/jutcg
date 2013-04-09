@@ -1,5 +1,7 @@
 package br.gov.serpro.tools.junit.model;
 
+import static br.gov.serpro.tools.junit.util.GeneratorHelper.lowerCaseFirstChar;
+import static br.gov.serpro.tools.junit.util.GeneratorHelper.plural;
 import static br.gov.serpro.tools.junit.util.GeneratorHelper.upperCaseFirstChar;
 
 import java.util.ArrayList;
@@ -155,6 +157,21 @@ public class Method {
     private boolean isOverload() {
         return getJavaClass().isAnOverloadedMethod(this);
     }
+
+    public String getVarNameFromReturningMock() {
+	    if (type.isCollection()) {
+	    	final Type[] generic = type.getGeneric();
+	    	if (generic != null) {
+	    		return lowerCaseFirstChar(plural(generic[0].getName()));
+	    	}
+	    	return lowerCaseFirstChar(type.getName()) + "FromMock";
+	    }
+	    if (type.isPrimitive()) {
+	    	return lowerCaseFirstChar(this.getName()) + "FromMock";
+	    }
+	    return lowerCaseFirstChar(type.getName()) + "FromMock";
+    }
+
 
     /** {@inheritDoc} */
     @Override

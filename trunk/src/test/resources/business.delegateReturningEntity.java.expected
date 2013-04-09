@@ -38,28 +38,28 @@ private PessoaDao criarMockPessoaDao() {
 }
 
 /**
- * Teste para o metodo {@link PessoaBusinessBean#consultarPessoas(String)}.
+ * Teste para o metodo {@link PessoaBusinessBean#consultarPessoa(String)}.
  */
 @Test
-public void testConsultarPessoas() {
+public void testConsultarPessoa() {
 
 // variaveis usadas
-final List<Pessoa> pessoas = Arrays.asList(new Pessoa(1));
-final String parteNome = "1";
+final Pessoa pessoaFromMock = new Pessoa(1);
+final String cpf = "1";
 
 // Configurando mock
 PessoaDao pessoaDao = criarMockPessoaDao();
-expect(pessoaDao.selecionarPessoas(parteNome))
-  .andReturn(pessoas);
+expect(pessoaDao.selecionarPessoa(cpf))
+  .andReturn(pessoaFromMock);
 replay(pessoaDao);
 
 // invocar metodo sendo testado
-final List<Pessoa> consultarPessoasReal = pessoaBusinessBean.consultarPessoas(parteNome);
+final Pessoa consultarPessoaReal = pessoaBusinessBean.consultarPessoa(cpf);
 
 // checar estados dos mocks
 verify(pessoaDao);
 
 // verificacoes do resultado do metodo sendo testado
-assertEquals(pessoas, consultarPessoasReal);
+assertEquals(pessoaFromMock, consultarPessoaReal);
 }
 }
