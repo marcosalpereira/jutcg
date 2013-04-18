@@ -1,0 +1,13 @@
+package br.gov.esaf.sgc.qqpacote;
+
+import static br.gov.esaf.scg.Sexo.MASCULINO;
+
+public class Bean {
+	private boolean masculino;
+
+    public void foo(Sexo.MASCULINO sexo) {
+        if(sexo == MASCULINO) {
+        	masculino = true; 
+        }
+    }    
+}

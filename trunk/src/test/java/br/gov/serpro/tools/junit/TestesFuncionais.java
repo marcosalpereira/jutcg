@@ -36,6 +36,11 @@ public class TestesFuncionais {
 //	}
 
 	@Test
+	public final void testImportStatic() throws IOException, ParseException {
+		assertContentsEquals("/importStatic.java");
+	}
+	
+	@Test
 	public final void testDelegateReturningEntity() throws IOException, ParseException {
 		assertContentsEquals("/business.delegateReturningEntity.java");
 	}
