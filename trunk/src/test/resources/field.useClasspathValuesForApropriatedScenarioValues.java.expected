@@ -1,6 +1,6 @@
-package br.gov.esaf.sgc.qqpacote;
+package br.qqpacote;
 
-import somepackage.EnumInClasspath;
+import br.model.PersonTypeInClasspath;
 import static org.easymock.EasyMock.*;
 import org.junit.*;
 import java.util.*;
@@ -27,36 +27,44 @@ public void setUp() {
 /**
  * Teste para o metodo {@link Bean#test()}.
  * Descricao do Fluxo: 
- *     Entra: if(field == EnumInClasspath.SOME_VALUE) {.
+ *     Entra: if (personType == PersonTypeInClasspath.MALE) {.
  */
 @Test
 public void testTestPath1() {
 
 // variaveis usadas
-final EnumInClasspath field = EnumInClasspath.SOME_VALUE;
+final PersonTypeInClasspath personType = PersonTypeInClasspath.MALE;
 
 // Configurando estado interno da classe sob teste
-bean.setField(field);
+bean.setPersonType(personType);
 
 // invocar metodo sendo testado
 bean.test();
+
+// verificacoes do resultado do metodo sendo testado
+assertFalse(bean.isFemalePerson());
+assertTrue(bean.isMalePerson());
 }
 
 /**
  * Teste para o metodo {@link Bean#test()}.
  * Descricao do Fluxo: 
- * NAO Entra: if(field == EnumInClasspath.SOME_VALUE) {.
+ * NAO Entra: if (personType == PersonTypeInClasspath.MALE) {.
  */
 @Test
 public void testTestPath2() {
 
 // variaveis usadas
-final EnumInClasspath field = EnumInClasspath.OTHER_VALUE;
+final PersonTypeInClasspath personType = PersonTypeInClasspath.FEMALE;
 
 // Configurando estado interno da classe sob teste
-bean.setField(field);
+bean.setPersonType(personType);
 
 // invocar metodo sendo testado
 bean.test();
+
+// verificacoes do resultado do metodo sendo testado
+assertTrue(bean.isFemalePerson());
+assertFalse(bean.isMalePerson());
 }
 }

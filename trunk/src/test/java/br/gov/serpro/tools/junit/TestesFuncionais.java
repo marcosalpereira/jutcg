@@ -50,11 +50,6 @@ public class TestesFuncionais {
 		assertContentsEquals("/business.delegateReturningList.java");
 	}
 
-	@Test
-	public final void testPreserveImports() throws IOException, ParseException {
-		assertContentsEquals("/preserveImports.java");
-	}
-
     @Test
     public final void testViewSemExtensaoFluxo() throws IOException, ParseException {
         assertContentsEquals("/view.semExtensaoFluxo.java");
@@ -128,9 +123,9 @@ public class TestesFuncionais {
     }
 
     @Test
-    public final void testSetKnownFieldEnumInitialValueUsingReflection() throws IOException,
+    public final void testFieldUseClasspathValuesForApropriatedScenarioValues() throws IOException,
             ParseException {
-        assertContentsEquals("/geral.setKnownFieldEnumInitialValueUsingReflection.java");
+        assertContentsEquals("/field.useClasspathValuesForApropriatedScenarioValues.java");
     }
 
     @Test

@@ -38,22 +38,50 @@ private Dao criarMockDao() {
 }
 
 /**
- * Teste para o metodo {@link Business#nonVoidMethod(Entity, boolean)}.
+ * Teste para o metodo {@link Business#nonVoidMethod(Entity)}.
+ * Descricao do Fluxo: 
+ *     Entra: if (dao.exists(entity)) {.
  */
 @Test
-public void testAlterarSituacaoDosCamposDeAtuacaoDoEntity() {
+public void testAlterarSituacaoDosCamposDeAtuacaoDoEntityPath1() {
 
 // variaveis usadas
 final Entity entity = new Entity(1);
-final boolean novaSituacao = false;
 
 // Configurando mock
 Dao dao = criarMockDao();
-dao.nonVoidMethod(entity,novaSituacao);
+expect(dao.exists(entity))
+  .andReturn(true);
+dao.alterar(entity);
 replay(dao);
 
 // invocar metodo sendo testado
-Business.nonVoidMethod(entity,novaSituacao);
+Business.nonVoidMethod(entity);
+
+// checar estados dos mocks
+verify(dao);
+}
+
+/**
+ * Teste para o metodo {@link Business#nonVoidMethod(Entity)}.
+ * Descricao do Fluxo: 
+ * NAO Entra: if (dao.exists(entity)) {.
+ */
+@Test
+public void testAlterarSituacaoDosCamposDeAtuacaoDoEntityPath2() {
+
+// variaveis usadas
+final Entity entity = new Entity(1);
+
+// Configurando mock
+Dao dao = criarMockDao();
+expect(dao.exists(entity))
+  .andReturn(false);
+dao.insert(entity);
+replay(dao);
+
+// invocar metodo sendo testado
+Business.nonVoidMethod(entity);
 
 // checar estados dos mocks
 verify(dao);

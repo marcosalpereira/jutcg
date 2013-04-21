@@ -1,4 +1,4 @@
-package br.gov.esaf.sgc.view.correcao;
+package br.view.correcao;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,18 +14,18 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
-import br.gov.esaf.sgc.facade.DigitacaoNotaManualFacade;
-import br.gov.esaf.sgc.model.CampoAtuacao;
-import br.gov.esaf.sgc.model.Cargo;
-import br.gov.esaf.sgc.model.Cidade;
-import br.gov.esaf.sgc.model.Concurso;
-import br.gov.esaf.sgc.model.Inscricao;
-import br.gov.esaf.sgc.model.OrgaoContratante;
-import br.gov.esaf.sgc.model.TipoConsultaNome;
-import br.gov.esaf.sgc.model.Uf;
-import br.gov.esaf.sgc.model.prova.Prova;
-import br.gov.esaf.sgc.model.prova.ConteudoProva.TipoConteudoProva;
-import br.gov.esaf.sgc.model.resultado.ResultadoProvaManual.VersaoResultadoProvaManual;
+import br.facade.DigitacaoNotaManualFacade;
+import br.model.CampoAtuacao;
+import br.model.Entity;
+import br.model.Cidade;
+import br.model.Concurso;
+import br.model.Inscricao;
+import br.model.OrgaoContratante;
+import br.model.TipoConsultaNome;
+import br.model.Uf;
+import br.model.prova.Prova;
+import br.model.prova.ConteudoProva.TipoConteudoProva;
+import br.model.resultado.ResultadoProvaManual.VersaoResultadoProvaManual;
 import br.gov.serpro.util.StringHelper;
 import br.gov.serpro.view.util.MessageHelper;
 

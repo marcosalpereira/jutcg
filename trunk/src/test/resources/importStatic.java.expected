@@ -1,9 +1,7 @@
-package br.business.impl;
+package br.anypackage;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
+import static br.Genre.FEMALE;
 import br.dao.Dao;
-import br.model.Entity;
 import static org.easymock.EasyMock.*;
 import org.junit.*;
 import java.util.*;
@@ -17,14 +15,14 @@ public class TestBusiness  {
 /**
  * Classe sendo testada {@link Business}.
  */
-private Business Business;
+private Business business;
 
 /**
  * Configuracoes iniciais.
  */
 @Before
 public void setUp() {
-  Business = new Business();
+  business = new Business();
 }
 
 /**
@@ -33,29 +31,32 @@ public void setUp() {
  */
 private Dao criarMockDao() {
   Dao mock = createStrictMock(Dao.class);
-  Business.setDao(mock);
+  business.setDao(mock);
   return mock;
 }
 
 /**
- * Teste para o metodo {@link Business#nonVoidMethod(Entity, boolean)}.
+ * Teste para o metodo {@link Business#findWomen()}.
  */
 @Test
-public void testAlterarSituacaoDosCamposDeAtuacaoDoEntity() {
+public void testFindWomen() {
 
 // variaveis usadas
-final Entity entity = new Entity(1);
-final boolean novaSituacao = false;
+final List<Person> persons = Arrays.asList(new Person(1));
 
 // Configurando mock
 Dao dao = criarMockDao();
-dao.nonVoidMethod(entity,novaSituacao);
+expect(dao.find(FEMALE))
+  .andReturn(persons);
 replay(dao);
 
 // invocar metodo sendo testado
-Business.nonVoidMethod(entity,novaSituacao);
+final List<Person> personsReal = business.findWomen();
 
 // checar estados dos mocks
 verify(dao);
+
+// verificacoes do resultado do metodo sendo testado
+assertEquals(persons, personsReal);
 }
 }

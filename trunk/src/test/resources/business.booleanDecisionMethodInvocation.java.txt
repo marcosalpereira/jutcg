@@ -12,8 +12,12 @@ public class Business {
     @EJB
     private Dao dao;
 
-    public void voidMethod(Entity entity) {
-        dao.voidMethod(entity);
+    public void nonVoidMethod(Entity entity) {
+        if (dao.exists(entity)) {
+           dao.alterar(entity);
+        } else {
+           dao.insert(entity);
+        }        
     }
 
 }

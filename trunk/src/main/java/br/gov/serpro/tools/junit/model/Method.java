@@ -164,13 +164,29 @@ public class Method {
 	    	if (generic != null) {
 	    		return lowerCaseFirstChar(plural(generic[0].getName()));
 	    	}
-	    	return lowerCaseFirstChar(type.getName()) + "FromMock";
+	    	return lowerCaseFirstChar(type.getName());
 	    }
 	    if (type.isPrimitive()) {
-	    	return lowerCaseFirstChar(this.getName()) + "FromMock";
+	    	return lowerCaseFirstChar(this.getName());
 	    }
-	    return lowerCaseFirstChar(type.getName()) + "FromMock";
+	    return lowerCaseFirstChar(type.getName());
     }
+    
+	public String getVarNameForRealContentInvocation() {
+	    if (type.isCollection()) {
+	    	final Type[] generic = type.getGeneric();
+	    	if (generic != null) {
+	    		return lowerCaseFirstChar(plural(generic[0].getName())) + "Real";
+	    	}
+	    	return lowerCaseFirstChar(type.getName()) + "Real";
+	    }
+	    if (type.isPrimitive()) {
+	    	return lowerCaseFirstChar(this.getName()) + "Real";
+	    }
+	    return lowerCaseFirstChar(type.getName()) + "Real";
+	}
+
+
 
 
     /** {@inheritDoc} */

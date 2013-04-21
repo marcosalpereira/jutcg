@@ -174,8 +174,8 @@ public class TestCaseMethodFlowGenerator {
                     strParams);
         } else {
             this.testMethod.getInvokeMethod().addCode(
-                    "final %s %sReal = %s.%s(%s);",
-                    this.method.getType().getName(), this.method.getName(),
+                    "final %s %s = %s.%s(%s);",
+                    this.method.getType().getName(), this.method.getVarNameForRealContentInvocation(),
                     this.varNameForClassUnderTest, this.method.getName(),
                     strParams);
 
@@ -227,14 +227,19 @@ public class TestCaseMethodFlowGenerator {
         final Method returnInvocationMethod = this.flow
                 .getReturnInvocationMethod();
         if (returnInvocationMethod != null) {
+        	final String varNameForRealContentInvocation =
+        			returnInvocationMethod.getVarNameForRealContentInvocation();
             final String varNameFromMock =
             		returnInvocationMethod.getVarNameFromReturningMock();
-            this.testMethod.getAsserts().addCode(
-                    "assertEquals(%s, %sReal);",
-                    varNameFromMock, this.method.getName());
+			this.testMethod.getAsserts().addCode(
+                    "assertEquals(%s, %s);",
+                    varNameFromMock, varNameForRealContentInvocation);
         } else if (!this.method.isVoid()) {
+        	final String varNameForRealContentInvocation =
+        			this.method.getVarNameForRealContentInvocation();
             this.testMethod.getAsserts().addCode(
-                    "assertEquals(esperado, %sReal);", this.method.getName());
+                    "assertEquals(esperado, %s);", this.method.getName(),
+                    varNameForRealContentInvocation);
         }
 
         for (final Field f : this.flow.getWrittenFields()) {

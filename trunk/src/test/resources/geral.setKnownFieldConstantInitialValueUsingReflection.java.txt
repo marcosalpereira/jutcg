@@ -1,8 +1,8 @@
-package br.gov.esaf.sgc.qqpacote;
+package br.qqpacote;
 
 import somepackage.SomeClass;
 
-public class Bean implements CampoAtuacaoBusiness {
+public class Bean {
     private int field;
 
     public void test() {
