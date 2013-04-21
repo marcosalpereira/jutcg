@@ -1,4 +1,4 @@
-package br.gov.esaf.sgc.qqpacote;
+package br.qqpacote;
 
 import somepackage.SomeClass;
 import static org.easymock.EasyMock.*;

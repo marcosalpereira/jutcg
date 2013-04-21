@@ -77,7 +77,11 @@ public class JsmgJavaSourceParser implements SourceParser {
         final List<String> imports = new ArrayList<String>(jsmgModel.getClassImports().size());
         final List<ImportPath> classImports = jsmgModel.getClassImports();
         for (final ImportPath importPath : classImports) {
-            imports.add(importPath.getImportPath());
+        	if (importPath.isStatic()) {
+        		imports.add("static " + importPath.getImportPath());
+        	} else {
+        		imports.add(importPath.getImportPath());
+        	}
         }
         return imports;
     }
@@ -188,8 +192,7 @@ public class JsmgJavaSourceParser implements SourceParser {
             flow.setFlowBranches(translateFlowBranches(executionPath));
             flow.setMethod(method);
             flow.setReadFields(translateReadFields(executionPath, method.getJavaClass()));
-            flow
-                    .setWrittenFields(translateWrittenFields(executionPath, method
+            flow.setWrittenFields(translateWrittenFields(executionPath, method
                             .getJavaClass()));
             flow.setInvocations(translateInvocations(executionPath, method));
             flows.add(flow);

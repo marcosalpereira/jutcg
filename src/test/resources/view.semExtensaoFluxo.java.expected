@@ -1,41 +1,39 @@
-package br.gov.esaf.sgc.view.correcao;
+package br.view.correcao;
 
-import br.gov.esaf.sgc.model.prova.Prova;
 import static org.easymock.EasyMock.*;
 import org.junit.*;
 import java.util.*;
 import static org.junit.Assert.*;
 
 /**
- * Testes unitarios para a classe {@link DigitacaoNotaManualListarBean}.
+ * Testes unitarios para a classe {@link ManagedBean}.
  */
-public class TestDigitacaoNotaManualListarBean extends br.gov.esaf.sgc.view.JsfTestCase {
+public class TestManagedBean extends br.view.JsfTestCase {
 
 /**
- * Classe sendo testada {@link DigitacaoNotaManualListarBean}.
+ * Classe sendo testada {@link ManagedBean}.
  */
-private DigitacaoNotaManualListarBean digitacaoNotaManualListarBean;
+private ManagedBean managedBean;
 
 @Override
 public void setUp() throws Exception {
   super.setUp();
-  digitacaoNotaManualListarBean = new DigitacaoNotaManualListarBean();
+  managedBean = new ManagedBean();
 }
 
 /**
- * Cria o mock {@link DigitacaoNotaManualFacade} e seta na classe sendo testada.
+ * Cria o mock {@link Facade} e seta na classe sendo testada.
  * @return o mock criado
  */
-private DigitacaoNotaManualFacade criarMockDigitacaoNotaManualFacade() {
-  DigitacaoNotaManualFacade mock = createStrictMock(DigitacaoNotaManualFacade.class);
-  digitacaoNotaManualListarBean.setDigitacaoNotaManualFacade(mock);
+private Facade criarMockFacade() {
+  Facade mock = createStrictMock(Facade.class);
+  managedBean.setFacade(mock);
   return mock;
 }
 
 /**
- * Teste para o metodo {@link DigitacaoNotaManualListarBean#pesquisar()}.
+ * Teste para o metodo {@link ManagedBean#pesquisar()}.
  * Descricao do Fluxo: 
- *     Entra: if (versaoSelecionada == VersaoResultadoProvaManual.DEFINITIVA) {
  *     Entra: for (Inscricao inscricao : inscricoes) {.
  */
 @Test
@@ -44,43 +42,36 @@ public void testPesquisarPath1() {
 // variaveis usadas
 final List<Inscricao> inscricoes = Arrays.asList(new Inscricao(1));
 final Map<Inscricao, Boolean> inscricoesExcluiveis = newHashMap(new Inscricao(2), Boolean.FALSE);
-final UsuarioLogado usuarioLogado = new Usuario(1);
-final VersaoResultadoProvaManual versaoSelecionada = VersaoResultadoProvaManual.DEFINITIVA;
 
 // Configurando mock
-DigitacaoNotaManualFacade digitacaoNotaManualFacade = criarMockDigitacaoNotaManualFacade();
-expect(digitacaoNotaManualFacade.consultarInscricoes(usuarioLogado))
+Facade facade = criarMockFacade();
+expect(facade.searchInscricoes())
   .andReturn(inscricoes);
 boolean bExcluivel = false;
-expect(digitacaoNotaManualFacade.existeNotaProvisoriaStatusCadastrada(inscricao))
+expect(facade.isExcluivel(inscricao))
   .andReturn(bExcluivel);
-replay(digitacaoNotaManualFacade);
+replay(facade);
 
 // Configurando estado interno da classe sob teste
-digitacaoNotaManualListarBean.setInscricoes(inscricoes);
-digitacaoNotaManualListarBean.setInscricoesExcluiveis(inscricoesExcluiveis);
-digitacaoNotaManualListarBean.setUsuarioLogado(usuarioLogado);
-digitacaoNotaManualListarBean.setVersaoSelecionada(versaoSelecionada);
+managedBean.setInscricoes(inscricoes);
+managedBean.setInscricoesExcluiveis(inscricoesExcluiveis);
 
 // invocar metodo sendo testado
-digitacaoNotaManualListarBean.pesquisar();
+managedBean.pesquisar();
 
 // checar estados dos mocks
-verify(digitacaoNotaManualFacade);
+verify(facade);
 
 // verificacoes do resultado do metodo sendo testado
 final List<Inscricao> getInscricoesExpected;
-assertEquals(getInscricoesExpected, digitacaoNotaManualListarBean.getInscricoes());
+assertEquals(getInscricoesExpected, managedBean.getInscricoes());
 final Map<Inscricao, Boolean> getInscricoesExcluiveisExpected;
-assertEquals(getInscricoesExcluiveisExpected, digitacaoNotaManualListarBean.getInscricoesExcluiveis());
-assertEquals(inscricoes.get(0) , digitacaoNotaManualListarBean.getNotNullAssignedField());
-assertNull(digitacaoNotaManualListarBean.getNullAssignedField());
+assertEquals(getInscricoesExcluiveisExpected, managedBean.getInscricoesExcluiveis());
 }
 
 /**
- * Teste para o metodo {@link DigitacaoNotaManualListarBean#pesquisar()}.
+ * Teste para o metodo {@link ManagedBean#pesquisar()}.
  * Descricao do Fluxo: 
- *     Entra: if (versaoSelecionada == VersaoResultadoProvaManual.DEFINITIVA) {
  * NAO Entra: for (Inscricao inscricao : inscricoes) {.
  */
 @Test
@@ -88,54 +79,26 @@ public void testPesquisarPath2() {
 
 // variaveis usadas
 final List<Inscricao> inscricoes = Arrays.asList(new Inscricao(1));
-final UsuarioLogado usuarioLogado = new Usuario(1);
-final VersaoResultadoProvaManual versaoSelecionada = VersaoResultadoProvaManual.DEFINITIVA;
 
 // Configurando mock
-DigitacaoNotaManualFacade digitacaoNotaManualFacade = criarMockDigitacaoNotaManualFacade();
-expect(digitacaoNotaManualFacade.consultarInscricoes(usuarioLogado))
+Facade facade = criarMockFacade();
+expect(facade.searchInscricoes())
   .andReturn(inscricoes);
-replay(digitacaoNotaManualFacade);
+replay(facade);
 
 // Configurando estado interno da classe sob teste
-digitacaoNotaManualListarBean.setInscricoes(inscricoes);
-digitacaoNotaManualListarBean.setUsuarioLogado(usuarioLogado);
-digitacaoNotaManualListarBean.setVersaoSelecionada(versaoSelecionada);
+managedBean.setInscricoes(inscricoes);
 
 // invocar metodo sendo testado
-digitacaoNotaManualListarBean.pesquisar();
+managedBean.pesquisar();
 
 // checar estados dos mocks
-verify(digitacaoNotaManualFacade);
+verify(facade);
 
 // verificacoes do resultado do metodo sendo testado
 final List<Inscricao> getInscricoesExpected;
-assertEquals(getInscricoesExpected, digitacaoNotaManualListarBean.getInscricoes());
+assertEquals(getInscricoesExpected, managedBean.getInscricoes());
 final Map<Inscricao, Boolean> getInscricoesExcluiveisExpected;
-assertEquals(getInscricoesExcluiveisExpected, digitacaoNotaManualListarBean.getInscricoesExcluiveis());
-assertEquals(inscricoes.get(0) , digitacaoNotaManualListarBean.getNotNullAssignedField());
-assertNull(digitacaoNotaManualListarBean.getNullAssignedField());
-}
-
-/**
- * Teste para o metodo {@link DigitacaoNotaManualListarBean#pesquisar()}.
- * Descricao do Fluxo: 
- * NAO Entra: if (versaoSelecionada == VersaoResultadoProvaManual.DEFINITIVA) {.
- */
-@Test
-public void testPesquisarPath3() {
-
-// variaveis usadas
-final VersaoResultadoProvaManual versaoSelecionada = VersaoResultadoProvaManual.PROVISORIA;
-
-// Configurando estado interno da classe sob teste
-digitacaoNotaManualListarBean.setVersaoSelecionada(versaoSelecionada);
-
-// invocar metodo sendo testado
-digitacaoNotaManualListarBean.pesquisar();
-
-// verificacoes do resultado do metodo sendo testado
-final Map<Inscricao, Boolean> getInscricoesExcluiveisExpected;
-assertEquals(getInscricoesExcluiveisExpected, digitacaoNotaManualListarBean.getInscricoesExcluiveis());
+assertEquals(getInscricoesExcluiveisExpected, managedBean.getInscricoesExcluiveis());
 }
 }

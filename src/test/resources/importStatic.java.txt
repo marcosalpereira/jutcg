@@ -1,13 +1,13 @@
-package br.gov.esaf.sgc.qqpacote;
+package br.anypackage;
 
-import static br.gov.esaf.scg.Sexo.MASCULINO;
+import static br.Genre.FEMALE;
+import br.dao.Dao;
 
-public class Bean {
-	private boolean masculino;
+public class Business {
+	@EJB
+	private Dao dao;
 
-    public void foo(Sexo.MASCULINO sexo) {
-        if(sexo == MASCULINO) {
-        	masculino = true; 
-        }
+    public List<Person> findWomen() {
+    	return dao.find(FEMALE);
     }    
 }

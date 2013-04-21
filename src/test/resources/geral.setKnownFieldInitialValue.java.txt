@@ -1,6 +1,6 @@
-package br.gov.esaf.sgc.qqpacote;
+package br.qqpacote;
 
-public class Bean implements CampoAtuacaoBusiness {
+public class Bean {
     private boolean field;
 
     public void test() {

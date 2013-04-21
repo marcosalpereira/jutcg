@@ -1,81 +1,16 @@
-package br.gov.esaf.sgc.view.correcao;
+package br.view.correcao;
 
-import br.gov.esaf.sgc.model.prova.Prova;
+public class ManagedBean {
 
-/**
- * Bean para o caso de uso Digitar Resultado Manual.
- */
-@Name("digitacaoNotaManualListarBean")
-@Scope(ScopeType.CONVERSATION)
-public class DigitacaoNotaManualListarBean {
-
-    /**
-     * Prova selecionada.
-     */
-    private Prova provaSelecionada;
-
-    /**
-     * Vers�o da nota selecionada.
-     */
-    private VersaoResultadoProvaManual versaoSelecionada;
-
-    /**
-     * Null Assigned field.
-     */
-    private Inscricao nullAssignedField;
-
-    /**
-     * Not Null Assigned field.
-     */
-    private Inscricao notNullAssignedField;
-
-    /**
-     * Inscri��es Pesquisadas.
-     */
     private List<Inscricao> inscricoes;
 
-    /**
-     * Map indicando se as inscricoes sao excluiveis.
-     */
     private Map<Inscricao, Boolean> inscricoesExcluiveis;
 
-    /**
-     * Fachada Digitacao Resultado Nota Manual.
-     */
-    @In("digitacaoNotaManualFacade")
-    private transient DigitacaoNotaManualFacade digitacaoNotaManualFacade;
-
-    /**
-     * Usu�rio logado.
-     */
     @In
-    private UsuarioLogado usuarioLogado;
+    private Facade facade;
 
-    public void setDigitacaoNotaManualFacade(
-        DigitacaoNotaManualFacade digitacaoNotaManualFacade) {
-        this.digitacaoNotaManualFacade = digitacaoNotaManualFacade;
-    }
-
-    public void setUsuarioLogado(UsuarioLogado usuarioLogado) {
-        this.usuarioLogado = usuarioLogado;
-    }
-
-    /**
-     * Pesquisar candidatos habilitados para etapa/fase a qual pertence a prova,
-     * observando todos os par�metros informados.
-     */
     public void pesquisar() {
-        inscricoesExcluiveis = new HashMap<Inscricao, Boolean>();
-        if (versaoSelecionada == VersaoResultadoProvaManual.DEFINITIVA) {
-            inscricoes = digitacaoNotaManualFacade.consultarInscricoes(usuarioLogado);
-            this.nullAssignedField = null;
-            this.notNullAssignedField = inscricoes.get(0);
-            for (Inscricao inscricao : inscricoes) {
-                final boolean bExcluivel = 
-                	digitacaoNotaManualFacade.existeNotaProvisoriaStatusCadastrada(inscricao);
-                inscricoesExcluiveis.put(inscricao, bExcluivel);
-            }
-        }
+        inscricoes = facade.searchInscricoes();
     }
 
 }

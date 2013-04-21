@@ -44,18 +44,23 @@ private Dao criarMockDao() {
 public void testAlterarSituacaoDosCamposDeAtuacaoDoEntity() {
 
 // variaveis usadas
+final boolean nonVoidMethodFromMock = false;
 final Entity entity = new Entity(1);
 final boolean novaSituacao = false;
 
 // Configurando mock
 Dao dao = criarMockDao();
-dao.nonVoidMethod(entity,novaSituacao);
+expect(dao.nonVoidMethod(entity,novaSituacao))
+  .andReturn(nonVoidMethodFromMock);
 replay(dao);
 
 // invocar metodo sendo testado
-Business.nonVoidMethod(entity,novaSituacao);
+final boolean nonVoidMethodReal = Business.nonVoidMethod(entity,novaSituacao);
 
 // checar estados dos mocks
 verify(dao);
+
+// verificacoes do resultado do metodo sendo testado
+assertEquals(nonVoidMethodFromMock, nonVoidMethodReal);
 }
 }

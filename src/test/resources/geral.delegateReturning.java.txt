@@ -11,9 +11,9 @@ public class Business {
 
     @EJB
     private Dao dao;
-
-    public void voidMethod(Entity entity) {
-        dao.voidMethod(entity);
+    
+    public boolean nonVoidMethod(Entity entity) {
+        return dao.nonVoidMethod(entity);
     }
 
 }

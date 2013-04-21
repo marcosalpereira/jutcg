@@ -1,65 +1,65 @@
-package br.gov.esaf.sgc.business.impl;
+package br.business.impl;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import br.gov.esaf.sgc.dao.CampoAtuacaoDao;
-import br.gov.esaf.sgc.model.Pessoa;
+import br.dao.PersonDao;
+import br.model.Person;
 import static org.easymock.EasyMock.*;
 import org.junit.*;
 import java.util.*;
 import static org.junit.Assert.*;
 
 /**
- * Testes unitarios para a classe {@link PessoaBusinessBean}.
+ * Testes unitarios para a classe {@link PersonBusinessBean}.
  */
-public class TestPessoaBusinessBean  {
+public class TestPersonBusinessBean  {
 
 /**
- * Classe sendo testada {@link PessoaBusinessBean}.
+ * Classe sendo testada {@link PersonBusinessBean}.
  */
-private PessoaBusinessBean pessoaBusinessBean;
+private PersonBusinessBean personBusinessBean;
 
 /**
  * Configuracoes iniciais.
  */
 @Before
 public void setUp() {
-  pessoaBusinessBean = new PessoaBusinessBean();
+  personBusinessBean = new PersonBusinessBean();
 }
 
 /**
- * Cria o mock {@link PessoaDao} e seta na classe sendo testada.
+ * Cria o mock {@link PersonDao} e seta na classe sendo testada.
  * @return o mock criado
  */
-private PessoaDao criarMockPessoaDao() {
-  PessoaDao mock = createStrictMock(PessoaDao.class);
-  pessoaBusinessBean.setPessoaDao(mock);
+private PersonDao criarMockPersonDao() {
+  PersonDao mock = createStrictMock(PersonDao.class);
+  personBusinessBean.setPersonDao(mock);
   return mock;
 }
 
 /**
- * Teste para o metodo {@link PessoaBusinessBean#consultarPessoas(String)}.
+ * Teste para o metodo {@link PersonBusinessBean#searchPersons(String)}.
  */
 @Test
-public void testConsultarPessoas() {
+public void testSearchPersons() {
 
 // variaveis usadas
-final List<Pessoa> pessoas = Arrays.asList(new Pessoa(1));
-final String parteNome = "1";
+final List<Person> persons = Arrays.asList(new Person(1));
+final String lastName = "1";
 
 // Configurando mock
-PessoaDao pessoaDao = criarMockPessoaDao();
-expect(pessoaDao.selecionarPessoas(parteNome))
-  .andReturn(pessoas);
-replay(pessoaDao);
+PersonDao personDao = criarMockPersonDao();
+expect(personDao.selectPersons(lastName))
+  .andReturn(persons);
+replay(personDao);
 
 // invocar metodo sendo testado
-final List<Pessoa> consultarPessoasReal = pessoaBusinessBean.consultarPessoas(parteNome);
+final List<Person> personsReal = personBusinessBean.searchPersons(lastName);
 
 // checar estados dos mocks
-verify(pessoaDao);
+verify(personDao);
 
 // verificacoes do resultado do metodo sendo testado
-assertEquals(pessoas, consultarPessoasReal);
+assertEquals(persons, personsReal);
 }
 }

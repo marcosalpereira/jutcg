@@ -1,19 +1,18 @@
-package br.gov.esaf.sgc.business.impl;
+package br.business.impl;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import br.gov.esaf.sgc.dao.CampoAtuacaoDao;
-import br.gov.esaf.sgc.model.Pessoa;
+import br.dao.PersonDao;
+import br.model.Person;
 
-public class PessoaBusinessBean implements PessoaBusiness {
+public class PersonBusinessBean {
 
     @EJB
-    private PessoaDao pessoaDao;
+    private PersonDao personDao;
 
-    @Override
-    public List<Pessoa> consultarPessoas(String parteNome) {
-        return pessoaDao.selecionarPessoas(parteNome);
+    public List<Person> searchPersons(String lastName) {
+        return personDao.selectPersons(lastName);
     }
 
 }
