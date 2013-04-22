@@ -159,4 +159,8 @@ public class JavaClass {
         return false;
     }
 
+	public boolean existsField(String fieldName) {
+	    return searchField(fieldName) != null;
+    }
+
 }

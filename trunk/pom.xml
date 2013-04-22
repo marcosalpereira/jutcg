@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>marcosoft</groupId>
   <artifactId>jutcg</artifactId>
-  <version>0.0.3-SNAPSHOT</version>
+  <version>0.1</version>
 
   <properties>
     <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
@@ -49,7 +49,7 @@
     <dependency>
       <groupId>net.sourceforge.jsmg</groupId>
       <artifactId>jsmg</artifactId>
-      <version>0.0.1-alfa</version>
+      <version>0.0.2-alfa</version>
       <scope>compile</scope>
     </dependency>
 <!--    <dependency>-->
