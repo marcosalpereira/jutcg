@@ -1,8 +1,5 @@
 package br.gov.serpro.tools.junit.generate;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +51,7 @@ public class TestCaseGenerator {
         this.selectedMethods = selectMethods();
         this.varNameForClassUnderTest = classUnderTest.variableNameForType();
 
-        //loadProperties();
+        loadProperties();
     }
 
     /**
@@ -77,17 +74,11 @@ public class TestCaseGenerator {
 
 	private void loadProperties() {
         final String filename = "config.properties";
-        final String fullname = TestCaseGenerator.class.getResource(filename).getFile();
-        final File configFile = new File(fullname);
-
-		FileInputStream propFile;
+        final ClassLoader loader = Thread.currentThread().getContextClassLoader();
         try {
-	        propFile = new FileInputStream(configFile);
 	        final Properties p = new Properties(System.getProperties());
-	        p.load(propFile);
+	        p.load(loader.getResourceAsStream(filename));
 	        System.setProperties(p);
-        } catch (final FileNotFoundException e) {
-	        e.printStackTrace();
         } catch (final IOException e) {
 	        e.printStackTrace();
         }

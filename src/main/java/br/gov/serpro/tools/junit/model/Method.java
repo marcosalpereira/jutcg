@@ -10,6 +10,8 @@ import java.util.List;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import br.gov.serpro.tools.junit.util.GeneratorHelper;
+
 /**
  * Reprsents a method in java class.
  */
@@ -127,11 +129,26 @@ public class Method {
     }
 
     public boolean isGetter() {
-        return getName().startsWith("is") || getName().startsWith("get");
+    	final String fieldName;
+		if (name.startsWith("is")) {
+        	fieldName = GeneratorHelper.lowerCaseFirstChar(name.substring(2));
+
+    	} else if (name.startsWith("get")) {
+        	fieldName = GeneratorHelper.lowerCaseFirstChar(name.substring(3));
+    	} else {
+    		fieldName = null;
+    	}
+    	return fieldName != null && javaClass.existsField(fieldName);
     }
 
     public boolean isSetter() {
-        return getName().startsWith("set");
+    	final String fieldName;
+		if (name.startsWith("set")) {
+        	fieldName = GeneratorHelper.lowerCaseFirstChar(name.substring(3));
+    	} else {
+    		fieldName = null;
+    	}
+    	return fieldName != null && javaClass.existsField(fieldName);
     }
 
     public boolean isNotVoid() {
@@ -171,7 +188,7 @@ public class Method {
 	    }
 	    return lowerCaseFirstChar(type.getName());
     }
-    
+
 	public String getVarNameForRealContentInvocation() {
 	    if (type.isCollection()) {
 	    	final Type[] generic = type.getGeneric();
