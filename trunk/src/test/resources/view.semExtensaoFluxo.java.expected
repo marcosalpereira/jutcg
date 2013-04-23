@@ -33,28 +33,15 @@ private Facade criarMockFacade() {
 
 /**
  * Teste para o metodo {@link ManagedBean#pesquisar()}.
- * Descricao do Fluxo: 
- *     Entra: for (Inscricao inscricao : inscricoes) {.
  */
 @Test
-public void testPesquisarPath1() {
-
-// variaveis usadas
-final List<Inscricao> inscricoes = Arrays.asList(new Inscricao(1));
-final Map<Inscricao, Boolean> inscricoesExcluiveis = newHashMap(new Inscricao(2), Boolean.FALSE);
+public void testPesquisar() {
 
 // Configurando mock
 Facade facade = criarMockFacade();
-expect(facade.searchInscricoes())
-  .andReturn(inscricoes);
-boolean bExcluivel = false;
-expect(facade.isExcluivel(inscricao))
-  .andReturn(bExcluivel);
+expect(facade.searchPersons())
+  .andReturn(persons);
 replay(facade);
-
-// Configurando estado interno da classe sob teste
-managedBean.setInscricoes(inscricoes);
-managedBean.setInscricoesExcluiveis(inscricoesExcluiveis);
 
 // invocar metodo sendo testado
 managedBean.pesquisar();
@@ -63,42 +50,7 @@ managedBean.pesquisar();
 verify(facade);
 
 // verificacoes do resultado do metodo sendo testado
-final List<Inscricao> getInscricoesExpected;
-assertEquals(getInscricoesExpected, managedBean.getInscricoes());
-final Map<Inscricao, Boolean> getInscricoesExcluiveisExpected;
-assertEquals(getInscricoesExcluiveisExpected, managedBean.getInscricoesExcluiveis());
-}
-
-/**
- * Teste para o metodo {@link ManagedBean#pesquisar()}.
- * Descricao do Fluxo: 
- * NAO Entra: for (Inscricao inscricao : inscricoes) {.
- */
-@Test
-public void testPesquisarPath2() {
-
-// variaveis usadas
-final List<Inscricao> inscricoes = Arrays.asList(new Inscricao(1));
-
-// Configurando mock
-Facade facade = criarMockFacade();
-expect(facade.searchInscricoes())
-  .andReturn(inscricoes);
-replay(facade);
-
-// Configurando estado interno da classe sob teste
-managedBean.setInscricoes(inscricoes);
-
-// invocar metodo sendo testado
-managedBean.pesquisar();
-
-// checar estados dos mocks
-verify(facade);
-
-// verificacoes do resultado do metodo sendo testado
-final List<Inscricao> getInscricoesExpected;
-assertEquals(getInscricoesExpected, managedBean.getInscricoes());
-final Map<Inscricao, Boolean> getInscricoesExcluiveisExpected;
-assertEquals(getInscricoesExcluiveisExpected, managedBean.getInscricoesExcluiveis());
+final List<Person> getPersonsExpected;
+assertEquals(getPersonsExpected, managedBean.getPersons());
 }
 }

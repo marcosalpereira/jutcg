@@ -39,7 +39,7 @@ public class TestesFuncionais {
 	public final void testImportStatic() throws IOException, ParseException {
 		assertContentsEquals("/importStatic.java");
 	}
-	
+
 	@Test
 	public final void testDelegateReturningEntity() throws IOException, ParseException {
 		assertContentsEquals("/business.delegateReturningEntity.java");
@@ -61,29 +61,13 @@ public class TestesFuncionais {
     }
 
     @Test
-    public final void testViewComExtensaoFluxoInvocacoesRetornadas() throws IOException,
-            ParseException {
-        assertContentsEquals("/view.comExtensaoFluxo.invocacaoRetornada.java");
-    }
-
-    @Test
     public final void testBusinessDelegateVoid() throws IOException, ParseException {
         assertContentsEquals("/business.delegateVoid.java");
     }
 
     @Test
-    public final void testBusinessDelegateReturning() throws IOException, ParseException {
-        assertContentsEquals("/business.delegateReturning.java");
-    }
-
-    @Test
-    public final void testBusinessNonVoidInvocation() throws IOException, ParseException {
-        assertContentsEquals("/business.nonVoidInvocation.java");
-    }
-
-    @Test
     public final void testDao() throws IOException, ParseException {
-        assertContentsEquals("/dao.java");
+        assertContentsEquals("/dao.insert.java");
     }
 
     @Test
@@ -115,11 +99,6 @@ public class TestesFuncionais {
     @Test
     public final void testSetKnownFieldInvocationNull() throws IOException, ParseException {
         assertContentsEquals("/geral.setKnownFieldInvocationValueNull.java");
-    }
-
-    @Test
-    public final void testSetKnownFieldEnumInitialValue() throws IOException, ParseException {
-        assertContentsEquals("/geral.setKnownFieldEnumInitialValue.java");
     }
 
     @Test

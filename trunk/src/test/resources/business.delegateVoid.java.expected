@@ -17,14 +17,14 @@ public class TestBusiness  {
 /**
  * Classe sendo testada {@link Business}.
  */
-private Business Business;
+private Business business;
 
 /**
  * Configuracoes iniciais.
  */
 @Before
 public void setUp() {
-  Business = new Business();
+  business = new Business();
 }
 
 /**
@@ -33,27 +33,26 @@ public void setUp() {
  */
 private Dao criarMockDao() {
   Dao mock = createStrictMock(Dao.class);
-  Business.setDao(mock);
+  business.setDao(mock);
   return mock;
 }
 
 /**
- * Teste para o metodo {@link Business#nonVoidMethod(Entity, boolean)}.
+ * Teste para o metodo {@link Business#voidMethod(Entity)}.
  */
 @Test
-public void testAlterarSituacaoDosCamposDeAtuacaoDoEntity() {
+public void testVoidMethod() {
 
 // variaveis usadas
 final Entity entity = new Entity(1);
-final boolean novaSituacao = false;
 
 // Configurando mock
 Dao dao = criarMockDao();
-dao.nonVoidMethod(entity,novaSituacao);
+dao.voidMethod(entity);
 replay(dao);
 
 // invocar metodo sendo testado
-Business.nonVoidMethod(entity,novaSituacao);
+business.voidMethod(entity);
 
 // checar estados dos mocks
 verify(dao);

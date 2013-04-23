@@ -1,45 +1,25 @@
-package br.view.correcao;
+package br.view;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+public class ManagedBean {
 
-import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Observer;
-import org.jboss.seam.annotations.Scope;
+    private String id;
 
-import br.facade.DigitacaoNotaManualFacade;
-import br.model.Inscricao;
-import br.model.UsuarioLogado;
-import br.model.prova.Prova;
-import br.model.resultado.ResultadoProvaManual.VersaoResultadoProvaManual;
-
-@Name("digitacaoNotaManualListarBean")
-@Scope(ScopeType.CONVERSATION)
-public class DigitacaoNotaManualListarBean {
-
-    private Prova provaSelecionada;
-
-    private List<Inscricao> inscricoes;
-
+    private Person person;
+    
     private boolean excluivel;
 
-    @In("digitacaoNotaManualFacade")
-    private transient DigitacaoNotaManualFacade digitacaoNotaManualFacade;
-
     @In
-    private UsuarioLogado usuarioLogado;
+    private Facade facade;
 
     public void pesquisar() {
-        inscricoes = digitacaoNotaManualFacade.searchInscricoes(usuarioLogado);
-        this.excluivel = isExcluivel(provaSelecionada);
-        //this.excluivel = digitacaoNotaManualFacade.existsNotaProvisoriaStatusCadastrada(provaSelecionada);
+        person = facade.searchPerson(id);
+        excluivel = isExcluivel(person);
+        
     }
 
-    private boolean isExcluivel(Prova prova) {
-        return digitacaoNotaManualFacade.existsNotaProvisoriaStatusCadastrada(prova);
+    private boolean isExcluivel(Person person) {
+        return !facade.existsDebitsFor(person);
     }
 
 }
+
