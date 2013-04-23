@@ -1,79 +1,68 @@
-package br.view.correcao;
+package br.view;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Observer;
-import org.jboss.seam.annotations.Scope;
-import br.facade.DigitacaoNotaManualFacade;
-import br.model.Inscricao;
-import br.model.UsuarioLogado;
-import br.model.prova.Prova;
-import br.model.resultado.ResultadoProvaManual.VersaoResultadoProvaManual;
 import static org.easymock.EasyMock.*;
 import org.junit.*;
 import java.util.*;
 import static org.junit.Assert.*;
 
 /**
- * Testes unitarios para a classe {@link DigitacaoNotaManualListarBean}.
+ * Testes unitarios para a classe {@link ManagedBean}.
  */
-public class TestDigitacaoNotaManualListarBean extends br.view.JsfTestCase {
+public class TestManagedBean extends br.view.JsfTestCase {
 
 /**
- * Classe sendo testada {@link DigitacaoNotaManualListarBean}.
+ * Classe sendo testada {@link ManagedBean}.
  */
-private DigitacaoNotaManualListarBean digitacaoNotaManualListarBean;
+private ManagedBean managedBean;
 
 @Override
 public void setUp() throws Exception {
   super.setUp();
-  digitacaoNotaManualListarBean = new DigitacaoNotaManualListarBean();
+  managedBean = new ManagedBean();
 }
 
 /**
- * Cria o mock {@link DigitacaoNotaManualFacade} e seta na classe sendo testada.
+ * Cria o mock {@link Facade} e seta na classe sendo testada.
  * @return o mock criado
  */
-private DigitacaoNotaManualFacade criarMockDigitacaoNotaManualFacade() {
-  DigitacaoNotaManualFacade mock = createStrictMock(DigitacaoNotaManualFacade.class);
-  digitacaoNotaManualListarBean.setDigitacaoNotaManualFacade(mock);
+private Facade criarMockFacade() {
+  Facade mock = createStrictMock(Facade.class);
+  managedBean.setFacade(mock);
   return mock;
 }
 
 /**
- * Teste para o metodo {@link DigitacaoNotaManualListarBean#pesquisar()}.
+ * Teste para o metodo {@link ManagedBean#pesquisar()}.
  */
 @Test
 public void testPesquisar() {
 
 // variaveis usadas
-final Prova provaSelecionada = new Prova(1);
-final UsuarioLogado usuarioLogado = new Usuario(1);
+final String id = "1";
+final Person person = new Person(1);
 
 // Configurando mock
-DigitacaoNotaManualFacade digitacaoNotaManualFacade = criarMockDigitacaoNotaManualFacade();
-expect(digitacaoNotaManualFacade.searchInscricoes(usuarioLogado))
-  .andReturn(inscricoesFromMock);
-expect(digitacaoNotaManualFacade.existsNotaProvisoriaStatusCadastrada(provaSelecionada))
-  .andReturn(excluivelFromMock);
-replay(digitacaoNotaManualFacade);
+Facade facade = criarMockFacade();
+expect(facade.searchPerson(id))
+  .andReturn(person);
+expect(facade.existsDebitsFor(person))
+  .andReturn(false);
+replay(facade);
 
 // Configurando estado interno da classe sob teste
-digitacaoNotaManualListarBean.setProvaSelecionada(provaSelecionada);
-digitacaoNotaManualListarBean.setUsuarioLogado(usuarioLogado);
+managedBean.setId(id);
+managedBean.setPerson(person);
 
 // invocar metodo sendo testado
-digitacaoNotaManualListarBean.pesquisar();
+managedBean.pesquisar();
 
 // checar estados dos mocks
-verify(digitacaoNotaManualFacade);
+verify(facade);
 
 // verificacoes do resultado do metodo sendo testado
-assertEquals(excluivelFromMock, digitacaoNotaManualListarBean.isExcluivel());
-assertEquals(inscricoesFromMock, digitacaoNotaManualListarBean.getInscricoes());
+final boolean isExcluivelExpected;
+assertEquals(isExcluivelExpected, managedBean.isExcluivel());
+final Person getPersonExpected;
+assertEquals(getPersonExpected, managedBean.getPerson());
 }
 }

@@ -1,31 +1,6 @@
 package br.dao.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import javax.ejb.Stateless;
-import javax.persistence.Query;
-import org.jboss.seam.annotations.Name;
-import br.dao.PersonDao;
-import br.model.AplicacaoProva;
-import br.model.CampoAtuacao;
-import br.model.Entity;
-import br.model.Cidade;
-import br.model.Concurso;
-import br.model.Etapa;
-import br.model.Fase;
-import br.model.Idioma;
-import br.model.Inscricao;
-import br.model.OfertaEntityConcurso;
-import br.model.Person;
-import br.model.Person.StatusVinculo;
-import br.model.prova.Prova;
-import br.model.prova.ProvaObjetiva;
-import br.model.prova.Prova.StatusProva;
-import br.model.prova.Prova.TipoCorrecaoProva;
-import br.model.prova.ProvaObjetiva.NumeroAplicacaoProva;
 import static org.easymock.EasyMock.*;
 import org.junit.*;
 import java.util.*;
@@ -43,7 +18,7 @@ private PersonDaoBean personDaoBean;
 
 @Override
 protected IDataSet getDataSet() {
-  return recuperarDataSet("personDaoBeanDS.xml");
+  return recuperarDataSet("personDS.xml");
 }
 
 /**
@@ -59,70 +34,12 @@ personDaoBean.setEntityManager(getEntityManager());
  * Teste para o metodo {@link PersonDaoBean#insert(Person)}.
  */
 @Test
-public void testInserir() {
+public void testInsert() {
 
 // variaveis usadas
 final Person person = new Person(1);
 
 // invocar metodo sendo testado
 personDaoBean.insert(person);
-}
-
-/**
- * Teste para o metodo {@link PersonDaoBean#atualizar(Person)}.
- */
-@Test
-public void testAtualizar() {
-
-// variaveis usadas
-final Person person = new Person(1);
-
-// invocar metodo sendo testado
-personDaoBean.atualizar(person);
-}
-
-/**
- * Teste para o metodo {@link PersonDaoBean#excluir(Person)}.
- */
-@Test
-public void testExcluir() {
-
-// variaveis usadas
-final Person person = new Person(1);
-
-// invocar metodo sendo testado
-personDaoBean.excluir(person);
-}
-
-/**
- * Teste para o metodo {@link PersonDaoBean#selecionar(Fase)}.
- */
-@Test
-public void testSelecionarFase() {
-
-// variaveis usadas
-final Fase fase = new Fase(1);
-
-// invocar metodo sendo testado
-final Set<Person> selecionarReal = personDaoBean.select(fase);
-
-// verificacoes do resultado do metodo sendo testado
-assertEquals(esperado, selecionarReal);
-}
-
-/**
- * Teste para o metodo {@link PersonDaoBean#selecionar(OfertaEntityConcurso)}.
- */
-@Test
-public void testSelecionarOfertaEntityConcurso() {
-
-// variaveis usadas
-final OfertaEntityConcurso oferta = new OfertaEntityConcurso(1);
-
-// invocar metodo sendo testado
-final List<Person> selecionarReal = personDaoBean.select(oferta);
-
-// verificacoes do resultado do metodo sendo testado
-assertEquals(esperado, selecionarReal);
 }
 }
