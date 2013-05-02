@@ -17,14 +17,14 @@ public class TestBusiness  {
 /**
  * Classe sendo testada {@link Business}.
  */
-private Business Business;
+private Business business;
 
 /**
  * Configuracoes iniciais.
  */
 @Before
 public void setUp() {
-  Business = new Business();
+  business = new Business();
 }
 
 /**
@@ -33,7 +33,7 @@ public void setUp() {
  */
 private Dao criarMockDao() {
   Dao mock = createStrictMock(Dao.class);
-  Business.setDao(mock);
+  business.setDao(mock);
   return mock;
 }
 
@@ -43,7 +43,7 @@ private Dao criarMockDao() {
  *     Entra: if (dao.exists(entity)) {.
  */
 @Test
-public void testAlterarSituacaoDosCamposDeAtuacaoDoEntityPath1() {
+public void testNonVoidMethodPath1() {
 
 // variaveis usadas
 final Entity entity = new Entity(1);
@@ -56,7 +56,7 @@ dao.alterar(entity);
 replay(dao);
 
 // invocar metodo sendo testado
-Business.nonVoidMethod(entity);
+business.nonVoidMethod(entity);
 
 // checar estados dos mocks
 verify(dao);
@@ -68,7 +68,7 @@ verify(dao);
  * NAO Entra: if (dao.exists(entity)) {.
  */
 @Test
-public void testAlterarSituacaoDosCamposDeAtuacaoDoEntityPath2() {
+public void testNonVoidMethodPath2() {
 
 // variaveis usadas
 final Entity entity = new Entity(1);
@@ -81,7 +81,7 @@ dao.insert(entity);
 replay(dao);
 
 // invocar metodo sendo testado
-Business.nonVoidMethod(entity);
+business.nonVoidMethod(entity);
 
 // checar estados dos mocks
 verify(dao);

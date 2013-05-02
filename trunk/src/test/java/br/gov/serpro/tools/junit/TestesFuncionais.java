@@ -29,89 +29,92 @@ public class TestesFuncionais {
 		loadProperties(getFile("/config.properties"));
 	}
 
-//	@Test
-//	public final void testDelegateReturningListArgumentFunction() throws IOException,
-//	        ParseException {
-//		assertContentsEquals("/business.delegateReturningListArgumentFunction.java");
-//	}
 
 	@Test
-	public final void testImportStatic() throws IOException, ParseException {
-		assertContentsEquals("/importStatic.java");
+	public final void testbusinessbooleanDecisionMethodInvocation() throws IOException,
+	        ParseException {
+		assertContentsEquals("/business.booleanDecisionMethodInvocation.java");
 	}
 
 	@Test
-	public final void testDelegateReturningEntity() throws IOException, ParseException {
+	public final void testbusinessdelegateReturningEntity() throws IOException, ParseException {
 		assertContentsEquals("/business.delegateReturningEntity.java");
 	}
 
 	@Test
-	public final void testDelegateReturningList() throws IOException, ParseException {
+	public final void testbusinessdelegateReturningList() throws IOException, ParseException {
 		assertContentsEquals("/business.delegateReturningList.java");
 	}
 
-    @Test
-    public final void testViewSemExtensaoFluxo() throws IOException, ParseException {
-        assertContentsEquals("/view.semExtensaoFluxo.java");
-    }
+	@Test
+	public final void testbusinessdelegateVoid() throws IOException, ParseException {
+		assertContentsEquals("/business.delegateVoid.java");
+	}
 
-    @Test
-    public final void testViewComExtensaoFluxo() throws IOException, ParseException {
-        assertContentsEquals("/view.comExtensaoFluxo.java");
-    }
+	@Test
+	public final void testdaoinsert() throws IOException, ParseException {
+		assertContentsEquals("/dao.insert.java");
+	}
 
-    @Test
-    public final void testBusinessDelegateVoid() throws IOException, ParseException {
-        assertContentsEquals("/business.delegateVoid.java");
-    }
+	@Test
+	public final void testfielduseClasspathValuesForApropriatedScenarioValues() throws IOException,
+	        ParseException {
+		assertContentsEquals("/field.useClasspathValuesForApropriatedScenarioValues.java");
+	}
 
-    @Test
-    public final void testDao() throws IOException, ParseException {
-        assertContentsEquals("/dao.insert.java");
-    }
+	@Test
+	public final void testgeralassertKnownBooleanField() throws IOException, ParseException {
+		assertContentsEquals("/geral.assertKnownBooleanField.java");
+	}
 
-    @Test
-    public final void testViewValidator() throws IOException, ParseException {
-        assertContentsEquals("/view.validator.java");
-    }
+	@Test
+	public final void testgeralsetKnownFieldConstantInitialValueUsingReflection()
+	        throws IOException, ParseException {
+		assertContentsEquals("/geral.setKnownFieldConstantInitialValueUsingReflection.java");
+	}
 
-    @Test
-    public final void testAssertBooleanKnownFieldValue() throws IOException, ParseException {
-        assertContentsEquals("/geral.assertKnownBooleanField.java");
-    }
+	@Test
+	public final void testgeralsetKnownFieldInitialValue() throws IOException, ParseException {
+		assertContentsEquals("/geral.setKnownFieldInitialValue.java");
+	}
 
-    @Test
-    public final void testSetKnownFieldInitialValue() throws IOException, ParseException {
-        assertContentsEquals("/geral.setKnownFieldInitialValue.java");
-    }
+	@Test
+	public final void testgeralsetKnownFieldInitialValueNotNull() throws IOException,
+	        ParseException {
+		assertContentsEquals("/geral.setKnownFieldInitialValueNotNull.java");
+	}
 
-    @Test
-    public final void testSetKnownFieldInitialValueNull() throws IOException, ParseException {
-        assertContentsEquals("/geral.setKnownFieldInitialValueNull.java");
-    }
+	@Test
+	public final void testgeralsetKnownFieldInitialValueNull() throws IOException, ParseException {
+		assertContentsEquals("/geral.setKnownFieldInitialValueNull.java");
+	}
 
-    @Test
-    public final void testSetKnownFieldInitialValueNotNull() throws IOException,
-            ParseException {
-        assertContentsEquals("/geral.setKnownFieldInitialValueNotNull.java");
-    }
+	@Test
+	public final void testgeralsetKnownFieldInvocationValueNull() throws IOException,
+	        ParseException {
+		assertContentsEquals("/geral.setKnownFieldInvocationValueNull.java");
+	}
 
-    @Test
-    public final void testSetKnownFieldInvocationNull() throws IOException, ParseException {
-        assertContentsEquals("/geral.setKnownFieldInvocationValueNull.java");
-    }
+	@Test
+	public final void testImportStatic() throws IOException,
+	        ParseException {
+		assertContentsEquals("/importStatic.java");
+	}
 
-    @Test
-    public final void testFieldUseClasspathValuesForApropriatedScenarioValues() throws IOException,
-            ParseException {
-        assertContentsEquals("/field.useClasspathValuesForApropriatedScenarioValues.java");
-    }
+	@Test
+	public final void testviewcomExtensaoFluxo() throws IOException, ParseException {
+		assertContentsEquals("/view.comExtensaoFluxo.java");
+	}
 
-    @Test
-    public final void testSetKnownFieldConstantInitialValueUsingReflection()
-            throws IOException, ParseException {
-        assertContentsEquals("/geral.setKnownFieldConstantInitialValueUsingReflection.java");
-    }
+	@Test
+	public final void testviewsemExtensaoFluxo() throws IOException, ParseException {
+		assertContentsEquals("/view.semExtensaoFluxo.java");
+	}
+
+	@Test
+	public final void testviewvalidator() throws IOException, ParseException {
+		assertContentsEquals("/view.validator.java");
+	}
 
     /**
      * @param inputFile
