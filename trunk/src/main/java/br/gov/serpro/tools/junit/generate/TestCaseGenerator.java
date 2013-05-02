@@ -223,12 +223,18 @@ public class TestCaseGenerator {
         }
 
         for (final String annotation : field.getAnnotations()) {
-            if (annotation.equals("In") || annotation.equals("EJB")) {
+            if (isInjectAnnotation(annotation)) {
                 return false;
             }
         }
 
         return true;
+    }
+
+	private boolean isInjectAnnotation(final String annotation) {
+	    return annotation.equals("In")
+	    		|| annotation.equals("EJB")
+	    		|| annotation.equals("Inject");
     }
 
     private void generateImports() {
