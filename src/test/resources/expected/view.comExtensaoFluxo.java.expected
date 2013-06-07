@@ -1,0 +1,68 @@
+package br.view;
+
+import static org.easymock.EasyMock.*;
+import org.junit.*;
+import java.util.*;
+import static org.junit.Assert.*;
+
+/**
+ * Testes unitarios para a classe {@link ManagedBean}.
+ */
+public class TestManagedBean extends br.view.JsfTestCase {
+
+/**
+ * Classe sendo testada {@link ManagedBean}.
+ */
+private ManagedBean managedBean;
+
+@Override
+public void setUp() throws Exception {
+  super.setUp();
+  managedBean = new ManagedBean();
+}
+
+/**
+ * Cria o mock {@link Facade} e seta na classe sendo testada.
+ * @return o mock criado
+ */
+private Facade criarMockFacade() {
+  Facade mock = createStrictMock(Facade.class);
+  managedBean.setFacade(mock);
+  return mock;
+}
+
+/**
+ * Teste para o metodo {@link ManagedBean#pesquisar()}.
+ */
+@Test
+public void testPesquisar() {
+
+// variaveis usadas
+final String id = "1";
+final Person person = new Person(1);
+
+// Configurando mock
+Facade facade = criarMockFacade();
+expect(facade.searchPerson(id))
+  .andReturn(person);
+expect(facade.existsDebitsFor(person))
+  .andReturn(false);
+replay(facade);
+
+// Configurando estado interno da classe sob teste
+managedBean.setId(id);
+managedBean.setPerson(person);
+
+// invocar metodo sendo testado
+managedBean.pesquisar();
+
+// checar estados dos mocks
+verify(facade);
+
+// verificacoes do resultado do metodo sendo testado
+final boolean isExcluivelExpected;
+assertEquals(isExcluivelExpected, managedBean.isExcluivel());
+final Person getPersonExpected;
+assertEquals(getPersonExpected, managedBean.getPerson());
+}
+}

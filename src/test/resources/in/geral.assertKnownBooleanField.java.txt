@@ -1,0 +1,21 @@
+package br.qqpacote;
+
+public class Bean {
+    private Boolean field;
+
+    public Boolean getField() {
+        return field;
+    }    
+    
+    public void resetField() {
+        field = false;
+    }
+
+    public void activateField() {
+        field = true;
+    }
+    
+    public void nullifyField() {
+        field = null;
+    }
+}

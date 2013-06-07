@@ -1,0 +1,14 @@
+package br.view.correcao;
+
+public class ManagedBean {
+
+    private List<Person> persons;
+
+    @In
+    private Facade facade;
+
+    public void pesquisar() {
+        persons = facade.searchPersons();
+    }
+
+}

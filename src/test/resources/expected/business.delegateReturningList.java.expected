@@ -1,0 +1,65 @@
+package br.business.impl;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import br.dao.PersonDao;
+import br.model.Person;
+import static org.easymock.EasyMock.*;
+import org.junit.*;
+import java.util.*;
+import static org.junit.Assert.*;
+
+/**
+ * Testes unitarios para a classe {@link PersonBusinessBean}.
+ */
+public class TestPersonBusinessBean  {
+
+/**
+ * Classe sendo testada {@link PersonBusinessBean}.
+ */
+private PersonBusinessBean personBusinessBean;
+
+/**
+ * Configuracoes iniciais.
+ */
+@Before
+public void setUp() {
+  personBusinessBean = new PersonBusinessBean();
+}
+
+/**
+ * Cria o mock {@link PersonDao} e seta na classe sendo testada.
+ * @return o mock criado
+ */
+private PersonDao criarMockPersonDao() {
+  PersonDao mock = createStrictMock(PersonDao.class);
+  personBusinessBean.setPersonDao(mock);
+  return mock;
+}
+
+/**
+ * Teste para o metodo {@link PersonBusinessBean#searchPersons(String)}.
+ */
+@Test
+public void testSearchPersons() {
+
+// variaveis usadas
+final List<Person> persons = Arrays.asList(new Person(1));
+final String lastName = "1";
+
+// Configurando mock
+PersonDao personDao = criarMockPersonDao();
+expect(personDao.selectPersons(lastName))
+  .andReturn(persons);
+replay(personDao);
+
+// invocar metodo sendo testado
+final List<Person> personsReal = personBusinessBean.searchPersons(lastName);
+
+// checar estados dos mocks
+verify(personDao);
+
+// verificacoes do resultado do metodo sendo testado
+assertEquals(persons, personsReal);
+}
+}

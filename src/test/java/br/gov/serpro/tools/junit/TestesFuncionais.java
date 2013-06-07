@@ -127,10 +127,10 @@ public class TestesFuncionais {
     private void assertContentsEquals(final String inputFile) throws ParseException,
             IOException {
         final SourceParser parser = new JsmgJavaSourceParser();
-        final JavaClass javaClass = parser.parse(getFile(inputFile + ".txt"));
+        final JavaClass javaClass = parser.parse(getFile("/in" + inputFile + ".txt"));
         final TestCaseGenerator testCaseGenerator = new TestCaseGenerator(javaClass);
-        assertEquals(getContents(inputFile + ".expected"), testCaseGenerator.generate()
-                .asCode());
+        final String expectFile = "/expected" + inputFile + ".expected";
+		assertEquals(getContents(expectFile), testCaseGenerator.generate().asCode());
     }
 
     public String getContents(final String resource) throws IOException {

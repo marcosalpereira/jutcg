@@ -1,0 +1,18 @@
+package br.business.impl;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+
+import br.dao.PersonDao;
+import br.model.Person;
+
+public class PersonBusinessBean {
+
+    @EJB
+    private PersonDao personDao;
+
+    public Person searchPerson(String id) {
+        return personDao.selectPerson(id);
+    }
+
+}
