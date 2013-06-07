@@ -1,0 +1,23 @@
+package br.business.impl;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+
+import br.dao.Dao;
+import br.model.Entity;
+
+@Stateless
+public class Business {
+
+    @EJB
+    private Dao dao;
+
+    public void nonVoidMethod(Entity entity) {
+        if (dao.exists(entity)) {
+           dao.alterar(entity);
+        } else {
+           dao.insert(entity);
+        }        
+    }
+
+}

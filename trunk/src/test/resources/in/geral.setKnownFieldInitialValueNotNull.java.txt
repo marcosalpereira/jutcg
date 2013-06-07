@@ -1,0 +1,11 @@
+package br.qqpacote;
+
+public class Bean {
+    private Var field;
+
+    public void test() {
+        if(field != null) {
+        	System.out.println("true");
+        }
+    }    
+}

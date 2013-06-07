@@ -1,0 +1,70 @@
+package br.qqpacote;
+
+import br.model.PersonTypeInClasspath;
+import static org.easymock.EasyMock.*;
+import org.junit.*;
+import java.util.*;
+import static org.junit.Assert.*;
+
+/**
+ * Testes unitarios para a classe {@link Bean}.
+ */
+public class TestBean  {
+
+/**
+ * Classe sendo testada {@link Bean}.
+ */
+private Bean bean;
+
+/**
+ * Configuracoes iniciais.
+ */
+@Before
+public void setUp() {
+  bean = new Bean();
+}
+
+/**
+ * Teste para o metodo {@link Bean#test()}.
+ * Descricao do Fluxo: 
+ *     Entra: if (personType == PersonTypeInClasspath.MALE) {.
+ */
+@Test
+public void testTestPath1() {
+
+// variaveis usadas
+final PersonTypeInClasspath personType = PersonTypeInClasspath.MALE;
+
+// Configurando estado interno da classe sob teste
+bean.setPersonType(personType);
+
+// invocar metodo sendo testado
+bean.test();
+
+// verificacoes do resultado do metodo sendo testado
+assertFalse(bean.isFemalePerson());
+assertTrue(bean.isMalePerson());
+}
+
+/**
+ * Teste para o metodo {@link Bean#test()}.
+ * Descricao do Fluxo: 
+ * NAO Entra: if (personType == PersonTypeInClasspath.MALE) {.
+ */
+@Test
+public void testTestPath2() {
+
+// variaveis usadas
+final PersonTypeInClasspath personType = PersonTypeInClasspath.FEMALE;
+
+// Configurando estado interno da classe sob teste
+bean.setPersonType(personType);
+
+// invocar metodo sendo testado
+bean.test();
+
+// verificacoes do resultado do metodo sendo testado
+assertTrue(bean.isFemalePerson());
+assertFalse(bean.isMalePerson());
+}
+}

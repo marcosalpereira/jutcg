@@ -1,0 +1,89 @@
+package br.business.impl;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import br.dao.Dao;
+import br.model.Entity;
+import static org.easymock.EasyMock.*;
+import org.junit.*;
+import java.util.*;
+import static org.junit.Assert.*;
+
+/**
+ * Testes unitarios para a classe {@link Business}.
+ */
+public class TestBusiness  {
+
+/**
+ * Classe sendo testada {@link Business}.
+ */
+private Business business;
+
+/**
+ * Configuracoes iniciais.
+ */
+@Before
+public void setUp() {
+  business = new Business();
+}
+
+/**
+ * Cria o mock {@link Dao} e seta na classe sendo testada.
+ * @return o mock criado
+ */
+private Dao criarMockDao() {
+  Dao mock = createStrictMock(Dao.class);
+  business.setDao(mock);
+  return mock;
+}
+
+/**
+ * Teste para o metodo {@link Business#nonVoidMethod(Entity)}.
+ * Descricao do Fluxo: 
+ *     Entra: if (dao.exists(entity)) {.
+ */
+@Test
+public void testNonVoidMethodPath1() {
+
+// variaveis usadas
+final Entity entity = new Entity(1);
+
+// Configurando mock
+Dao dao = criarMockDao();
+expect(dao.exists(entity))
+  .andReturn(true);
+dao.alterar(entity);
+replay(dao);
+
+// invocar metodo sendo testado
+business.nonVoidMethod(entity);
+
+// checar estados dos mocks
+verify(dao);
+}
+
+/**
+ * Teste para o metodo {@link Business#nonVoidMethod(Entity)}.
+ * Descricao do Fluxo: 
+ * NAO Entra: if (dao.exists(entity)) {.
+ */
+@Test
+public void testNonVoidMethodPath2() {
+
+// variaveis usadas
+final Entity entity = new Entity(1);
+
+// Configurando mock
+Dao dao = criarMockDao();
+expect(dao.exists(entity))
+  .andReturn(false);
+dao.insert(entity);
+replay(dao);
+
+// invocar metodo sendo testado
+business.nonVoidMethod(entity);
+
+// checar estados dos mocks
+verify(dao);
+}
+}
